@@ -62,6 +62,7 @@ End Function
 Public Sub main(Optional logout As Boolean)
     If logout = True Then
         Unload mMenu
+        Stop
         GoTo relogin
     End If
     Application.WindowState = xlMaximized
@@ -113,7 +114,7 @@ auth_retry:
         ElseIf ans = vbRetry Then
             GoTo auth_retry
         ElseIf ans = vbAbort Then
-            If Environ$("username") = "jsikorski1" Then
+            If Environ$("username") = "jsikorski" Then
                 Exit Sub
             Else
                 ThisWorkbook.Close False
@@ -149,7 +150,7 @@ auth_retry:
     job = vbNullString
     Set mMenu = New mainMenu
     ThisWorkbook.Protect xPass, True, False
-    If user <> "jsikorski1" Then
+    If user <> "jsikorski" Then
         mMenu.Show
     ElseIf ld = True Then
         mMenu.Show
@@ -503,24 +504,6 @@ Public Sub send_leadSheet(addr As String, lnk As String)
     End With
 End Sub
 
-Public Sub showBooks()
-Attribute showBooks.VB_ProcData.VB_Invoke_Func = "S\n14"
-    If Environ$("username") = "jsikorski1" Then
-        On Error Resume Next
-        ActiveWorkbook.Unprotect xPass
-        For i = 1 To ThisWorkbook.Sheets.count
-            If ThisWorkbook.Worksheets(i).Visible = xlVeryHidden Then
-                ThisWorkbook.Worksheets(i).Visible = True
-            End If
-        Next i
-        ThisWorkbook.Worksheets("KEY").Visible = xlVeryHidden
-    Else
-        MsgBox ("Sorry this toy is not for you to play with")
-    End If
-    On Error GoTo 0
-End Sub
-
-
 Private Sub check_updates(Optional uTime As Date)
     If uTime = 0 Then
         uTime = Now
@@ -544,16 +527,15 @@ Private Sub check_updates(Optional uTime As Date)
     
 End Sub
 
-Public Sub hideBooks()
-Attribute hideBooks.VB_ProcData.VB_Invoke_Func = "H\n14"
-    For i = 1 To ThisWorkbook.Sheets.count
-        If ThisWorkbook.Worksheets(i).name <> "HOME" Then
-            If ThisWorkbook.Worksheets(i).name <> "KEY" Then
-                ThisWorkbook.Worksheets(i).Visible = False
-                End If
-        End If
-    Next i
-End Sub
+'Public Sub hideBooks()
+'    For i = 1 To ThisWorkbook.Sheets.count
+'        If ThisWorkbook.Worksheets(i).name <> "HOME" Then
+'            If ThisWorkbook.Worksheets(i).name <> "KEY" Then
+'                ThisWorkbook.Worksheets(i).Visible = False
+'                End If
+'        End If
+'    Next i
+'End Sub
 
 Private Function get_lic(url As String) As Boolean
     
@@ -572,7 +554,7 @@ Private Sub hide_key()
 End Sub
 
 Public Function publicEncryptPassword(pw As String) As String
-    If Environ$("username") <> "jsikorski1" Then
+    If Environ$("username") <> "jsikorski" Then
         If InputBox("Authorization code:", "RESTRICED") <> 12292018 Then
             publicEncryptPassword = "ERROR"
             Exit Function
@@ -625,7 +607,7 @@ Public Function file_auth(Optional pw As String) As Integer
     Set rg = ThisWorkbook.Worksheets("USER").Range("A" & 2)
     Dim auth As Integer
     Dim datPath As String
-'    If user = "jsikorski1" Then
+'    If user = "jsikorski" Then
 '        file_auth = 1
 '        Exit Function
 '    End If
@@ -691,7 +673,7 @@ login_retry:
                 Loop
             Else
                 MsgBox "You have made 3 failed attempts!", 16, "FAILED UNLOCK"
-                If user <> "jsikorski1" Then
+                If user <> "jsikorski" Then
                     Unload loginMenu
                     Workbooks(launcher).Worksheets(1).Range("appRunning") = False
                     ThisWorkbook.Close False

@@ -26,6 +26,10 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
+
 Private Sub loginButton_Click()
     Me.Hide
 End Sub
@@ -43,7 +47,7 @@ Public Sub mCancel_Click()
         Unload Me
         ThisWorkbook.Close
     ElseIf ans = 2 Then
-        If user = "jsikorski1" Then
+        If user = "jsikorski" Then
             On Error Resume Next
             If loginMenu.Visible = True Then
                 loginMenu.Hide

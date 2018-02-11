@@ -59,7 +59,7 @@ Public Sub get_user_list()
 End Sub
 
 Public Sub extract_users()
-    If Environ$("Username") = "jsikorski1" Then
+    If Environ$("Username") = "jsikorski" Then
         Application.DisplayAlerts = False
         Application.ScreenUpdating = False
         showBooks
@@ -73,7 +73,7 @@ Public Sub extract_users()
         dwb.Worksheets(1).Delete
         dwb.SaveAs "C:\Users\jsikorski\Documents\GitHub\hei_misc\Modules\Time_Card_User.csv", xlCSV
         dwb.Close
-        hideBooks
+        HideBooks
         Application.DisplayAlerts = True
         Application.ScreenUpdating = True
     End If
