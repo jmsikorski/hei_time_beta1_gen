@@ -414,8 +414,10 @@ Public Sub genLeadSheets()
             .Value = iTemp.getClass
             .Offset(0, 1).Value = iTemp.getFName & " " & iTemp.getLName
             .Offset(0, 2).Value = iTemp.getNum
-            ls.Worksheets("LEAD").Protect
         End With
+        ls.Worksheets("LEAD").Protection.AllowInsertingRows = True
+        ls.Worksheets("LEAD").Protect
+        ls.Worksheets("LEAD").Protection.AllowInsertingRows = True
         bks.Add ls
         For x = 1 To UBound(weekRoster, 2)
             Dim xTemp As Employee
@@ -442,7 +444,7 @@ Public Sub genLeadSheets()
         If genRoster(bk, ls.Worksheets("ROSTER"), i + 1) = -1 Then
             MsgBox ("ERROR PRINTING ROSTER")
         End If
-        setDataValidation ls.Sheet5
+        setDataValidation ls.Worksheets(Sheet5.name)
         ls.Worksheets("LEAD").Protect
         bk.Worksheets("SAVE").Visible = xlVeryHidden
         ls.Worksheets("ROSTER").Visible = xlVeryHidden
@@ -483,7 +485,7 @@ Public Sub setDataValidation(ws As Worksheet)
     For i = 1 To 7
         For Each rng In ws.ListObjects(i).ListColumns(6).DataBodyRange
             rng.Validation.Delete
-            vData = "=" & Sheet4.naws & "!" & Sheet4.Cells(rng.Row, 20).Address
+            vData = "=DATA!" & Sheet4.Cells(rng.Row, 20).Address
             rng.Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
             Operator:=xlEqual, Formula1:=vData
             With rng.Validation
@@ -780,6 +782,7 @@ Public Sub savePacket()
 
     On Error GoTo 0
     xlFile = xlPath & jobNum & "_Week_" & we & ".xlsx"
+    hiddenApp.Visible = True
     hiddenApp.Workbooks.Open ThisWorkbook.path & "\Packet Template.xlsx"
     Set bk = hiddenApp.Workbooks("Packet Template.xlsx")
     saveWeekRoster bk.Sheets("SAVE")

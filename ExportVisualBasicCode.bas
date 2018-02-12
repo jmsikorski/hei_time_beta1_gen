@@ -3,7 +3,7 @@ Attribute VB_Name = "ExportVisualBasicCode"
 ' Requires enabling the Excel setting in Options/Trust Center/Trust Center Settings/Macro Settings/Trust access to the VBA project object model
 
 Public Sub callExportVBA()
-    ExportVBA
+    ExportVBA ThisWorkbook.name
 End Sub
 
 Public Sub ExportVBA(Optional xlFile As String)
