@@ -30,6 +30,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Private Sub spAdd_Click()
     Set aLead = New addlead
     aLead.Show

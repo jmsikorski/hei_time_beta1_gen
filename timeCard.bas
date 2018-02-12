@@ -438,11 +438,12 @@ Public Sub genLeadSheets()
                 ls.Worksheets("LEAD").ListObjects(n).ListRows(e_cnt + 1).Delete
             Next p
         Next n
-        ls.Worksheets("LEAD").Protect
         copy_tables ls
         If genRoster(bk, ls.Worksheets("ROSTER"), i + 1) = -1 Then
             MsgBox ("ERROR PRINTING ROSTER")
         End If
+        setDataValidation ls.Sheet5
+        ls.Worksheets("LEAD").Protect
         bk.Worksheets("SAVE").Visible = xlVeryHidden
         ls.Worksheets("ROSTER").Visible = xlVeryHidden
         ls.Worksheets("DATA").Visible = xlVeryHidden
@@ -474,9 +475,29 @@ Public Sub genLeadSheets()
     ThisWorkbook.Protect xPass
 End Sub
 
-Public Sub test1()
-    addlead.Show
+Public Sub setDataValidation(ws As Worksheet)
+    Dim rng As Range
+    Dim i As Integer, c As Integer, r As Integer
+    Dim vData As String
+    On Error Resume Next
+    For i = 1 To 7
+        For Each rng In ws.ListObjects(i).ListColumns(6).DataBodyRange
+            rng.Validation.Delete
+            vData = "=" & Sheet4.naws & "!" & Sheet4.Cells(rng.Row, 20).Address
+            rng.Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
+            Operator:=xlEqual, Formula1:=vData
+            With rng.Validation
+                .Errorwsssage = "The Formula in this cell cannot be changed!" & vbNewLine & _
+                "Correct Formula is: =IFERROR(INDIRECT(CONCATENATE(""DATA!T"",ROW())),"""")"
+                .IgnoreBlank = False
+                .InCellDropdown = False
+            End With
+        Next
+    Next
+    Err.Clear
+    On Error GoTo 0
 End Sub
+
 Public Sub send_leadSheet(addr As String, lnk As String)
     Dim xOutlookObj As Object
     Dim xEmailObj As Object ' Outlook.MailItem
