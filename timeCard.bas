@@ -796,7 +796,7 @@ Public Sub savePacket()
     End If
     bk.SaveAs xlFile
     hiddenApp.Visible = True
-    bk.Close
+'    bk.Close
     
     
     On Error GoTo 0
