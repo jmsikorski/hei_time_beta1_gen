@@ -389,7 +389,9 @@ Public Sub genLeadSheets()
     On Error GoTo 0
     Dim r_size As Integer
     Dim bk As Workbook
+    On Error Resume Next
     hiddenApp.Workbooks.Open jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+    On Error GoTo 0
     Set bk = hiddenApp.Workbooks(jobNum & "_Week_" & we & ".xlsx")
     For i = 0 To UBound(weekRoster)
         e_cnt = 1
@@ -415,9 +417,7 @@ Public Sub genLeadSheets()
             .Offset(0, 1).Value = iTemp.getFName & " " & iTemp.getLName
             .Offset(0, 2).Value = iTemp.getNum
         End With
-        ls.Worksheets("LEAD").Protection.AllowInsertingRows = True
-        ls.Worksheets("LEAD").Protect
-        ls.Worksheets("LEAD").Protection.AllowInsertingRows = True
+        ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
         bks.Add ls
         For x = 1 To UBound(weekRoster, 2)
             Dim xTemp As Employee
@@ -430,7 +430,7 @@ Public Sub genLeadSheets()
                     .Value = xTemp.getClass
                     .Offset(0, 1).Value = xTemp.getFName & " " & xTemp.getLName
                     .Offset(0, 2).Value = xTemp.getNum
-                    ls.Worksheets("LEAD").Protect
+                    ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
                 End With
             End If
         Next x
@@ -445,7 +445,7 @@ Public Sub genLeadSheets()
             MsgBox ("ERROR PRINTING ROSTER")
         End If
         setDataValidation ls.Worksheets(Sheet5.name)
-        ls.Worksheets("LEAD").Protect
+        ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
         bk.Worksheets("SAVE").Visible = xlVeryHidden
         ls.Worksheets("ROSTER").Visible = xlVeryHidden
         ls.Worksheets("DATA").Visible = xlVeryHidden
@@ -475,6 +475,8 @@ Public Sub genLeadSheets()
     bk.Close False
 '    wb.Worksheets("LEAD").Visible = False
     ThisWorkbook.Protect xPass
+    Application.EnableEvents = True
+
 End Sub
 
 Public Sub setDataValidation(ws As Worksheet)
