@@ -278,7 +278,7 @@ Public Function loadShifts(Optional test As Boolean) As Integer
         week = calcWeek(43127)
     End If
     we = Format(week, "mm.dd.yy")
-    xlPath = jobPath & "\" & jobNum & "\Week_" & we & "\TimeSheets\"
+    xlPath = jobPath & jobNum & "\Week_" & we & "\TimeSheets\"
     lead_arr = getLeadSheets(xlPath)
     wb_arr = Split(lead_arr, ",")
     For i = 0 To UBound(wb_arr)
@@ -975,7 +975,7 @@ Public Function isSave() As Integer
     Dim we As String
     Dim tmp() As String
     we = Format(week, "mm.dd.yy")
-    xlFile = jobPath & "\" & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+    xlFile = jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     If testFileExist(xlFile) > 0 Then
         isSave = 1
     Else
@@ -1203,7 +1203,7 @@ Public Sub updatePacket(Optional test As Boolean)
         loadShifts test
     End If
     we = Format(week, "mm.dd.yy")
-    xlPath = jobPath & "\" & jobNum & "\Week_" & we & "\TimePackets\"
+    xlPath = jobPath & jobNum & "\Week_" & we & "\TimePackets\"
     xlFile = jobNum & "_Week_" & we & ".xlsx"
     xlTCFile = jobNum & "_Week_" & we & "_TimeCards.xlsx"
     
@@ -1332,7 +1332,7 @@ Public Function loadRoster() As Integer
     ReDim weekRoster(0, eCount)
     Dim hiddenApp As New Excel.Application
     i = 0
-    xlFile = jobPath & "\" & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+    xlFile = jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
 '    On Error GoTo 10
     hiddenApp.Workbooks.Open xlFile
     SetAttr xlFile, vbNormal

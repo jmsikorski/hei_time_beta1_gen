@@ -22,30 +22,27 @@ Private Sub smBuild_Click()
     Dim ans As Integer
     Dim FSO As FileSystemObject
     Set FSO = New FileSystemObject
-    lastWE Format(calcWeek(Date - 7), "mm.dd.yy")
+    lastWE = Format(calcWeek(Date - 7), "mm.dd.yy")
     we = Format(week, "mm.dd.yy")
-    xlFile = jobPath & "\" & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
-    lwXlFile = jobPath & "\" & jobNum & "\Week_" & lastWE & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+    xlFile = jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+    lwXlfile = jobPath & jobNum & "\Week_" & lastWE & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     
-    If Dir(lwXlFile) <> "" Then
+    If Dir(lwXlfile) <> "" Then
         ans = MsgBox("Copy from last week?", vbYesNoCancel + vbQuestion, "COPY?")
         If ans = vbYes Then
-            FSO.CopyFile lwXlFile, xlFile
+            FSO.CopyFile lwXlfile, xlFile
             smEdit_Click
             GoTo clean_up
         ElseIf ans = vbCancel Then
             GoTo clean_up
         End If
     End If
-    xlFile = jobPath & "\" & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     If testFileExist(xlFile) > 0 Then
         On Error Resume Next
-        Dim ans As Integer
         ans = MsgBox("The packet already exists, Are you sure you want to overwrite it?", vbYesNo + vbQuestion)
         If ans = vbYes Then
-            xStrPath = jobPath & "\" & jobNum & "\Week_" & we & "\TimeSheets\"
             Kill xlFile
-            xStrPath = jobPath & "\" & jobNum & "\Week_" & we & "\TimeSheets\"
+            xStrPath = jobPath & jobNum & "\Week_" & we & "\TimeSheets\"
             killFile = Dir(xStrPath & "\*.xlsx")
             Do While killFile <> ""
                 Kill xStrPath & killFile
