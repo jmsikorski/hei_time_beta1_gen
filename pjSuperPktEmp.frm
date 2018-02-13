@@ -318,6 +318,58 @@ Public Sub setSheet(menuNum As Integer)
 End Sub
 
 
+Private Sub updateGoals_Click()
+    hiddenApp.Workbooks.Open ThisWorkbook.path & "\UnitGoals.xlsx"
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Set wb = hiddenApp.Workbooks("UnitGoals.xlsx")
+    For i = 0 To wb.Sheets.count
+        If wb.Worksheets(i).Visible = False Then
+            wb.Worksheets(i).Visible = True
+        End If
+    Next
+    Dim tmp() As String
+    Dim leadName As String
+    Dim rng As Range
+    tmp() = Split(Me.E1.Caption, " ")
+    leadName = tmp(UBound(tmp))
+    On Error Resume Next
+    Set ws = wb.Worksheets(leadName)
+    If Err.Number <> 0 Then
+        Err.Clear
+        On Error GoTo 0
+        hiddenApp.Visible = True
+        wb.Worksheets("MASTER").Copy before:=wb.Worksheets(1)
+        Set ws = wb.Worksheets(1)
+        ws.name = leadName
+        With ws.ListObjects(1)
+            ws.Unprotect
+            .name = leadName & "_goals"
+            ws.Protect
+        End With
+    End If
+    Dim i As Integer
+    For i = 1 To wb.Sheets.count
+        With wb.Worksheets(i)
+        If .name <> leadName Then
+            .Visible = xlVeryHidden
+        End If
+        End With
+    Next i
+    hiddenApp.Visible = True
+    hiddenApp.WindowState = xlMaximized
+    Do While done = False
+        On Error GoTo wb_closed
+        Set wb = hiddenApp.Workbooks("UnitGoals.xlsx")
+        done = False
+    Loop
+wb_closed:
+    Err.Clear
+    hiddenApp.Visible = False
+    Set wb = Nothing
+    Set ws = Nothing
+End Sub
+
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
     If CloseMode = vbFormControlMenu Then
         Me.Hide
