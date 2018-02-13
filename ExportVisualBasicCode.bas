@@ -74,7 +74,6 @@ Public Sub ExportVBA(Optional xlFile As String)
     Next
     Set FSO = Nothing
     Dim cnt As Integer
-    Dim ln As String
     cnt = 0
     For Each directory In dirs
         For Each VBComponent In ActiveWorkbook.VBProject.VBComponents

@@ -25,11 +25,14 @@ Private Sub smBuild_Click()
     lastWE = Format(calcWeek(Date - 7), "mm.dd.yy")
     we = Format(week, "mm.dd.yy")
     xlFile = jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
-    lwXLFile = jobPath & jobNum & "\Week_" & lastWE & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+    lwXLFile = jobPath & jobNum & "\Week_" & lastWE & "\TimePackets\" & jobNum & "_Week_" & lastWE & ".xlsx"
     
+try_again:
     If FSO.FileExists(lwXLFile) Then
         ans = MsgBox("Copy from last week?", vbYesNoCancel + vbQuestion, "COPY?")
         If ans = vbYes Then
+            MkDir jobPath & jobNum & "\Week_" & we
+            MkDir jobPath & jobNum & "\Week_" & we & "\TimePackets"
             FSO.CopyFile lwXLFile, xlFile
             smEdit_Click
             GoTo clean_up
