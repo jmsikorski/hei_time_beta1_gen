@@ -206,14 +206,14 @@ Private Sub copy_tables(ByRef wb As Workbook)
     Set ws = wb.Worksheets("LEAD")
     ws.Unprotect
     ws.ListObjects("Monday").DataBodyRange.Copy
-    ws.Range("Tuesday").PasteSpecial xlPasteValues
-    ws.Range("Wednesday").PasteSpecial xlPasteValues
-    ws.Range("Thursday").PasteSpecial xlPasteValues
-    ws.Range("Friday").PasteSpecial xlPasteValues
-    ws.Range("Saturday").PasteSpecial xlPasteValues
-    ws.Range("Sunday").PasteSpecial xlPasteValues
+    ws.Range("Tuesday").PasteSpecial xlPastformulas
+    ws.Range("Wednesday").PasteSpecial xlPasteFormulas
+    ws.Range("Thursday").PasteSpecial xlPasteFormulas
+    ws.Range("Friday").PasteSpecial xlPasteFormulas
+    ws.Range("Saturday").PasteSpecial xlPasteFormulas
+    ws.Range("Sunday").PasteSpecial xlPasteFormulas
     ws.Activate
-    ws.Protect
+    ws.Protect AllowInsertingRows:=True
     Application.CutCopyMode = False
 End Sub
 
