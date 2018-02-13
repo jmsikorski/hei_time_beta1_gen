@@ -13,36 +13,30 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Private Sub smBuild_Click()
     Dim we As String
     Dim xlFile As String
     Dim killFile As String
     Dim xStrPath As String
+    Dim lastWE As String
+    Dim ans As Integer
+    Dim FSO As FileSystemObject
+    Set FSO = New FileSystemObject
+    lastWE Format(calcWeek(Date - 7), "mm.dd.yy")
     we = Format(week, "mm.dd.yy")
+    xlFile = jobPath & "\" & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+    lwXlFile = jobPath & "\" & jobNum & "\Week_" & lastWE & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+    
+    If Dir(lwXlFile) <> "" Then
+        ans = MsgBox("Copy from last week?", vbYesNoCancel + vbQuestion, "COPY?")
+        If ans = vbYes Then
+            FSO.CopyFile lwXlFile, xlFile
+            smEdit_Click
+            GoTo clean_up
+        ElseIf ans = vbCancel Then
+            GoTo clean_up
+        End If
+    End If
     xlFile = jobPath & "\" & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     If testFileExist(xlFile) > 0 Then
         On Error Resume Next
@@ -62,6 +56,8 @@ Private Sub smBuild_Click()
         End If
         On Error GoTo 0
     End If
+clean_up:
+    Set FSO = Nothing
     sMenu.Hide
     Set lMenu = New pjSuperPkt
     lMenu.Show
