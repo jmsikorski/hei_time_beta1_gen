@@ -31,13 +31,10 @@ Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
         ExportVBA ThisWorkbook.name
     End If
     On Error GoTo 0
-    If Environ$("username") <> "jsikorski" Then
-        ThisWorkbook.Saved = True
-        Cancel = True
-    End If
 End Sub
 
 Private Sub Workbook_Open()
     main
 End Sub
+
 

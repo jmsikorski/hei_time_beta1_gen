@@ -46,8 +46,3 @@ Public Sub HideBooks()
     On Error GoTo 0
 End Sub
 
-Public Sub t123()
-    ThisWorkbook.Unprotect getXPass
-    ThisWorkbook.Unprotect getXPass
-    
-End Sub
