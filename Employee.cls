@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Private fName As String
+Private Fname As String
 Private lName As String
 Private num As Integer
 Private eClass As String
@@ -21,7 +21,7 @@ Public Property Let eLead(i As Integer)
 End Property
 
 Public Property Let efName(s As String)
-    fName = s
+    Fname = s
 End Property
 
 Public Property Let elName(s As String)
@@ -77,7 +77,7 @@ Public Property Get getLead() As Integer
 End Property
 
 Public Property Get getFName() As String
-    getFName = fName
+    getFName = Fname
 End Property
 
 Public Property Get getLName() As String
@@ -105,7 +105,7 @@ Public Property Get getPerDiem() As Boolean
 End Property
 
 Private Sub Class_Initialize()
-    fName = "NONE"
+    Fname = "NONE"
     lName = "NONE"
     num = -1
     eClass = "NONE"
@@ -118,7 +118,7 @@ Private Sub Class_Initialize()
 End Sub
 
 Public Property Get getFullname() As String
-    getFullname = fName & " " & lName
+    getFullname = Fname & " " & lName
 End Property
 
 Public Property Get newEmployee(ByVal i As Integer) As Integer

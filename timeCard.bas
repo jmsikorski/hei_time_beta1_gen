@@ -266,14 +266,14 @@ Private Function getLeadSheets(xStrPath As String) As String
 
 End Function
 
-Public Function loadShifts(Optional test As Boolean) As Integer
+Public Function loadShifts(Optional tEst As Boolean) As Integer
     'On Error GoTo shift_err
     Dim wb_arr() As String
     Dim lead_arr As String
     Dim xlPath As String
     Dim we As String
     Dim hiddenApp As New Excel.Application
-    If test Then
+    If tEst Then
         jobNum = "461705"
         week = calcWeek(43127)
     End If
@@ -584,13 +584,13 @@ Public Function publicEncryptPassword(pw As String) As String
         End If
     End If
     Dim pwi As Long
-    Dim test As String
+    Dim tEst As String
     Dim epw As String
     Dim key As Long
     epw = vbnullStrig
     For i = 0 To Len(pw) - 1
-        test = Left(pw, 1)
-        pwi = Asc(test)
+        tEst = Left(pw, 1)
+        pwi = Asc(tEst)
         pw = Right(pw, Len(pw) - 1)
         key = ThisWorkbook.Worksheets("KEY").Range("A" & i + 1).Value
         If key = pwi Then key = key + 128
@@ -605,13 +605,13 @@ End Function
 
 Private Function encryptPassword(pw As String) As String
     Dim pwi As Long
-    Dim test As String
+    Dim tEst As String
     Dim epw As String
     Dim key As Long
     epw = vbnullStrig
     For i = 0 To Len(pw) - 1
-        test = Left(pw, 1)
-        pwi = Asc(test)
+        tEst = Left(pw, 1)
+        pwi = Asc(tEst)
         pw = Right(pw, Len(pw) - 1)
         key = ThisWorkbook.Worksheets("KEY").Range("A" & i + 1).Value
         If key = pwi Then key = key + 128
@@ -1054,7 +1054,7 @@ Public Sub insertRoster(index As Integer)
     Next x
 End Sub
 
-Public Sub genTimeCard(Optional test As Boolean)
+Public Sub genTimeCard(Optional tEst As Boolean)
     Dim hiddenApp As New Excel.Application
     hiddenApp.DisplayAlerts = False
     Dim xlPath As String
@@ -1062,7 +1062,7 @@ Public Sub genTimeCard(Optional test As Boolean)
     Dim we As String
     Dim shtCnt As Integer
     shtCnt = 0
-    If test Then
+    If tEst Then
         jobNum = "461705"
         week = calcWeek(43127)
 '        we = "01.28.18"
@@ -1073,8 +1073,8 @@ Public Sub genTimeCard(Optional test As Boolean)
     xlPath = jobPath & jobNum & "\Week_" & we & "\TimePackets\"
     xlFile = jobNum & "_Week_" & we & "_TimeCards.xlsx"
     If loadRoster = -1 Then GoTo load_err
-    If test Then
-        If timeCard.loadShifts(test) = -1 Then
+    If tEst Then
+        If timeCard.loadShifts(tEst) = -1 Then
             Stop
         End If
     Else
@@ -1185,7 +1185,7 @@ Public Sub test_updatePacket()
     timeCard.updatePacket True
 End Sub
 
-Public Sub updatePacket(Optional test As Boolean)
+Public Sub updatePacket(Optional tEst As Boolean)
     Dim we As String
     Dim xlPath As String
     Dim xlFile As String
@@ -1193,14 +1193,14 @@ Public Sub updatePacket(Optional test As Boolean)
     Dim wb As Workbook
     Dim tc_wb As Workbook
     Dim tEmp As Variant
-    If test Then
+    If tEst Then
         jobNum = "461705"
         week = calcWeek(43127)
 '        we = "01.28.18"
         jobPath = ThisWorkbook.path & "\"
         On Error GoTo 0
         loadRoster
-        loadShifts test
+        loadShifts tEst
     End If
     we = Format(week, "mm.dd.yy")
     xlPath = jobPath & jobNum & "\Week_" & we & "\TimePackets\"
@@ -1350,7 +1350,7 @@ Public Function loadRoster() As Integer
         xlEmp.emClass = tmp.Offset(0, 2)
         xlEmp.elName = tmp.Offset(0, 3)
         xlEmp.efName = tmp.Offset(0, 4)
-        xlEmp.emnum = tmp.Offset(0, 5)
+        xlEmp.emNum = tmp.Offset(0, 5)
         xlEmp.emPerDiem = tmp.Offset(0, 6)
        Set weekRoster(tmp.Offset(0, 0).Value, tmp.Offset(0, 1).Value) = xlEmp
     Next tmp
@@ -1388,7 +1388,7 @@ Private Sub loadMenu() 'ws As Worksheet)
         Set tmp = New Employee
         tmp.efName = rng.Offset(0, 4).Value
         tmp.elName = rng.Offset(0, 3).Value
-        tmp.emnum = rng.Offset(0, 5).Value
+        tmp.emNum = rng.Offset(0, 5).Value
         tmp.emClass = rng.Offset(0, 2).Value
         tmp.emPerDiem = rng.Offset(0, 6).Value
         Set weekRoster(rng.Offset(0, 0).Value, rng.Offset(0, 1).Value) = tmp

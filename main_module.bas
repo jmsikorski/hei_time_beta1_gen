@@ -28,12 +28,14 @@ Public Sub HideBooks()
         ActiveWorkbook.Unprotect xPass
         For i = 1 To ThisWorkbook.Sheets.count
             If ThisWorkbook.Worksheets(i).Visible = True Then
+                Debug.Print ThisWorkbook.Worksheets(i).name
                 If ThisWorkbook.Worksheets(i).name <> ThisWorkbook.Worksheets("HOME").name Then
                     ThisWorkbook.Worksheets(i).Visible = False
                 End If
             End If
         Next i
         For i = 1 To ThisWorkbook.Sheets.count
+            Debug.Print ThisWorkbook.Worksheets(i).name
             If ThisWorkbook.Worksheets(i).Visible = False Then
                 ThisWorkbook.Worksheets(i).Visible = xlVeryHidden
             End If
