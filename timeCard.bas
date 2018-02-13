@@ -28,8 +28,7 @@ End Enum
 
 Public Sub t123()
     ThisWorkbook.Unprotect getXPass
-    ThisWorkbook.Unprotect getXPass
-    
+    Sheet5.Unprotect getXPass
 End Sub
 
 Private Function getSharePointLink(xlPath As String) As String
@@ -206,7 +205,7 @@ Private Sub copy_tables(ByRef wb As Workbook)
     Set ws = wb.Worksheets("LEAD")
     ws.Unprotect
     ws.ListObjects("Monday").DataBodyRange.Copy
-    ws.Range("Tuesday").PasteSpecial xlPastformulas
+    ws.Range("Tuesday").PasteSpecial xlPasteFormulas
     ws.Range("Wednesday").PasteSpecial xlPasteFormulas
     ws.Range("Thursday").PasteSpecial xlPasteFormulas
     ws.Range("Friday").PasteSpecial xlPasteFormulas

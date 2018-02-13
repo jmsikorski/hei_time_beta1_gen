@@ -35,6 +35,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Public Sub updateProgress(task As String, pct As Single)
     Me.Label1.Caption = "Loading " & task & vbNewLine & "This might take a few moments."
     Me.ProgressLabel.Width = (Me.ProgressFrame.Width - 12) * pct
