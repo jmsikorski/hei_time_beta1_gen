@@ -21,7 +21,7 @@ Public Sub ExportVBA(Optional xlFile As String)
     Const Document = 100
     Const Padding = 24
 
-    Dim VBComponent As Object
+    Dim VBComponent As VBComponent
     Dim count As Integer
     Dim path As String
     Dim dir_main As String
@@ -73,9 +73,12 @@ Public Sub ExportVBA(Optional xlFile As String)
         End If
     Next
     Set FSO = Nothing
-
+    Dim cnt As Integer
+    Dim ln As String
+    cnt = 0
     For Each directory In dirs
         For Each VBComponent In ActiveWorkbook.VBProject.VBComponents
+            cnt = cnt + VBComponent.CodeModule.CountOfLines
             If directory = dirs(0) Then
                 Exit For
             End If
@@ -104,7 +107,7 @@ Public Sub ExportVBA(Optional xlFile As String)
                 path = directory & "\" & VBComponent.name & extension
             End If
             Call VBComponent.Export(path)
-
+            
             If Err.Number <> 0 Then
                  Call MsgBox("Failed to export " & VBComponent.name & " to " & path, vbCritical)
             Else
@@ -115,7 +118,7 @@ Public Sub ExportVBA(Optional xlFile As String)
             On Error GoTo 0
         Next
     Next
-
+    MsgBox cnt & " lines"
     Application.StatusBar = "Successfully exported " & CStr(count) & " VBA files to " & dir_main
     Application.StatusBar = False
     If ans = vbYes Then
@@ -420,7 +423,7 @@ Public Sub ImportModules(Optional codeFolder As String)
         
         ElseIf (objFSO.GetExtensionName(objFile.name) = "frm") Then
             cmpComponents.Import objFile.path
-            .DeleteLines StartLine:=16, count:=1
+            ThisWorkbook.VBProject.VBComponents(objFile).CodeModule.DeleteLines StartLine:=16, count:=1
         ElseIf (objFSO.GetExtensionName(objFile.name) = "bas") Then
             If objFile.name <> "main_module.bas" Then
                 cmpComponents.Import objFile.path
