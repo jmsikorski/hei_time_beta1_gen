@@ -29,6 +29,7 @@ Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
     On Error Resume Next
     If Environ$("Username") = "jsikorski" Then
         ExportVBA ThisWorkbook.name
+        MsgBox "Dont forget to post your time"
     End If
     On Error GoTo 0
 End Sub
