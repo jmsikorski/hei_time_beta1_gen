@@ -122,7 +122,7 @@ Public Sub ExportVBA(Optional xlFile As String)
         On Error Resume Next
         Dim commitMessage As String
         commitMessage = InputBox("Commit Message: ", "MESSAGE", Left(ThisWorkbook.name, Len(ThisWorkbook.name) - 5))
-        VBA_IDE_main.gitCommit commitMessage, dirs(3)
+        Application.Run "'VBA_IDE.xlsm'!gitCommit", commitMessage, dirs(3)
         On Error GoTo 0
         ans = MsgBox("Release?", vbYesNo, ThisWorkbook.name)
         If ans = vbYes Then
@@ -400,7 +400,6 @@ Public Sub ImportModules(Optional codeFolder As String)
     For Each objFile In objFSO.GetFolder(szImportPath).Files
     
         If (objFSO.GetExtensionName(objFile.name) = "cls") Then
-            Debug.Print objFile.name
             If Left(objFile.name, 12) = "ThisWorkbook" Then
                 With ActiveWorkbook.VBProject.VBComponents("ThisWorkbook").CodeModule
                     .DeleteLines StartLine:=1, count:=.CountOfLines
@@ -419,17 +418,16 @@ Public Sub ImportModules(Optional codeFolder As String)
                 On Error GoTo 0
             End If
         
-        ElseIf (objFSO.GetExtensionName(objFile.name) = "frm") Or _
-            (objFSO.GetExtensionName(objFile.name) = "bas") Then
-            Debug.Print objFile.name
+        ElseIf (objFSO.GetExtensionName(objFile.name) = "frm") Then
+            cmpComponents.Import objFile.path
+            .DeleteLines StartLine:=16, count:=1
+        ElseIf (objFSO.GetExtensionName(objFile.name) = "bas") Then
             If objFile.name <> "main_module.bas" Then
                 cmpComponents.Import objFile.path
             End If
         End If
         cnt = cnt + 1
     Next objFile
-    
-    Debug.Print "Imported " & cnt & " Files"
     Set wkbTarget = Nothing
     Set objShell = Nothing
     Set objFSO = Nothing
@@ -491,7 +489,6 @@ Function DeleteVBAModulesAndUserForms(Optional saveModule As String)
 End Function
 
 Sub AddReference(rName As String, rLoc As String)
-    Debug.Print rName
     Dim VBAEditor As VBIDE.VBE
     Dim vbProj As VBIDE.VBProject
     Dim chkRef As VBIDE.Reference
@@ -511,12 +508,6 @@ Sub AddReference(rName As String, rLoc As String)
     vbProj.References.AddFromFile rLoc
 
 CleanUp:
-    If BoolExists = True Then
-        Debug.Print rName & " already exists"
-    Else
-        Debug.Print rName & " Added Successfully"
-    End If
-
     Set vbProj = Nothing
     Set VBAEditor = Nothing
 End Sub

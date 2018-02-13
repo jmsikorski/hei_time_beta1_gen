@@ -67,8 +67,6 @@ Public Sub extract_users()
         Dim dwb As Workbook
         Set wb = ThisWorkbook
         Set dwb = Workbooks.Add
-        Debug.Print wb.name
-        Debug.Print dwb.name
         wb.Worksheets("USER").Copy after:=dwb.Worksheets(1)
         dwb.Worksheets(1).Delete
         dwb.SaveAs "C:\Users\jsikorski\Documents\GitHub\hei_misc\Modules\Time_Card_User.csv", xlCSV

@@ -28,7 +28,6 @@ Private Sub addLeadEnter_Click()
     Dim dm As ListObject
     For Each tEmp In ThisWorkbook.Worksheets("ROSTER").ListObjects("emp_roster").ListColumns("LEAD").DataBodyRange
         With Me.ComboBox1
-            Debug.Print .Value & " = " & tEmp.Offset(0, -3) & " " & tEmp.Offset(0, -4)
             If .Value = tEmp.Offset(0, -3) & " " & tEmp.Offset(0, -4) Then
                 ThisWorkbook.Worksheets("ROSTER").Unprotect xPass
                 tEmp.Value = "YES"

@@ -539,7 +539,6 @@ Private Sub check_updates(Optional uTime As Date)
         t1 = Now
         emp_table.update_emp_table
         t2 = Now
-        Debug.Print DateDiff("s", t1, t2)
     End If
     If DateDiff("s", uTime, FileDateTime(datPath & "\Labor Report.xlsx")) > 0 Then
         Dim lc_wb As Workbook
@@ -1018,9 +1017,7 @@ Public Sub resizeRoster(l As Integer, e As Integer)
     For i = 0 To l
         For x = 0 To e
             Set weekRoster(i, x) = newRoster(i, x)
-            
             On Error Resume Next
-            Debug.Print newRoster(i, x).getFullname
         Next x
     Next i
     On Error GoTo 0

@@ -13,31 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Private Sub spAdd_Click()
     Set aLead = New addlead
     aLead.Show
@@ -167,7 +142,6 @@ Private Sub UserForm_Initialize()
     lCnt = 0
     cnt = 0
     For Each tmp In ws.Range("E2", ws.Range("E2").End(xlDown))
-        Debug.Print tmp.Offset(0, -1) & " " & tmp.Offset(0, -2)
         If tmp.Offset(0, 2).Value = "YES" Then
             lCnt = lCnt + 1
         End If
