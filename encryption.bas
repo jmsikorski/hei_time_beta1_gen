@@ -1,13 +1,13 @@
 Attribute VB_Name = "encryption"
 Private Function encryptPassword(pw As String) As String
     Dim pwi As Long
-    Dim test As String
+    Dim tEst As String
     Dim epw As String
     Dim key As Long
     epw = vbnullStrig
     For i = 0 To Len(pw) - 1
-        test = Left(pw, 1)
-        pwi = Asc(test)
+        tEst = Left(pw, 1)
+        pwi = Asc(tEst)
         pw = Right(pw, Len(pw) - 1)
         key = ThisWorkbook.Worksheets("KEY").Range("A" & i + 1).Value
         If key = pwi Then key = key + 128

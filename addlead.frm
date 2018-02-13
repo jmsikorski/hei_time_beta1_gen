@@ -14,14 +14,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
-
-
-Public Sub mCancel_Click()
-    Unload Me
-    lMenu.Show
-End Sub
-
-
 Private Sub addLeadEnter_Click()
     Dim tEmp As Variant
     Dim uNum As Range
@@ -64,7 +56,15 @@ End Sub
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
     If CloseMode = vbFormControlMenu Then
-       mCancel_Click
+       xcl_Click
     End If
 End Sub
 
+Private Sub xcl_Click()
+    Stop
+    Unload Me
+    If addlead.Visible = True Then
+        addlead.Hide
+    End If
+    lMenu.Show
+End Sub

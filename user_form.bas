@@ -44,18 +44,49 @@ Public Sub get_user_list()
     Dim ws As Worksheet
     Dim rng As Range
     Dim fRng As Range
-    
-    hiddenApp.Workbooks.Open ThisWorkbook.path & "\User.xlsx", Password:="hei3078USER"
+    Dim tEst As Integer
+    Dim pct As Single
+    pct = 0
+    Dim t1 As Date, t2 As Date
+    t1 = Now
+    tEst = 8
+    loadingMenu.Show
+    loadingMenu.updateProgress "User File", pct
+    Set hiddenApp = New Excel.Application
+    pct = DateDiff("s", t1, Now()) / tEst
+    loadingMenu.updateProgress "User File", pct
+    hiddenApp.Workbooks.Open Getlnkpath(ThisWorkbook.path & "\Data.lnk") & "\User.xlsx", Password:="hei3078USER"
+    pct = DateDiff("s", t1, Now()) / tEst
+    loadingMenu.updateProgress "User File", pct
     Set ws = hiddenApp.Workbooks("User.xlsx").Worksheets("USER")
+    pct = DateDiff("s", t1, Now()) / tEst
+    loadingMenu.updateProgress "User File", pct
     Set rng = ws.UsedRange
+    pct = DateDiff("s", t1, Now()) / tEst
+    loadingMenu.updateProgress "User File", pct
     With wb.Worksheets("USER")
         .UsedRange.Offset(1, 0).Clear
+        pct = DateDiff("s", t1, Now()) / tEst
+        loadingMenu.updateProgress "User File", pct
         .Range("A2", .Range("A2").Offset(rng.Rows.count - 1, rng.Columns.count - 1)) = rng.Offset(1, 0).Value
+        pct = DateDiff("s", t1, Now()) / tEst
+        loadingMenu.updateProgress "User File", pct
         .Range("user_updated") = Now()
+        pct = DateDiff("s", t1, Now()) / tEst
+        loadingMenu.updateProgress "User File", pct
     End With
     ws.Parent.Close False
-    
-    
+    pct = DateDiff("s", t1, Now()) / tEst
+    loadingMenu.updateProgress "User File", pct
+    hiddenApp.Quit
+    Set hiddenApp = Nothing
+    t2 = Now
+    pct = DateDiff("s", t1, Now()) / tEst
+    loadingMenu.updateProgress "User File", pct
+    Debug.Print DateDiff("s", t1, t2)
+    pct = 1
+    loadingMenu.updateProgress "User File", pct
+    Unload loadingMenu
 End Sub
 
 Public Sub extract_users()
@@ -71,7 +102,7 @@ Public Sub extract_users()
         dwb.Worksheets(1).Delete
         dwb.SaveAs "C:\Users\jsikorski\Documents\GitHub\hei_misc\Modules\Time_Card_User.csv", xlCSV
         dwb.Close
-        HideBooks
+        hideBooks
         Application.DisplayAlerts = True
         Application.ScreenUpdating = True
     End If
@@ -87,9 +118,9 @@ Public Sub export_user_sheet()
     Dim ws As Worksheet
     Dim rng As Range
     Dim xFile As String
-    
+    Set hiddenApp = New Excel.Application
     hiddenApp.DisplayAlerts = False
-    hiddenApp.Workbooks.Open ThisWorkbook.path & "\User.xlsx", Password:="hei3078USER"
+    hiddenApp.Workbooks.Open Getlnkpath(ThisWorkbook.path & "\Data.lnk") & "\User.xlsx", Password:="hei3078USER"
     Set ws = hiddenApp.Workbooks("User.xlsx").Worksheets("USER")
     Set rng = wb.Worksheets("USER").UsedRange
     With ws
@@ -101,6 +132,6 @@ Public Sub export_user_sheet()
     ws.Parent.SaveAs xFile
     SetAttr xFile, vbHidden
     ws.Parent.Close
-    
-    
+    hiddenApp.Quit
+    Set hiddenApp = Nothing
 End Sub

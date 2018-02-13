@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Private Fname As String
+Private fName As String
 Private lName As String
 Private num As Integer
 Private eClass As String
@@ -21,14 +21,14 @@ Public Property Let eLead(i As Integer)
 End Property
 
 Public Property Let efName(s As String)
-    Fname = s
+    fName = s
 End Property
 
 Public Property Let elName(s As String)
     lName = s
 End Property
 
-Public Property Let emnum(s As Integer)
+Public Property Let emNum(s As Integer)
     num = s
 End Property
 
@@ -77,7 +77,7 @@ Public Property Get getLead() As Integer
 End Property
 
 Public Property Get getFName() As String
-    getFName = Fname
+    getFName = fName
 End Property
 
 Public Property Get getLName() As String
@@ -105,7 +105,7 @@ Public Property Get getPerDiem() As Boolean
 End Property
 
 Private Sub Class_Initialize()
-    Fname = "NONE"
+    fName = "NONE"
     lName = "NONE"
     num = -1
     eClass = "NONE"
@@ -118,7 +118,7 @@ Private Sub Class_Initialize()
 End Sub
 
 Public Property Get getFullname() As String
-    getFullname = Fname & " " & lName
+    getFullname = fName & " " & lName
 End Property
 
 Public Property Get newEmployee(ByVal i As Integer) As Integer
@@ -128,7 +128,7 @@ Public Property Get newEmployee(ByVal i As Integer) As Integer
         With Me
             .efName = rg.Offset(0, 3).Value
             .elName = rg.Offset(0, 2).Value
-            .emnum = rg.Offset(0, 4).Value
+            .emNum = rg.Offset(0, 4).Value
             .emClass = rg.Offset(0, 1).Value
             If rg.Offset(0, 5).Value = "YES" Then
                 .emPerDiem = True
