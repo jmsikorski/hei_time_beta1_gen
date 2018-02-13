@@ -322,9 +322,11 @@ Private Sub updateGoals_Click()
     hiddenApp.Workbooks.Open ThisWorkbook.path & "\UnitGoals.xlsx"
     Dim wb As Workbook
     Dim ws As Worksheet
+    Dim i As Integer
+    hiddenApp.Visible = True
     Set wb = hiddenApp.Workbooks("UnitGoals.xlsx")
-    For i = 0 To wb.Sheets.count
-        If wb.Worksheets(i).Visible = False Then
+    For i = 1 To wb.Sheets.count
+        If wb.Worksheets(i).Visible = xlVeryHidden Then
             wb.Worksheets(i).Visible = True
         End If
     Next
@@ -348,7 +350,6 @@ Private Sub updateGoals_Click()
             ws.Protect
         End With
     End If
-    Dim i As Integer
     For i = 1 To wb.Sheets.count
         With wb.Worksheets(i)
         If .name <> leadName Then
