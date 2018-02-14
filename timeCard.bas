@@ -873,7 +873,7 @@ Public Function genRoster(ByRef wb As Workbook, ByRef ws As Worksheet, Optional 
             .Range("job_num").Value = jobNum
             .Range("job_name").Value = jobName
             .Range("week_ending").Value = we
-            .Range("emp").Copy
+'            .Range("emp").Copy
             ws.Activate
             For Each tmp In wb.Worksheets("SAVE").Range("A1", wb.Worksheets("SAVE").Range("A1").End(xlDown))
                 If tmp.Value = lead - 1 Then
@@ -886,10 +886,10 @@ Public Function genRoster(ByRef wb As Workbook, ByRef ws As Worksheet, Optional 
                     Else
                         .Range("emp_phaseCode").Offset(cnt, 0).Value = "N/A"
                     End If
-                    If cnt > 1 Then
-                        .Range("emp").Offset(cnt, 0).PasteSpecial Paste:=xlPasteFormats
-                    End If
-                    cnt = cnt + 1
+'                    If cnt > 1 Then
+'                        .Range("emp").Offset(cnt, 0).PasteSpecial Paste:=xlPasteFormats
+'                    End If
+'                    cnt = cnt + 1
                 ElseIf tmp.Value > lead Then
                     Exit For
                 End If
