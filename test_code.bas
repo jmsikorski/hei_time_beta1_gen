@@ -8,8 +8,9 @@ Public Sub t12()
     MsgBox "Does it keep going?"
     lApp.Run "'loadingtimer.xlsm'!update", "Task2"
     Application.Wait Now + TimeValue("00:00:10")
-    lApp.Run "'loadingtimer.xlsm'!stoploading", "Task2"
-    Stop
+    lApp.Run "'loadingtimer.xlsm'!stopLoading"
+    lApp.Quit
+    Set lApp = Nothing
 End Sub
 
 Public Sub t13()
