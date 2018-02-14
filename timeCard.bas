@@ -435,13 +435,15 @@ rt:
         hiddenApp.EnableEvents = True
         ls.Worksheets("Labor Tracking & Goals").Unprotect
         ls.Worksheets("Labor Tracking & Goals").Range("lead_name") = iTemp.getFullname
+        hiddenApp.Visible = True
+        lApp.Visible = True
         ls.Worksheets("Labor Tracking & Goals").Protect
-        With ls.Worksheets("LEAD").Range("Monday").Cells(1, 1)
-            ls.Worksheets("LEAD").Unprotect
-            .Value = iTemp.getClass
-            .Offset(0, 1).Value = iTemp.getFName & " " & iTemp.getLName
-            .Offset(0, 2).Value = iTemp.getNum
-        End With
+'        With ls.Worksheets("LEAD").Range("Monday").Cells(1, 1)
+'            ls.Worksheets("LEAD").Unprotect
+'            .Value = iTemp.getClass
+'            .Offset(0, 1).Value = iTemp.getFName & " " & iTemp.getLName
+'            .Offset(0, 2).Value = iTemp.getNum
+'        End With
         ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
         bks.Add ls
         For x = 1 To UBound(weekRoster, 2)
@@ -450,25 +452,50 @@ rt:
             If xTemp Is Nothing Then
             Else
                 e_cnt = e_cnt + 1
-                With ls.Worksheets("LEAD").Range("Monday").Cells(x + 1, 1)
-                    ls.Worksheets("LEAD").Unprotect
-                    .Value = xTemp.getClass
-                    .Offset(0, 1).Value = xTemp.getFName & " " & xTemp.getLName
-                    .Offset(0, 2).Value = xTemp.getNum
-                    ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
-                End With
+'                With ls.Worksheets("LEAD").Range("Monday").Cells(x + 1, 1)
+'                    ls.Worksheets("LEAD").Unprotect
+'                    .Value = xTemp.getClass
+'                    .Offset(0, 1).Value = xTemp.getFName & " " & xTemp.getLName
+'                    .Offset(0, 2).Value = xTemp.getNum
+'                    ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
+'                End With
             End If
         Next x
         With ls.Worksheets("LEAD")
-            hiddenApp.Visible = True
             .Unprotect
             For tr = 1 To 7
-                Set rng = .Range(.ListObjects(tr).HeaderRowRange, .ListObjects(tr).HeaderRowRange.Offset(e_cnt + 1, 0))
-                .ListObjects(tr).Resize rng
+                Dim day As String
+                Dim nday As String
+                If tr = 1 Then
+                    day = "Monday"
+                    nday = "Tuesday"
+                ElseIf tr = 2 Then
+                    nday = "Wednesday"
+                    day = "Tuesday"
+                ElseIf tr = 3 Then
+                    day = "Wednesday"
+                    nday = "Thursday"
+                ElseIf tr = 4 Then
+                    nday = "Friday"
+                    day = "Thursday"
+                ElseIf tr = 5 Then
+                    nday = "Saturday"
+                    day = "Friday"
+                ElseIf tr = 6 Then
+                    day = "Saturday"
+                    nday = "Sunday"
+                Else
+                    day = "Sunday"
+                    nday = vbNullString
+                End If
+                Set rng = .Range(.ListObjects(day).HeaderRowRange, .ListObjects(day).HeaderRowRange.Offset(e_cnt + 1, 0))
+                .ListObjects(day).Resize rng
                 If tr < 7 Then
-                    .Range(rng.End(xlDown).Offset(2, 0), .ListObjects(tr + 1).HeaderRowRange.Offset(-2, 0)).EntireRow.Delete
+                    rng.End(xlDown).Offset(1, 0).EntireRow.Clear
+                    .Range(rng.End(xlDown).Offset(2, 0), .ListObjects(nday).HeaderRowRange.Offset(-2, 0)).EntireRow.Delete
                 Else
                     .Range(rng.End(xlDown).Offset(2, 0)).End(xlDown).EntireRow.Delete
+                GoTo rt
                 End If
             Next tr
         End With
