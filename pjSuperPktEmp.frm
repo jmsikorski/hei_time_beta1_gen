@@ -134,6 +134,7 @@ Private Sub spDone_Click()
     Application.ScreenUpdating = False
     Unload sMenu
     Unload lMenu
+    loadingMenu.Show
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets("ROSTER")
 '    Stop
@@ -323,7 +324,6 @@ Private Sub updateGoals_Click()
     Dim wb As Workbook
     Dim ws As Worksheet
     Dim i As Integer
-    hiddenApp.Visible = True
     Set wb = hiddenApp.Workbooks("UnitGoals.xlsx")
     For i = 1 To wb.Sheets.count
         If wb.Worksheets(i).Visible = xlVeryHidden Then
@@ -340,7 +340,6 @@ Private Sub updateGoals_Click()
     If Err.Number <> 0 Then
         Err.Clear
         On Error GoTo 0
-        hiddenApp.Visible = True
         wb.Worksheets("MASTER").Copy before:=wb.Worksheets(1)
         Set ws = wb.Worksheets(1)
         ws.name = leadName

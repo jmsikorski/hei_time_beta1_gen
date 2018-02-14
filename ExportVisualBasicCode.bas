@@ -162,7 +162,7 @@ Public Sub Zip_All_Files_in_Folder(Optional FolderName As String, Optional DefPa
     On Error Resume Next
     Do Until oApp.Namespace(FileNameZip).Items.count = _
        oApp.Namespace(FolderName).Items.count
-        Application.Wait (Now + TimeValue("0:00:01"))
+        Application.wait (Now + TimeValue("0:00:01"))
     Loop
     On Error GoTo 0
 

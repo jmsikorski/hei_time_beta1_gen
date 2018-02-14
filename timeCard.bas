@@ -350,7 +350,6 @@ Sub showsave()
     ws.Visible = True
 End Sub
 Public Sub genLeadSheets()
-
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
     Application.EnableEvents = False
@@ -393,6 +392,7 @@ Public Sub genLeadSheets()
     On Error GoTo 0
     Set bk = hiddenApp.Workbooks(jobNum & "_Week_" & we & ".xlsx")
     For i = 0 To UBound(weekRoster)
+        loadingMenu.updateTask "Building Lead Sheets " & i + 1 & " of " & Uboud(weekRoster) + 1
         e_cnt = 1
         Dim iTemp As Employee
         Set iTemp = weekRoster(i, 0)
@@ -768,6 +768,7 @@ Public Function saveWeekRoster(ByRef ws As Worksheet) As Integer
 End Function
 
 Public Sub savePacket()
+    loadingMenu.updateTask "Saving Packet"
     Dim time As Date
     On Error Resume Next
     Application.ScreenUpdating = False
@@ -801,7 +802,7 @@ Public Sub savePacket()
 
     On Error GoTo 0
     xlFile = xlPath & jobNum & "_Week_" & we & ".xlsx"
-    hiddenApp.Visible = True
+    
     hiddenApp.Workbooks.Open ThisWorkbook.path & "\Packet Template.xlsx"
     Set bk = hiddenApp.Workbooks("Packet Template.xlsx")
     saveWeekRoster bk.Sheets("SAVE")
@@ -814,7 +815,7 @@ Public Sub savePacket()
         Kill xlFile
     End If
     bk.SaveAs xlFile
-    hiddenApp.Visible = True
+    
 '    bk.Close
     
     
