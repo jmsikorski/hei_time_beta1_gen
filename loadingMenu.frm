@@ -14,39 +14,29 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Dim dots As Integer
-Dim done As Boolean
-Dim task As String
+Private dots As Integer
+Public done As Boolean
+Public task As String
+Private i As Integer
+Const steps = 20
 
-Public Sub go()
-    Dim i As Integer
-    Dim pct As Single
-    Dim steps As Integer
-    Dim waittime As Date
-    waittime = Now + TimeValue("00:00:01")
-    steps = 20
-    i = 0
-    Do While Not done
-        If Application.wait(waittime) Then
-            waittime = Now + TimeValue("00:00:01")
-            i = i + 1
-            If i > steps Then i = 1
-            pct = i / steps
-            loadingMenu.updateProgress task, pct
-        End If
-    Loop
-    Unload Me
+Public Sub stopLoading()
+    done = True
 End Sub
 
 Public Sub updateTask(t As String)
     task = t
 End Sub
 
-Public Sub updateProgress(t As String, Optional pct As Single)
-    If t = vbNullString Then t = task
+Public Sub updateProgress()
+    Dim pct As Single
+    pct = i / steps
+    i = i + 1
+    t = task
     Me.Label1.Caption = t & vbNewLine & "This might take a few moments."
     Me.Caption = "Working"
     Me.Caption = Me.Caption & Left("..........", dots)
+        
     If dots > 10 Then
         dots = 1
     Else
@@ -61,8 +51,10 @@ Private Sub UserForm_Initialize()
     Me.ProgressLabel.Width = 0
     Me.ProgressFrame.Caption = vbNullString
     dots = 0
-    task = vbNullString
-    Me.go
+    i = 0
+    done = False
+    task = "Loading"
+    continueLoading
 End Sub
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
@@ -70,7 +62,7 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 retry:
         Dim ans As Integer
         ans = MsgBox("The application is still running!" & vbNewLine & _
-        "Exiting before completion is not allowed.", vbCritical + vbAbortRetryIgnore, "STOP!")
+        "Exiting before completion is dangerous.", vbCritical + vbAbortRetryIgnore, "STOP!")
         If ans = vbAbort Then
             Cancel = True
         ElseIf ans = vbIgnore Then

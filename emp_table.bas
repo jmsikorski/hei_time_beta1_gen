@@ -24,7 +24,7 @@ Public Sub update_emp_table()
     On Error Resume Next
     pct = 0
     loadingMenu.Show
-    loadingMenu.updateProgress "Employee Roster", pct
+    ''loadingMenu.updateProgress "Employee Roster", pct
     hiddenApp.Workbooks.Open (timeCard.Getlnkpath(ThisWorkbook.path & "\Data.lnk") & "\Attendance Tracking.xlsx")
     emNum = hiddenApp.Workbooks("Attendance Tracking.xlsx").Worksheets(1).ListObjects("emp_roster").ListRows.count
     On Error GoTo 0
@@ -36,7 +36,7 @@ Public Sub update_emp_table()
     ws.Range(ws.ListObjects("emp_roster").DataBodyRange(1, 1), ws.ListObjects("emp_roster").DataBodyRange(1, 7)).Clear
 1:
     pct = (cnt + 3) / emNum
-    loadingMenu.updateProgress "Employee Roster", pct
+    ''loadingMenu.updateProgress "Employee Roster", pct
     Set new_emp = get_emp(cnt)
     If new_emp Is Nothing Then
         cnt = cnt + 1
@@ -75,7 +75,7 @@ update_done:
     Set hiddenApp = Nothing
     ws.Protect xPass
     pct = 1
-    loadingMenu.updateProgress "Employee Roster", pct
+    'loadingMenu.updateProgress "Employee Roster", pct
     Unload loadingMenu
     Exit Sub
 10:

@@ -145,6 +145,7 @@ Private Sub spDone_Click()
     Next i
     savePacket
     genLeadSheets
+    loadingMenu.stopLoading
     mMenu.Show
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True

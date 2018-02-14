@@ -43,18 +43,18 @@ Public Sub update_phase_code()
     Dim pct As Single
     Dim uCnt As Integer
     pct = 0.03
-    loadingMenu.updateProgress "Open Phase Codes", pct
+    ''loadingMenu.updateProgress "Open Phase Codes", pct
     Set lc_wb = hiddenApp.Workbooks("Lead Card.xlsx")
     hiddenApp.Workbooks.Open lc_wb.path & "\Labor Report.xlsx"
     uCnt = 0
     cnt = 1
     pct = 0.04
-    loadingMenu.updateProgress "Open Phase Codes", pct
+    ''loadingMenu.updateProgress "Open Phase Codes", pct
     Do While hiddenApp.Workbooks("Labor Report.xlsx").Worksheets(1).Range("C3").Offset(uCnt, 0) <> vbNullString
         uCnt = uCnt + 1
     Loop
     pct = 0.05
-    loadingMenu.updateProgress "Open Phase Codes", pct
+    ''loadingMenu.updateProgress "Open Phase Codes", pct
     Set ws = lc_wb.Worksheets("Open Phase Codes")
     ws.Unprotect pw
     ws.Range(ws.ListObjects("phase_list").DataBodyRange(1, 1), ws.ListObjects("phase_list").DataBodyRange(ws.ListObjects("phase_list").ListRows.count - 6, 2)).Delete
@@ -65,7 +65,7 @@ Public Sub update_phase_code()
     Do While new_code <> 0
 1:
         pct = 0.06 + ((cnt / uCnt) * 0.91)
-        loadingMenu.updateProgress "Open Phase Codes", pct
+        ''loadingMenu.updateProgress "Open Phase Codes", pct
         new_code = get_code(update_phase, cnt)
         If new_code = -1 Then
             GoTo 20
@@ -97,13 +97,13 @@ Public Sub update_phase_code()
     Loop
     On Error GoTo 0
     pct = 0.98
-    loadingMenu.updateProgress "Open Phase Codes", pct
+    ''loadingMenu.updateProgress "Open Phase Codes", pct
     
     ws.ListObjects("phase_list").ListRows(ws.ListObjects("phase_list").ListRows.count - 5).Delete
     ws.Protect pw
     hiddenApp.Workbooks("Labor Report.xlsx").Close False
     pct = 0.99
-    loadingMenu.updateProgress "Open Phase Codes", pct
+    ''loadingMenu.updateProgress "Open Phase Codes", pct
     Exit Sub
 10:
     Dim ans As Integer

@@ -392,7 +392,7 @@ Public Sub genLeadSheets()
     On Error GoTo 0
     Set bk = hiddenApp.Workbooks(jobNum & "_Week_" & we & ".xlsx")
     For i = 0 To UBound(weekRoster)
-        loadingMenu.updateTask "Building Lead Sheets " & i + 1 & " of " & Uboud(weekRoster) + 1
+        loadingMenu.updateTask "Building Lead Sheets " & i + 1 & " of " & UBound(weekRoster) + 1
         e_cnt = 1
         Dim iTemp As Employee
         Set iTemp = weekRoster(i, 0)
@@ -1199,6 +1199,15 @@ Public Sub bubblesortWorksheets(wb As String)
             End If
         Next j
     Next i
+End Sub
+
+Public Sub continueLoading()
+    loadingMenu.updateProgress
+    If loadingMenu.done Then
+        Unload loadingMenu
+        Exit Sub
+    End If
+    Application.OnTime Now + TimeValue("00:00:01"), "continueLoading"
 End Sub
 
 Public Sub test_updatePacket()
