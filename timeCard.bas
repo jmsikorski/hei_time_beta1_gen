@@ -303,8 +303,8 @@ Public Function loadShifts(Optional tEst As Boolean) As Integer
             For Each trng In rng
                 If trng.Value = weekRoster(l, e).getNum Then
                     Dim tPhase() As String
-                    Dim shft As Shift
-                    Set shft = New Shift
+                    Dim shft As shift
+                    Set shft = New shift
                     shft.setDay = trng.Offset(0, -3)
                     shft.setHrs = trng.Offset(0, 1)
                     If trng.Offset(0, 2) <> 0 Then
@@ -1123,7 +1123,7 @@ Public Sub genTimeCard(Optional tEst As Boolean)
                 .Range("e_num") = tEmp.getNum
                 .Range("we_date") = calcWeek(Date)
                 .Range("job_desc") = jobNum & " - " & jobName
-                Dim tshft As Shift
+                Dim tshft As shift
                 For Each tshft In tEmp.getShifts
                     Dim i As Integer
                     i = 0
@@ -1355,7 +1355,7 @@ Public Function loadRoster() As Integer
     Dim hiddenApp As New Excel.Application
     i = 0
     xlFile = jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
-'    On Error GoTo 10
+    On Error GoTo 10
     hiddenApp.Workbooks.Open xlFile
     SetAttr xlFile, vbNormal
     On Error GoTo 0

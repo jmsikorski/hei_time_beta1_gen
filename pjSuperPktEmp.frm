@@ -13,8 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
 Private Sub nLead_Click()
     Dim thisMenu As String
     For i = 1 To UBound(menuList)
@@ -132,6 +130,9 @@ End Sub
 Private Sub spDone_Click()
     Application.DisplayAlerts = False
     Application.ScreenUpdating = True
+    Set lApp = New Excel.Application
+    lApp.Workbooks.Open ThisWorkbook.path & "\loadingtimer.xlsm"
+    lApp.Run "'loadingtimer.xlsm'!main"
     Unload sMenu
     Unload lMenu
     Dim ws As Worksheet
@@ -143,9 +144,6 @@ Private Sub spDone_Click()
         Unload menuList(i)
     Next i
     Application.Visible = False
-    Set lApp = New Excel.Application
-    lApp.Workbooks.Open ThisWorkbook.path & "\loadingtimer.xlsm"
-    lApp.Run "'loadingtimer.xlsm'!main"
     savePacket
     genLeadSheets
     lApp.Run "'loadingtimer.xlsm'!stopLoading"
