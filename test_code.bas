@@ -59,12 +59,12 @@ Private Function loadTestRoster(leads As Integer, emps As Integer) As Integer
     Dim cnt As Integer
     cnt = 1
     For i = 0 To leads - 1
-        For X = 0 To emps - 1
+        For x = 0 To emps - 1
             Dim tEmp As Employee
             Set tEmp = New Employee
             If tEmp.newEmployee(cnt) = -1 Then GoTo load_err
             cnt = cnt + 1
-            Set weekRoster(i, X) = tEmp
+            Set weekRoster(i, x) = tEmp
         Next
     Next
     On Error GoTo 0
@@ -84,12 +84,12 @@ Private Function print_roster() As Integer
     e = UBound(weekRoster, 2)
     cnt = 1
     For i = 0 To l
-        For X = 0 To e
-            If weekRoster(i, X) Is Nothing Then
+        For x = 0 To e
+            If weekRoster(i, x) Is Nothing Then
                 Exit For
             Else
-                Debug.Print cnt & ": " & weekRoster(i, X).getFullname
-                Debug.Print "Shift Count: " & weekRoster(i, X).getShifts.count
+                Debug.Print cnt & ": " & weekRoster(i, x).getFullname
+                Debug.Print "Shift Count: " & weekRoster(i, x).getShifts.count
                 cnt = cnt + 1
             End If
         Next
@@ -99,7 +99,7 @@ Private Function print_roster() As Integer
     On Error GoTo 0
     Exit Function
 print_err:
-    Debug.Print "ERROR PRINTING (" & i & "," & X & ")"
+    Debug.Print "ERROR PRINTING (" & i & "," & x & ")"
     print_roster = -1
     On Error GoTo 0
 End Function

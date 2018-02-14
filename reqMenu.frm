@@ -63,7 +63,7 @@ Private Sub reqSubmit_Click()
     rng.Offset(0, 1).Value = pw
     rng.Offset(0, 2).Value = "NO"
     With xEmailObj
-        .To = "jsikorski@helixelectric.com"
+        .to = "jsikorski@helixelectric.com"
         .Subject = "Time Card User Request"
         .Body = name & vbNewLine & user & vbNewLine & mgr
         .display ' REMOVE AFTER BETA
@@ -114,16 +114,16 @@ Private Function encryptPassword(pw As String) As String
     epw = vbnullStrig
     ReDim tEst(Len(pw))
     ReDim pwi(Len(pw))
-    Dim X As Integer
-    X = 1
+    Dim x As Integer
+    x = 1
     For i = 0 To Len(pw) - 1
         tEst(i) = Left(pw, 1)
         pwi(i) = Asc(tEst(i))
         pw = Right(pw, Len(pw) - 1)
-        pwi(i) = pwi(i) Xor ThisWorkbook.Worksheets("KEY").Range("A" & X).Value
+        pwi(i) = pwi(i) Xor ThisWorkbook.Worksheets("KEY").Range("A" & x).Value
         'If pwi(i) = 0 Then pwi(i) = 1
         epw = epw & Chr(pwi(i))
-        X = X + 1
+        x = x + 1
     Next i
     encryptPassword = epw
 End Function

@@ -60,11 +60,11 @@ Private Sub spAdd_Click()
     For ld = 0 To UBound(menuList) - 1
         For i = 1 To lBox
             Set tlist = menuList(ld).Controls.Item("empList" & i)
-            For X = 0 To tlist.ListCount - 1
-                If tlist.Selected(X) Then
+            For x = 0 To tlist.ListCount - 1
+                If tlist.Selected(x) Then
                 cnt = cnt + 1
                 End If
-            Next X
+            Next x
         Next i
 '        If mSize < cnt Then mSize = cnt
 '        If mSize > 0 Then
@@ -72,17 +72,17 @@ Private Sub spAdd_Click()
         lIndex = 1
         For i = 1 To lBox
             Set tlist = menuList(ld).Controls.Item("empList" & i)
-            For X = 0 To tlist.ListCount - 1
-                If tlist.Selected(X) Then
-                    empRoster(i - 1, X).eLead = ld
-                    Set weekRoster(ld, lIndex) = empRoster(i - 1, X)
+            For x = 0 To tlist.ListCount - 1
+                If tlist.Selected(x) Then
+                    empRoster(i - 1, x).eLead = ld
+                    Set weekRoster(ld, lIndex) = empRoster(i - 1, x)
                     lIndex = lIndex + 1
                     If lIndex > eCount Then
                         MsgBox ("ERROR, Lead can only have " & eCount & " workers!")
                         Exit Sub
                     End If
                 End If
-            Next X
+            Next x
         Next i
     Next ld
 '    savePacket
@@ -103,27 +103,27 @@ Private Sub loadRoster(ld)
     cnt = 0
     For i = 1 To lBox
         Set tlist = menuList(ld).Controls.Item("empList" & i)
-        For X = 0 To tlist.ListCount - 1
-            If tlist.Selected(X) Then
+        For x = 0 To tlist.ListCount - 1
+            If tlist.Selected(x) Then
             cnt = cnt + 1
             End If
-        Next X
+        Next x
     Next i
 '    resizeRoster UBound(menuList) - 1, eCount
     lIndex = 1
     For i = 1 To lBox
         Set tlist = menuList(ld).Controls.Item("empList" & i)
-        For X = 0 To tlist.ListCount - 1
-            If tlist.Selected(X) Then
-                empRoster(i - 1, X).eLead = ld
-                Set weekRoster(ld, lIndex) = empRoster(i - 1, X)
+        For x = 0 To tlist.ListCount - 1
+            If tlist.Selected(x) Then
+                empRoster(i - 1, x).eLead = ld
+                Set weekRoster(ld, lIndex) = empRoster(i - 1, x)
                 lIndex = lIndex + 1
                 If lIndex > eCount Then
                     MsgBox ("ERROR, Lead can only have " & eCount & " workers!")
                     Exit Sub
                 End If
             End If
-        Next X
+        Next x
     Next i
 End Sub
 

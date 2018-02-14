@@ -21,7 +21,7 @@ Public Sub send_req()
     Set xOutlookObj = CreateObject("Outlook.Application")
     Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
     With xEmailObj
-        .To = ThisWorkbook.Worksheets("INSTRUCTIONS").Range("email_to")
+        .to = ThisWorkbook.Worksheets("INSTRUCTIONS").Range("email_to")
         .CC = ThisWorkbook.Worksheets("INSTRUCTIONS").Range("email_cc")
         .Subject = job & " PO " & xSht.name
         
