@@ -402,6 +402,12 @@ Public Sub genLeadSheets()
         lsPath = xlPath + lsPath
         hiddenApp.Workbooks.Open ThisWorkbook.path & "\Lead Card.xlsx"
         hiddenApp.Workbooks.Open ThisWorkbook.path & "\UnitGoals.xlsx"
+        With hiddenApp.Workbooks("UnitGoals.xlsx")
+        For i = 1 To .Sheets.count
+            If .Worksheets(i).Visible = xlVeryHidden Then
+                .Worksheets(i).Visible = True
+            End If
+        Next
         On Error Resume Next
         Set uTbl = hiddenApp.Workbooks("UnitGoals.xlsx").Worksheets(iTemp.getLName).ListObjects(1)
         If uTbl Is Nothing Then
