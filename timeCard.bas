@@ -399,13 +399,14 @@ Public Sub genLeadSheets()
     Set bk = hiddenApp.Workbooks(jobNum & "_Week_" & we & ".xlsx")
     For i = 0 To UBound(weekRoster)
         lApp.Run "'loadingtimer.xlsm'!update", "Building Lead Sheets " & i + 1 & " of " & UBound(weekRoster) + 1
-        e_cnt = 1
         Dim iTemp As Employee
         Set iTemp = weekRoster(i, 0)
         Dim lsPath As String
         Dim ls As Workbook
         lsPath = iTemp.getLName & "_Week_" & we & ".xlsx"
         lsPath = xlPath + lsPath
+rt:
+        e_cnt = 1
         hiddenApp.Workbooks.Open ThisWorkbook.path & "\Lead Card.xlsx"
         hiddenApp.Workbooks.Open ThisWorkbook.path & "\UnitGoals.xlsx"
         With hiddenApp.Workbooks("UnitGoals.xlsx")
@@ -458,12 +459,20 @@ Public Sub genLeadSheets()
                 End With
             End If
         Next x
-        uTbl.hje
         With ls.Worksheets("LEAD")
+            hiddenApp.Visible = True
             .Unprotect
-            Set rng = .Range(.ListObjects(1).HeaderRowRange, .ListObjects(1).HeaderRowRange.Offset(e_cnt + 1, 0))
-            .ListObjects(1).Resize rng
+            For tr = 1 To 7
+                Set rng = .Range(.ListObjects(tr).HeaderRowRange, .ListObjects(tr).HeaderRowRange.Offset(e_cnt + 1, 0))
+                .ListObjects(tr).Resize rng
+                If tr < 7 Then
+                    .Range(rng.End(xlDown).Offset(2, 0), .ListObjects(tr + 1).HeaderRowRange.Offset(-2, 0)).EntireRow.Delete
+                Else
+                    .Range(rng.End(xlDown).Offset(2, 0)).End(xlDown).EntireRow.Delete
+                End If
+            Next tr
         End With
+        GoTo rt
 '        For n = 1 To 7
 '            For p = e_cnt + 1 To 15
 '                ls.Worksheets("LEAD").ListObjects(n).ListRows(e_cnt + 1).Delete
@@ -550,7 +559,7 @@ Public Sub send_leadSheet(addr As String, lnk As String)
     Set xOutlookObj = CreateObject("Outlook.Application")
     Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
     With xEmailObj
-        .to = LCase(addr)
+        .To = LCase(addr)
         .Subject = "Lead Sheet for " & jobNum & " Week Ending " & week
         
         .HTMLBody = "</head><body lang=EN-US link=""#0563C1"" vlink=""#954F72"" style='tab-interval:.5in'><div class=WordSection1><p class=MsoNormal>Your lead sheet for week " & week & " is now available for download:</p><p class=MsoNormal><a href=""" & lnk & """>HERE</a><o:p></o:p></p><p class=MsoNormal><o:p>&nbsp;</o:p></p></div></body></html>"
