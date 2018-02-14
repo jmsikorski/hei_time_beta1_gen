@@ -36,12 +36,12 @@ Public Property Let emClass(s As String)
     eClass = s
 End Property
 
-Public Sub addShift(s As shift)
+Public Sub addShift(s As Shift)
     shifts.Add s
 End Sub
 
 Private Sub calcPerDiem()
-    Dim s As shift
+    Dim s As Shift
     Dim n As Double
     For Each s In shifts
         n = s.getPhase

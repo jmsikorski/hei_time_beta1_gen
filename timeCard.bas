@@ -302,8 +302,8 @@ Public Function loadShifts(Optional tEst As Boolean) As Integer
             For Each trng In rng
                 If trng.Value = weekRoster(l, e).getNum Then
                     Dim tPhase() As String
-                    Dim shft As shift
-                    Set shft = New shift
+                    Dim shft As Shift
+                    Set shft = New Shift
                     shft.setDay = trng.Offset(0, -3)
                     shft.setHrs = trng.Offset(0, 1)
                     If trng.Offset(0, 2) <> 0 Then
@@ -403,11 +403,13 @@ Public Sub genLeadSheets()
         hiddenApp.Workbooks.Open ThisWorkbook.path & "\Lead Card.xlsx"
         hiddenApp.Workbooks.Open ThisWorkbook.path & "\UnitGoals.xlsx"
         With hiddenApp.Workbooks("UnitGoals.xlsx")
-        For i = 1 To .Sheets.count
-            If .Worksheets(i).Visible = xlVeryHidden Then
-                .Worksheets(i).Visible = True
-            End If
-        Next
+            For q = 1 To .Sheets.count
+                If .Worksheets(q).Visible = xlVeryHidden Then
+                    .Worksheets(q).Visible = True
+                End If
+            Next
+        End With
+        
         On Error Resume Next
         Set uTbl = hiddenApp.Workbooks("UnitGoals.xlsx").Worksheets(iTemp.getLName).ListObjects(1)
         If uTbl Is Nothing Then
@@ -418,6 +420,7 @@ Public Sub genLeadSheets()
         Set ls = hiddenApp.Workbooks("Lead Card.xlsx")
         uTbl.DataBodyRange.Copy ls.Worksheets("DATA").ListObjects(1).Range(2, 1)
         hiddenApp.Workbooks("UnitGoals.xlsx").Close False
+        Set uTbl = Nothing
         SetAttr ls.path, vbNormal
         hiddenApp.DisplayAlerts = False
         hiddenApp.EnableEvents = False
@@ -434,13 +437,13 @@ Public Sub genLeadSheets()
         End With
         ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
         bks.Add ls
-        For x = 1 To UBound(weekRoster, 2)
+        For X = 1 To UBound(weekRoster, 2)
             Dim xTemp As Employee
-            Set xTemp = weekRoster(i, x)
+            Set xTemp = weekRoster(i, X)
             If xTemp Is Nothing Then
             Else
                 e_cnt = e_cnt + 1
-                With ls.Worksheets("LEAD").Range("Monday").Cells(x + 1, 1)
+                With ls.Worksheets("LEAD").Range("Monday").Cells(X + 1, 1)
                     ls.Worksheets("LEAD").Unprotect
                     .Value = xTemp.getClass
                     .Offset(0, 1).Value = xTemp.getFName & " " & xTemp.getLName
@@ -448,7 +451,7 @@ Public Sub genLeadSheets()
                     ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
                 End With
             End If
-        Next x
+        Next X
         ls.Worksheets("LEAD").Unprotect
         For n = 1 To 7
             For p = e_cnt + 1 To 15
@@ -733,9 +736,9 @@ End Function
 Public Function saveWeekRoster(ByRef ws As Worksheet) As Integer
     ws.name = "SAVE"
     ws.Visible = True
-    Dim cnt As Integer, x As Integer
+    Dim cnt As Integer, X As Integer
     cnt = 0
-    x = 0
+    X = 0
     Dim done As Boolean
     Dim tEmp As Employee
     Set tEmp = New Employee
@@ -743,21 +746,21 @@ Public Function saveWeekRoster(ByRef ws As Worksheet) As Integer
         For i = 0 To UBound(weekRoster)
             done = False
             Do While done = False
-                If weekRoster(i, x) Is Nothing Then
+                If weekRoster(i, X) Is Nothing Then
                     done = True
                 Else
                     .Offset(cnt, 0).Value = i
-                    .Offset(cnt, 1).Value = x
-                    .Offset(cnt, 2).Value = weekRoster(i, x).getClass
-                    .Offset(cnt, 3).Value = weekRoster(i, x).getLName
-                    .Offset(cnt, 4).Value = weekRoster(i, x).getFName
-                    .Offset(cnt, 5).Value = weekRoster(i, x).getNum
-                    .Offset(cnt, 6).Value = weekRoster(i, x).getPerDiem
+                    .Offset(cnt, 1).Value = X
+                    .Offset(cnt, 2).Value = weekRoster(i, X).getClass
+                    .Offset(cnt, 3).Value = weekRoster(i, X).getLName
+                    .Offset(cnt, 4).Value = weekRoster(i, X).getFName
+                    .Offset(cnt, 5).Value = weekRoster(i, X).getNum
+                    .Offset(cnt, 6).Value = weekRoster(i, X).getPerDiem
                     cnt = cnt + 1
                 End If
-                x = x + 1
+                X = X + 1
             Loop
-            x = 0
+            X = 0
         Next i
     End With
 
@@ -972,14 +975,14 @@ End Sub
 Public Sub printRoster()
     Dim tEmp As Employee
     For i = 0 To UBound(weekRoster)
-        For x = 0 To UBound(weekRoster, 2)
-            If weekRoster(i, x) Is Nothing Then
+        For X = 0 To UBound(weekRoster, 2)
+            If weekRoster(i, X) Is Nothing Then
             Else
-                Set tEmp = weekRoster(i, x)
-                MsgBox ("LD: " & i & vbNewLine & "EMP: " & x & _
+                Set tEmp = weekRoster(i, X)
+                MsgBox ("LD: " & i & vbNewLine & "EMP: " & X & _
                 vbNewLine & tEmp.getFName & " " & tEmp.getLName)
             End If
-        Next x
+        Next X
     Next i
             
 End Sub
@@ -1019,55 +1022,55 @@ Public Sub resizeRoster(l As Integer, e As Integer)
     ReDim newRoster(l, e)
     Dim tEmp As Employee
     For i = 0 To l
-        For x = 0 To e
+        For X = 0 To e
             On Error Resume Next
-            Set tEmp = weekRoster(i, x)
+            Set tEmp = weekRoster(i, X)
 '            If temp Is Nothing Then
 '            Else
-                Set newRoster(i, x) = tEmp
+                Set newRoster(i, X) = tEmp
 '            End If
-        Next x
+        Next X
     Next i
     On Error GoTo 0
     ReDim weekRoster(l, e)
     For i = 0 To l
-        For x = 0 To e
-            Set weekRoster(i, x) = newRoster(i, x)
+        For X = 0 To e
+            Set weekRoster(i, X) = newRoster(i, X)
             On Error Resume Next
-        Next x
+        Next X
     Next i
     On Error GoTo 0
     
 End Sub
 
 Public Sub insertRoster(index As Integer)
-    Dim x As Integer
+    Dim X As Integer
     Dim tmp As Employee
     Dim tmpRoster() As Employee
     ReDim tmpRoster(UBound(weekRoster), eCount)
-    For x = 0 To index - 1
+    For X = 0 To index - 1
         For i = 0 To eCount
-            Set tmp = weekRoster(x, i)
+            Set tmp = weekRoster(X, i)
             If tmp Is Nothing Then
             Else
-                Set tmpRoster(x, i) = tmp
+                Set tmpRoster(X, i) = tmp
             End If
         Next i
-    Next x
-    For x = index + 1 To UBound(weekRoster)
+    Next X
+    For X = index + 1 To UBound(weekRoster)
         For i = 0 To eCount
-            Set tmp = weekRoster(x - 1, i)
+            Set tmp = weekRoster(X - 1, i)
             If tmp Is Nothing Then
             Else
-                Set tmpRoster(x, i) = tmp
+                Set tmpRoster(X, i) = tmp
             End If
         Next i
-    Next x
-    For x = 0 To UBound(weekRoster)
+    Next X
+    For X = 0 To UBound(weekRoster)
         For i = 0 To eCount
-            Set weekRoster(x, i) = tmpRoster(x, i)
+            Set weekRoster(X, i) = tmpRoster(X, i)
         Next i
-    Next x
+    Next X
 End Sub
 
 Public Sub genTimeCard(Optional tEst As Boolean)
@@ -1117,7 +1120,7 @@ Public Sub genTimeCard(Optional tEst As Boolean)
                 .Range("e_num") = tEmp.getNum
                 .Range("we_date") = calcWeek(Date)
                 .Range("job_desc") = jobNum & " - " & jobName
-                Dim tshft As shift
+                Dim tshft As Shift
                 For Each tshft In tEmp.getShifts
                     Dim i As Integer
                     i = 0

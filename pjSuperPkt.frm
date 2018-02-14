@@ -42,11 +42,11 @@ Private Sub spDone_Click()
     lIndex = 0
     For i = 1 To lBox
         Set tlist = Me.Controls.Item("empList" & i)
-        For x = 0 To tlist.ListCount - 1
-            If tlist.Selected(x) Then
+        For X = 0 To tlist.ListCount - 1
+            If tlist.Selected(X) Then
             lIndex = lIndex + 1
             End If
-        Next x
+        Next X
     Next i
     If lIndex = 0 Then
         MsgBox "You must Select a Lead!", vbExclamation + vbOKOnly
@@ -60,17 +60,17 @@ Private Sub spDone_Click()
     lIndex = 0
     For i = 1 To lBox
         Set tlist = Me.Controls.Item("empList" & i)
-        For x = 0 To tlist.ListCount - 1
-            If tlist.Selected(x) Then
-                leadRoster(i - 1, x).eLead = 0
+        For X = 0 To tlist.ListCount - 1
+            If tlist.Selected(X) Then
+                leadRoster(i - 1, X).eLead = 0
                 If UBound(menuList) = 0 And isSave <> 1 Then 'isSave < 0 Then
-                    Set weekRoster(lIndex, 0) = leadRoster(i - 1, x)
+                    Set weekRoster(lIndex, 0) = leadRoster(i - 1, X)
                 Else
-                    Set tmpRoster(lIndex, 0) = leadRoster(i - 1, x)
+                    Set tmpRoster(lIndex, 0) = leadRoster(i - 1, X)
                 End If
                 lIndex = lIndex + 1
             End If
-        Next x
+        Next X
     Next i
     lNum = 1
     Dim ldn As Integer
@@ -81,9 +81,9 @@ Private Sub spDone_Click()
         If UBound(weekRoster) < lIndex - 1 Then
             For i = 0 To UBound(tmpRoster)
                 If (tmpRoster(i, 0).getFullname = weekRoster(ldn, 0).getFullname) Then
-                    For x = 0 To eCount
-                        Set tmpRoster(i, x) = weekRoster(ldn, x)
-                    Next x
+                    For X = 0 To eCount
+                        Set tmpRoster(i, X) = weekRoster(ldn, X)
+                    Next X
                     If ldn = UBound(weekRoster) Then Exit For
                     ldn = ldn + 1
                 End If
@@ -91,9 +91,9 @@ Private Sub spDone_Click()
         Else
             For i = 0 To UBound(weekRoster)
                 If (tmpRoster(ldn, 0).getFullname = weekRoster(i, 0).getFullname) Then
-                    For x = 0 To eCount
-                        Set tmpRoster(ldn, x) = weekRoster(i, x)
-                    Next x
+                    For X = 0 To eCount
+                        Set tmpRoster(ldn, X) = weekRoster(i, X)
+                    Next X
                     If ldn = UBound(tmpRoster) Then Exit For
                     ldn = ldn + 1
                 End If

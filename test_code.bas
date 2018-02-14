@@ -1,4 +1,7 @@
 Attribute VB_Name = "test_code"
+Public Sub t12()
+    loadingMenu.Show
+End Sub
 'Private Sub t8() 'Test of loadTestRoster function
 '    Dim l As Integer
 '    Dim e As Integer

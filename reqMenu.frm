@@ -112,16 +112,16 @@ Private Function encryptPassword(pw As String) As String
     epw = vbnullStrig
     ReDim tEst(Len(pw))
     ReDim pwi(Len(pw))
-    Dim x As Integer
-    x = 1
+    Dim X As Integer
+    X = 1
     For i = 0 To Len(pw) - 1
         tEst(i) = Left(pw, 1)
         pwi(i) = Asc(tEst(i))
         pw = Right(pw, Len(pw) - 1)
-        pwi(i) = pwi(i) Xor ThisWorkbook.Worksheets("KEY").Range("A" & x).Value
+        pwi(i) = pwi(i) Xor ThisWorkbook.Worksheets("KEY").Range("A" & X).Value
         'If pwi(i) = 0 Then pwi(i) = 1
         epw = epw & Chr(pwi(i))
-        x = x + 1
+        X = X + 1
     Next i
     encryptPassword = epw
 End Function
