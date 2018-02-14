@@ -74,8 +74,8 @@ Public Sub ExportVBA(Optional xlFile As String)
     Next
     Set FSO = Nothing
     Dim cnt As Integer
-    cnt = 0
     For Each directory In dirs
+        cnt = 0
         For Each VBComponent In ActiveWorkbook.VBProject.VBComponents
             cnt = cnt + VBComponent.CodeModule.CountOfLines
             If directory = dirs(0) Then

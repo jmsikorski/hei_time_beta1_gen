@@ -364,6 +364,7 @@ Public Sub genLeadSheets()
     done = False
     Dim wb As Workbook
     Dim new_path() As String
+    Dim uTbl As ListObject
     Set wb = ThisWorkbook
     ThisWorkbook.Unprotect xPass
     Dim xlPath As String
@@ -383,7 +384,6 @@ Public Sub genLeadSheets()
             FSO.CreateFolder xlPath
         End If
     Loop
-    
     Dim e_cnt As Integer
     On Error GoTo 0
     Dim r_size As Integer
@@ -401,7 +401,17 @@ Public Sub genLeadSheets()
         lsPath = iTemp.getLName & "_Week_" & we & ".xlsx"
         lsPath = xlPath + lsPath
         hiddenApp.Workbooks.Open ThisWorkbook.path & "\Lead Card.xlsx"
+        hiddenApp.Workbooks.Open ThisWorkbook.path & "\UnitGoals.xlsx"
+        On Error Resume Next
+        Set uTbl = hiddenApp.Workbooks("UnitGoals.xlsx").Worksheets(iTemp.getLName).ListObjects(1)
+        If uTbl Is Nothing Then
+            Err.Clear
+            Set uTbl = hiddenApp.Workbooks("UnitGoals.xlsx").Worksheets("MASTER").ListObjects(1)
+        End If
+        On Error GoTo 0
         Set ls = hiddenApp.Workbooks("Lead Card.xlsx")
+        uTbl.DataBodyRange.Copy ls.Worksheets("DATA").ListObjects(1).Range(2, 1)
+        hiddenApp.Workbooks("UnitGoals.xlsx").Close False
         SetAttr ls.path, vbNormal
         hiddenApp.DisplayAlerts = False
         hiddenApp.EnableEvents = False
