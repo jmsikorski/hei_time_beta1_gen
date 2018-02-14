@@ -485,6 +485,7 @@ Public Sub genLeadSheets()
     ln = 0
     For Each ls In bks
         ls.Worksheets("LEAD").Activate
+        hiddenApp.Visible = True
         ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Activate
         ls.Save
         ls.Close
