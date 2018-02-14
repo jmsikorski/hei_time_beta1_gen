@@ -1,6 +1,15 @@
 Attribute VB_Name = "test_code"
 Public Sub t12()
-    loadingMenu.Show
+    Dim lApp As Excel.Application
+    Set lApp = New Excel.Application
+    lApp.Workbooks.Open ThisWorkbook.path & "\loadingtimer.xlsm"
+    lApp.Run "'loadingtimer.xlsm'!main"
+    lApp.Run "'loadingtimer.xlsm'!update", "Task1"
+    MsgBox "Does it keep going?"
+    lApp.Run "'loadingtimer.xlsm'!update", "Task2"
+    Application.Wait Now + TimeValue("00:00:10")
+    lApp.Run "'loadingtimer.xlsm'!stoploading", "Task2"
+    Stop
 End Sub
 
 Public Sub t13()

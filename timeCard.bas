@@ -1201,15 +1201,6 @@ Public Sub bubblesortWorksheets(wb As String)
     Next i
 End Sub
 
-Public Sub continueLoading()
-    loadingMenu.updateProgress
-    If loadingMenu.done Then
-        Unload loadingMenu
-        Exit Sub
-    End If
-    Application.OnTime Now + TimeValue("00:00:01"), "continueLoading"
-End Sub
-
 Public Sub test_updatePacket()
     timeCard.updatePacket True
 End Sub

@@ -131,10 +131,9 @@ End Sub
 
 Private Sub spDone_Click()
     Application.DisplayAlerts = False
-    Application.ScreenUpdating = False
+    Application.ScreenUpdating = True
     Unload sMenu
     Unload lMenu
-    loadingMenu.Show
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets("ROSTER")
 '    Stop
@@ -143,6 +142,10 @@ Private Sub spDone_Click()
         loadRoster i
         Unload menuList(i)
     Next i
+    Dim lApp As Excel.Application
+    Set lApp = New Excel.Application
+    lApp.Workbooks.Open ThisWorkbook.path & "\loadingtimer.xlsm"
+    lApp.Run "'loadingtimer.xlsm'!main"
     savePacket
     genLeadSheets
     loadingMenu.stopLoading
