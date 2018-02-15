@@ -9,7 +9,7 @@ Private Const pw = ""
     
 Public Sub update_emp_table()
     On Error Resume Next
-    hiddenApp.Workbooks("Attendance Tracking.xlsx").Close False
+    Workbooks("Attendance Tracking.xlsx").Close False
     Workbooks("Attendance Tracking.xlsx").Close False
     On Error GoTo 0
     Application.ScreenUpdating = False
@@ -20,13 +20,12 @@ Public Sub update_emp_table()
     Dim cnt As Integer
     Dim pct As Single
     Dim emNum As Integer
-    Set hiddenApp = New Excel.Application
     On Error Resume Next
     pct = 0
     loadingMenu.Show
     ''loadingMenu.updateProgress "Employee Roster", pct
-    hiddenApp.Workbooks.Open (timeCard.Getlnkpath(ThisWorkbook.path & "\Data.lnk") & "\Attendance Tracking.xlsx")
-    emNum = hiddenApp.Workbooks("Attendance Tracking.xlsx").Worksheets(1).ListObjects("emp_roster").ListRows.count
+    Workbooks.Open (timeCard.Getlnkpath(ThisWorkbook.path & "\Data.lnk") & "\Attendance Tracking.xlsx")
+    emNum = Workbooks("Attendance Tracking.xlsx").Worksheets(1).ListObjects("emp_roster").ListRows.count
     On Error GoTo 0
     emNum = emNum + 3
     cnt = 1
@@ -64,15 +63,13 @@ update_done:
     On Error GoTo 0
     Set rng = ws.Range(ws.ListObjects("emp_roster").Range(1, 1), ws.ListObjects("emp_roster").Range(1, ws.ListObjects("emp_roster").ListColumns.count).End(xlDown))
     ws.ListObjects("emp_roster").Resize rng
-    hiddenApp.Workbooks("Attendance Tracking.xlsx").Close
+    Workbooks("Attendance Tracking.xlsx").Close
     With ThisWorkbook.Worksheets("ROSTER")
         .Unprotect
         .Range("emp_table_updated") = Now()
         .Protect
     End With
     Application.ScreenUpdating = True
-    hiddenApp.Quit
-    Set hiddenApp = Nothing
     ws.Protect xPass
     pct = 1
     'loadingMenu.updateProgress "Employee Roster", pct
@@ -113,7 +110,7 @@ Private Function get_emp(Optional cnt As Integer = 1) As Range
     Dim mb As Workbook
     Dim xlFile As String
     On Error GoTo book_closed
-    Set mb = hiddenApp.Workbooks(datFile)
+    Set mb = Workbooks(datFile)
     On Error GoTo 0
     Dim rng As Range
     Set rng = mb.Worksheets(1).ListObjects("emp_roster").ListRows(cnt).Range
@@ -125,8 +122,8 @@ Private Function get_emp(Optional cnt As Integer = 1) As Range
     Set get_emp = new_emp
     Exit Function
 book_closed:
-    hiddenApp.Workbooks.Open Getlnkpath(ThisWorkbook.path & "\Data.lnk") & "\" & datFile
-    Set mb = hiddenApp.Workbooks(datFile)
+    Workbooks.Open Getlnkpath(ThisWorkbook.path & "\Data.lnk") & "\" & datFile
+    Set mb = Workbooks(datFile)
     Resume Next
 End Function
 

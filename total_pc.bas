@@ -28,7 +28,7 @@ Attribute update_file.VB_ProcData.VB_Invoke_Func = "U\n14"
     On Error GoTo 0
     Dim phase_wb As Workbook
     Dim wb As Workbook
-    Set wb = hiddenApp.Workbooks("Lead Card.xlsx")
+    Set wb = Workbooks("Lead Card.xlsx")
     
     Dim ws As Worksheet
     Dim xlFile As String
@@ -41,7 +41,7 @@ Attribute update_file.VB_ProcData.VB_Invoke_Func = "U\n14"
         .Protect pw
     End With
     open_phase_code.update_phase_code
-    hiddenApp.DisplayAlerts = False
+    DisplayAlerts = False
     wb.SaveAs wb.path & "\" & wb.name
     wb.Close
     Exit Sub

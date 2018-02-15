@@ -324,11 +324,11 @@ End Sub
 
 
 Private Sub updateGoals_Click()
-    hiddenApp.Workbooks.Open ThisWorkbook.path & "\UnitGoals.xlsx"
+    Workbooks.Open ThisWorkbook.path & "\UnitGoals.xlsx"
     Dim wb As Workbook
     Dim ws As Worksheet
     Dim i As Integer
-    Set wb = hiddenApp.Workbooks("UnitGoals.xlsx")
+    Set wb = Workbooks("UnitGoals.xlsx")
     For i = 1 To wb.Sheets.count
         If wb.Worksheets(i).Visible = xlVeryHidden Then
             wb.Worksheets(i).Visible = True
@@ -360,16 +360,16 @@ Private Sub updateGoals_Click()
         End If
         End With
     Next i
-    hiddenApp.Visible = True
-    hiddenApp.WindowState = xlMaximized
+    Visible = True
+    WindowState = xlMaximized
     Do While done = False
         On Error GoTo wb_closed
-        Set wb = hiddenApp.Workbooks("UnitGoals.xlsx")
+        Set wb = Workbooks("UnitGoals.xlsx")
         done = False
     Loop
 wb_closed:
     Err.Clear
-    hiddenApp.Visible = False
+    Visible = False
     Set wb = Nothing
     Set ws = Nothing
 End Sub
