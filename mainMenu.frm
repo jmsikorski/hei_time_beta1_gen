@@ -26,7 +26,7 @@ Private Sub ComboBox1_Change()
     jobNum = tEmp(0)
     jobName = tEmp(1)
     jobPath = ThisWorkbook.path & "\Data\"
-    spPath = "C:\Users\" & Environ$("username") & "\Helix Electric Inc\TeslaTimeCard - Documents\Time Card Files\Data\"
+    sharePointPath = "C:\Users\" & Environ$("username") & "\Helix Electric Inc\TeslaTimeCard - Documents\Time Card Files\Data\"
 1:
 End Sub
 

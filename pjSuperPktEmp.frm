@@ -363,7 +363,6 @@ Private Sub updateGoals_Click()
         End If
         End With
     Next i
-    Visible = True
     WindowState = xlMaximized
     Do While done = False
         On Error GoTo wb_closed
@@ -372,7 +371,6 @@ Private Sub updateGoals_Click()
     Loop
 wb_closed:
     Err.Clear
-    Visible = False
     Set wb = Nothing
     Set ws = Nothing
 End Sub

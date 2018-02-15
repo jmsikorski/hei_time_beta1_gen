@@ -17,6 +17,17 @@ Public Sub t13()
     loadingMenu.stopLoading
 End Sub
 
+Public Sub t14() ' test timeCard.makeWeekPath
+    Dim wb As Workbook
+    jobNum = "46XXXX"
+    jobName = "TEST"
+    Dim we As String
+    we = Format(calcWeek(Now), "mm.dd.yy")
+    jobPath = ThisWorkbook.path & "\Data\"
+    sharePointPath = "C:\Users\jsikorski\Helix Electric Inc\TeslaTimeCard - Documents\Time Card Files\Data\"
+    timeCard.makeWeekPath (we)
+        
+End Sub
 Private Sub t8() 'Test of loadTestRoster function
     Dim l As Integer
     Dim e As Integer
