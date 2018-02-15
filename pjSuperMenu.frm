@@ -13,11 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
 Private Sub smBuild_Click()
     Dim we As String
     Dim xlFile As String
@@ -29,7 +24,7 @@ Private Sub smBuild_Click()
     Set FSO = New FileSystemObject
     lastWE = Format(calcWeek(Date - 7), "mm.dd.yy")
     we = Format(week, "mm.dd.yy")
-    xlFile = jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+    xlFile = jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     lwXLFile = jobPath & jobNum & "\Week_" & lastWE & "\TimePackets\" & jobNum & "_Week_" & lastWE & ".xlsx"
     
 try_again:
@@ -40,17 +35,22 @@ try_again:
             MkDir jobPath & jobNum & "\Week_" & we & "\TimePackets"
             FSO.CopyFile lwXLFile, xlFile
             smEdit_Click
-            GoTo clean_up
         ElseIf ans = vbCancel Then
             GoTo clean_up
         End If
     End If
-    If testFileExist(xlFile) > 0 Then
+    If testFileExist(sharePointPath & xlFile) > 0 Then
         On Error Resume Next
         ans = MsgBox("The packet already exists, Are you sure you want to overwrite it?", vbYesNo + vbQuestion)
         If ans = vbYes Then
-            Kill xlFile
+            Kill jobPath & xlFile
             xStrPath = jobPath & jobNum & "\Week_" & we & "\TimeSheets\"
+            killFile = Dir(xStrPath & "\*.xlsx")
+            Do While killFile <> ""
+                Kill xStrPath & killFile
+                killFile = Dir
+            Loop
+            xStrPath = sharePointPath & jobNum & "\Week_" & we & "\TimeSheets\"
             killFile = Dir(xStrPath & "\*.xlsx")
             Do While killFile <> ""
                 Kill xStrPath & killFile

@@ -143,8 +143,6 @@ Private Sub spDone_Click()
     Unload lMenu
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets("ROSTER")
-'    Stop
-'    loadRoster
     For i = 0 To UBound(menuList) - 1
         loadRoster i
         Unload menuList(i)
@@ -156,10 +154,10 @@ Private Sub spDone_Click()
     Set lApp = Nothing
     fn = Now
     MsgBox "Time to complete: " & Format(fn - st, "mm:ss")
-    mMenu.Show
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
     Application.EnableEvents = True
+    mMenu.Show
 End Sub
 
 Public Sub setSheet(menuNum As Integer)

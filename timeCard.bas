@@ -585,7 +585,7 @@ rt:
         ln = ln + 1
     Next ls
     Set xOutlookObj = Nothing
-    FSO.CopyFolder xlPath, spPath
+    FSO.CopyFolder xlPath, spPath, True
     bk.Close False
     ThisWorkbook.Protect xPass
 
@@ -900,7 +900,7 @@ Public Sub savePacket()
         Kill xlFile
     End If
     bk.SaveAs xlFile
-    FSO.CopyFolder xlPath, spPath
+    FSO.CopyFolder xlPath, spPath, True
     
 '    bk.Close
     
