@@ -340,7 +340,12 @@ Public Function loadShifts() As Integer
                             shft.setPhase = -1
                         Else
                             shft.setPhase = Val(tPhase(0))
-                            shft.setPhaseDesc = tPhase(1)
+                            Dim tPhaseDesc As String
+                            tPhaseDesc = vbNullString
+                            For i = 1 To UBound(tPhase)
+                                tPhaseDesc = tPhaseDesc & tPhase(i) & " "
+                            Next
+                            shft.setPhaseDesc = (Left(tPhaseDesc, Len(tPhaseDesc) - 1))
                         End If
                     Else
                         shft.setPhase = 0
@@ -629,7 +634,7 @@ Public Sub send_leadSheet(addr As String, lnk As String)
     On Error GoTo 0
     Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
     With xEmailObj
-        .To = LCase(addr)
+        .to = LCase(addr)
         .Subject = "Lead Sheet for " & jobNum & " Week Ending " & week
         
         .HTMLBody = "</head><body lang=EN-US link=""#0563C1"" vlink=""#954F72"" style='tab-interval:.5in'><div class=WordSection1><p class=MsoNormal>Your lead sheet for week " & week & " is now available for download:</p><p class=MsoNormal><a href=""" & lnk & """>HERE</a><o:p></o:p></p><p class=MsoNormal><o:p>&nbsp;</o:p></p></div></body></html>"
@@ -1189,7 +1194,8 @@ Public Sub genTimeCard()
         If tEmp Is Nothing Then
             Exit For
         Else
-        cnt = cnt + 1
+            cnt = cnt + 1
+        End If
     Next
     ThisWorkbook.Unprotect xPass
     For Each tEmp In weekRoster
@@ -1283,10 +1289,6 @@ Public Sub bubblesortWorksheets(wb As String)
             End If
         Next j
     Next i
-End Sub
-
-Public Sub test_updatePacket()
-    timeCard.updatePacket True
 End Sub
 
 Public Sub updatePacket()
