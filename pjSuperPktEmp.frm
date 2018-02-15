@@ -144,13 +144,11 @@ Private Sub spDone_Click()
         loadRoster i
         Unload menuList(i)
     Next i
-    Application.Visible = False
     savePacket
     genLeadSheets
     lApp.Run "'loadingtimer.xlsm'!stopLoading"
     lApp.Quit
     Set lApp = Nothing
-    Application.Visible = True
     mMenu.Show
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True

@@ -204,6 +204,7 @@ End Sub
 Private Sub copy_tables(ByRef wb As Workbook)
     Dim ws As Worksheet
     Dim tbl As ListObject
+    Exit Sub
     Set tbl = ws.ListObjects("Monday")
     Set ws = wb.Worksheets("LEAD")
     ws.Unprotect
@@ -435,8 +436,6 @@ rt:
         hiddenApp.EnableEvents = True
         ls.Worksheets("Labor Tracking & Goals").Unprotect
         ls.Worksheets("Labor Tracking & Goals").Range("lead_name") = iTemp.getFullname
-        hiddenApp.Visible = True
-        lApp.Visible = True
         ls.Worksheets("Labor Tracking & Goals").Protect
 '        With ls.Worksheets("LEAD").Range("Monday").Cells(1, 1)
 '            ls.Worksheets("LEAD").Unprotect
@@ -494,12 +493,12 @@ rt:
                     rng.End(xlDown).Offset(1, 0).EntireRow.Clear
                     .Range(rng.End(xlDown).Offset(2, 0), .ListObjects(nday).HeaderRowRange.Offset(-2, 0)).EntireRow.Delete
                 Else
-                    .Range(rng.End(xlDown).Offset(2, 0)).End(xlDown).EntireRow.Delete
-                GoTo rt
+                    rng.End(xlDown).Offset(1, 0).EntireRow.Clear
+                    Set rng = rng.End(xlDown).Offset(2, 0)
+                    .Range(rng, rng.Offset(300, 0)).EntireRow.Delete
                 End If
             Next tr
         End With
-        GoTo rt
 '        For n = 1 To 7
 '            For p = e_cnt + 1 To 15
 '                ls.Worksheets("LEAD").ListObjects(n).ListRows(e_cnt + 1).Delete
@@ -531,7 +530,6 @@ rt:
     ln = 0
     For Each ls In bks
         ls.Worksheets("LEAD").Activate
-        hiddenApp.Visible = True
         ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Activate
         ls.Save
         ls.Close
@@ -925,7 +923,7 @@ Public Function genRoster(ByRef wb As Workbook, ByRef ws As Worksheet, Optional 
 '                    If cnt > 1 Then
 '                        .Range("emp").Offset(cnt, 0).PasteSpecial Paste:=xlPasteFormats
 '                    End If
-'                    cnt = cnt + 1
+                    cnt = cnt + 1
                 ElseIf tmp.Value > lead Then
                     Exit For
                 End If

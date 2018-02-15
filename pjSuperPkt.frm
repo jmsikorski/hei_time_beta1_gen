@@ -234,7 +234,7 @@ Private Sub UserForm_Initialize()
             .Width = wide * numBox + 24
         End If
         If (.Controls("empList1").Height + 24 + Me.L1.Height + Me.Label2.Height + Me.spAdd.Height + 78) > Application.Height * 0.95 Then
-            .Height = Applicaiton.Height * 0.95
+            .Height = applicaiton.Height * 0.95
             .ScrollBars = fmScrollBarsVertical
         Else
             .Height = .Controls("empList1").Height + 24
