@@ -25,7 +25,8 @@ Private Sub ComboBox1_Change()
     tEmp = Split(job, " - ")
     jobNum = tEmp(0)
     jobName = tEmp(1)
-    jobPath = "C:\Users\" & Environ$("username") & "\Helix Electric Inc\TeslaTimeCard - Documents\Time Card Files\Data\"
+    jobPath = ThisWorkbook.path & "\Data\"
+    spPath = "C:\Users\" & Environ$("username") & "\Helix Electric Inc\TeslaTimeCard - Documents\Time Card Files\Data\"
 1:
 End Sub
 

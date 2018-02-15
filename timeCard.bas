@@ -358,9 +358,6 @@ Sub showsave()
     ws.Visible = True
 End Sub
 Public Sub genLeadSheets()
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
-    Application.EnableEvents = False
     Dim bks As Collection
     Dim ebks() As String
     Dim FSO As FileSystemObject
@@ -523,8 +520,6 @@ rt:
         spFile = getSharePointLink(ls.path) & "/" & ls.name
         ebks(i, 0) = leadEmail
         ebks(i, 1) = spFile
-        Application.DisplayAlerts = True
-        Application.ScreenUpdating = True
     Next i
     If jobPath = vbNullString Then
         MsgBox ("ERROR!")
@@ -540,10 +535,9 @@ rt:
         send_leadSheet ebks(ln, 0), ebks(ln, 1)
         ln = ln + 1
     Next ls
+    FSO.CopyFolder jobPath, spPath
     bk.Close False
-'    wb.Worksheets("LEAD").Visible = False
     ThisWorkbook.Protect xPass
-    Application.EnableEvents = True
 
 End Sub
 
@@ -821,8 +815,6 @@ Public Sub savePacket()
     lApp.Run "'loadingtimer.xlsm'!update", "Saving Packet"
     Dim time As Date
     On Error Resume Next
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
     Dim bk As Workbook
     Dim wb As Workbook
     Set wb = ThisWorkbook
