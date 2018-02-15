@@ -1082,11 +1082,16 @@ Public Function isSave() As Integer
     Dim we As String
     Dim tmp() As String
     we = Format(week, "mm.dd.yy")
-    xlFile = jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+    xlFile = sharePointPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     If testFileExist(xlFile) > 0 Then
         isSave = 1
     Else
-        isSave = -1
+        xlFile = jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+        If testFileExist(xlFile) > 0 Then
+            isSave = 1
+        Else
+            isSave = -1
+        End If
     End If
 End Function
 
@@ -1447,6 +1452,7 @@ Public Function loadRoster() As Integer
     i = 0
     xlFile = sharePointPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     On Error GoTo 10
+    Application.Visible = True
     Workbooks.Open xlFile
     SetAttr xlFile, vbNormal
     On Error GoTo 0

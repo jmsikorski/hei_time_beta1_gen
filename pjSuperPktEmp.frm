@@ -130,6 +130,9 @@ Private Sub loadRoster(ld)
 End Sub
 
 Private Sub spDone_Click()
+    Dim st As Date
+    Dim fn As Date
+    st = Now
     Application.DisplayAlerts = False
     Application.ScreenUpdating = False
     Application.EnableEvents = False
@@ -155,6 +158,8 @@ Private Sub spDone_Click()
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
     Application.EnableEvents = True
+    fn = Now
+    MsgBox "Time to complete: " & Format(fn - st, "mm:ss")
 End Sub
 
 Public Sub setSheet(menuNum As Integer)

@@ -86,7 +86,7 @@ load_err:
     On Error GoTo 0
 End Function
 
-Private Function print_roster() As Integer
+Public Function print_roster() As Integer
     On Error GoTo print_err
     Dim cnt As Integer
     Dim l As Integer
@@ -99,7 +99,7 @@ Private Function print_roster() As Integer
             If weekRoster(i, x) Is Nothing Then
                 Exit For
             Else
-                Debug.Print cnt & ": " & weekRoster(i, x).getFullname
+                Debug.Print cnt & ": Lead(" & i & ") " & weekRoster(i, x).getFullname
                 Debug.Print "Shift Count: " & weekRoster(i, x).getShifts.count
                 cnt = cnt + 1
             End If
