@@ -1432,12 +1432,12 @@ Public Function updatedFile(aFile As String, bFile As String)
     End If
     If a Is Nothing Then
         Debug.Print aFile & " Not found!"
-        updatedFile = False
+        updatedFile = True
         Exit Function
     End If
     If b Is Nothing Then
         Debug.Print bFile & " Not found!"
-        updatedFile = False
+        updatedFile = True
         Exit Function
     End If
     
