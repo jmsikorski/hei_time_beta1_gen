@@ -94,19 +94,22 @@ Private Sub smSubmit_Click()
     Application.ScreenUpdating = False
     Application.EnableEvents = False
     Set lApp = New Excel.Application
+    Unload Me
+    Application.Visible = False
     lApp.Workbooks.Open ThisWorkbook.path & "\loadingtimer.xlsm"
     lApp.Run "'loadingtimer.xlsm'!main"
+    Me.Visible = False
     timeCard.genTimeCard
     timeCard.updatePacket
     lApp.Run "'loadingtimer.xlsm'!stopLoading"
     lApp.Quit
     Set lApp = Nothing
+    Application.Visible = True
     fn = Now
     MsgBox "Time to complete: " & Format(fn - st, "h:mm:ss")
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
     Application.EnableEvents = True
-    Unload Me
     mMenu.Show
 End Sub
 

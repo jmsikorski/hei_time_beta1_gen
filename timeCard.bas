@@ -316,7 +316,7 @@ Public Function loadShifts() As Integer
     n = 0
     Dim l As Integer
     For l = 0 To UBound(weekRoster)
-        lApp.Run "'loadingtimer.xlsm'!update", "Load Lead Cards " & l & " of " & UBound(weekRoster)
+        lApp.Run "'loadingtimer.xlsm'!update", "Load Lead Cards " & l + 1 & " of " & UBound(weekRoster)
         Dim e As Integer
         For e = 0 To UBound(weekRoster, 2)
             n = 0
