@@ -428,10 +428,12 @@ rt:
         Workbooks("UnitGoals.xlsx").Close False
         Set uTbl = Nothing
         SetAttr ls.path, vbNormal
-        DisplayAlerts = False
-        EnableEvents = False
         ls.SaveAs lsPath, 51
-        EnableEvents = True
+        On Error Resume Next
+        Application.Visible = False
+        If Err.Number <> 0 Then
+            Err.Clear
+        End If
         ls.Worksheets("Labor Tracking & Goals").Unprotect
         ls.Worksheets("Labor Tracking & Goals").Range("lead_name") = iTemp.getFullname
         ls.Worksheets("Labor Tracking & Goals").Protect

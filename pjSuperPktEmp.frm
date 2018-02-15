@@ -14,6 +14,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+
 Private Sub nLead_Click()
     Dim thisMenu As String
     For i = 1 To UBound(menuList)
@@ -50,7 +51,7 @@ End Sub
 
 Private Sub spAdd_Click()
     Dim ws As Worksheet
-    Set ws = Worksheets("ROSTER")
+    Set ws = ThisWorkbook.Worksheets("ROSTER")
     Dim lBox As Integer
     Dim tlist As Object
     lBox = Me.Controls.count - 6
@@ -130,7 +131,8 @@ End Sub
 
 Private Sub spDone_Click()
     Application.DisplayAlerts = False
-    Application.ScreenUpdating = True
+    Application.ScreenUpdating = False
+    Application.EnableEvents = False
     Set lApp = New Excel.Application
     lApp.Workbooks.Open ThisWorkbook.path & "\loadingtimer.xlsm"
     lApp.Run "'loadingtimer.xlsm'!main"
@@ -152,12 +154,13 @@ Private Sub spDone_Click()
     mMenu.Show
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
+    Application.EnableEvents = True
 End Sub
 
 Public Sub setSheet(menuNum As Integer)
     Dim ws As Worksheet
     Dim tmp As Range
-    Set ws = Worksheets("ROSTER")
+    Set ws = ThisWorkbook.Worksheets("ROSTER")
     Dim cnt As Integer
     Dim lBoxHt As Integer
     lBoxHt = 0
