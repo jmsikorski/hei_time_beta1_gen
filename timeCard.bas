@@ -294,17 +294,13 @@ Public Function getLeadSheets(xStrPath As String) As String
 
 End Function
 
-Public Function loadShifts(Optional tEst As Boolean) As Integer
+Public Function loadShifts() As Integer
     'On Error GoTo shift_err
     Dim wb_arr() As String
     Dim lead_arr As String
     Dim xlPath As String
     Dim xlFile As String
     Dim we As String
-    If tEst Then
-        jobNum = "461705"
-        week = calcWeek(43127)
-    End If
     we = Format(week, "mm.dd.yy")
     xlPath = jobPath & jobNum & "\Week_" & we & "\TimeSheets\"
     lead_arr = getLeadSheets(xlPath)
@@ -885,25 +881,21 @@ Public Sub savePacket()
     Dim we As String
     we = Format(week, "mm.dd.yy")
     makeWeekPath we
-    xlPath = jobPath & jobNum & "\Week_" & we & "\TimePackets\"
-    spPath = sharePointPath & jobNum & "\Week_" & we & "\TimePackets\"
-    xlFile = xlPath & jobNum & "_Week_" & we & ".xlsx"
+    xlPath = jobPath & jobNum & "\Week_" & we & "\TimePackets"
+    spPath = sharePointPath & jobNum & "\Week_" & we & "\TimePackets"
+    xlFile = xlPath & "\" & jobNum & "_Week_" & we & ".xlsx"
     Workbooks.Open ThisWorkbook.path & "\Packet Template.xlsx"
     Set bk = Workbooks("Packet Template.xlsx")
     saveWeekRoster bk.Sheets("SAVE")
     If genRoster(bk, bk.Worksheets("ROSTER")) = -1 Then
         MsgBox ("ERROR PRINTING ROSTER")
     End If
-'    moveRoster wb, bk
     bk.Worksheets("SAVE").Visible = xlVeryHidden
     If testFileExist(xlFile) = 1 Then
         Kill xlFile
     End If
     bk.SaveAs xlFile
     FSO.CopyFolder xlPath, spPath, True
-    
-'    bk.Close
-    
     
     On Error GoTo 0
 End Sub
@@ -1170,7 +1162,7 @@ Public Sub insertRoster(index As Integer)
     Next x
 End Sub
 
-Public Sub genTimeCard(Optional tEst As Boolean)
+Public Sub genTimeCard()
     Application.DisplayAlerts = False
     Dim xlPath As String
     Dim xlFile As String
@@ -1178,25 +1170,12 @@ Public Sub genTimeCard(Optional tEst As Boolean)
     Dim shtCnt As Integer
     Dim wb_tc As Workbook
     shtCnt = 0
-    If tEst Then
-        jobNum = "461705"
-        week = calcWeek(43127)
-'        we = "01.28.18"
-        jobPath = ThisWorkbook.path & "\"
-        'jobPath =
-    End If
     we = Format(week, "mm.dd.yy")
     xlPath = jobPath & jobNum & "\Week_" & we & "\TimePackets\"
     xlFile = jobNum & "_Week_" & we & "_TimeCards.xlsx"
     If loadRoster = -1 Then GoTo load_err
-    If tEst Then
-        If timeCard.loadShifts(tEst) = -1 Then
-            Stop
-        End If
-    Else
-        If timeCard.loadShifts = -1 Then
-            Stop
-        End If
+    If timeCard.loadShifts = -1 Then
+        Stop
     End If
     Workbooks.Open ThisWorkbook.path & "\Master TC.xlsx", False
     Set wb_tc = Workbooks("Master TC.xlsx")
@@ -1301,7 +1280,7 @@ Public Sub test_updatePacket()
     timeCard.updatePacket True
 End Sub
 
-Public Sub updatePacket(Optional tEst As Boolean)
+Public Sub updatePacket()
     Dim we As String
     Dim xlPath As String
     Dim xlFile As String
@@ -1309,15 +1288,6 @@ Public Sub updatePacket(Optional tEst As Boolean)
     Dim wb As Workbook
     Dim tc_wb As Workbook
     Dim tEmp As Variant
-    If tEst Then
-        jobNum = "461705"
-        week = calcWeek(43127)
-'        we = "01.28.18"
-        jobPath = ThisWorkbook.path & "\"
-        On Error GoTo 0
-        loadRoster
-        loadShifts tEst
-    End If
     we = Format(week, "mm.dd.yy")
     xlPath = jobPath & jobNum & "\Week_" & we & "\TimePackets\"
     xlFile = jobNum & "_Week_" & we & ".xlsx"
@@ -1438,7 +1408,63 @@ Public Sub showHiddenApps()
     Set oXLApp = Nothing
 End Sub
 
+Public Function updatedFile(aFile As String, bFile As String)
+    Dim FSO As FileSystemObject
+    Dim a As File
+    Dim b As File
+    
+    Set FSO = New FileSystemObject
+    On Error Resume Next
+    Set a = FSO.GetFile(aFile)
+    Set b = FSO.GetFile(bFile)
+    On Error GoTo 0
+    If Err.Number <> 0 Then
+        Err.Clear
+    End If
+    If a Is Nothing Then
+        Debug.Print aFile & " Not found!"
+        updatedFile = False
+        Exit Function
+    End If
+    If b Is Nothing Then
+        Debug.Print bFile & " Not found!"
+        updatedFile = False
+        Exit Function
+    End If
+    
+    If a.DateLastModified <> b.DateLastModified Then
+        updatedFile = True
+    Else
+        updatedFile = False
+    End If
+    Set FSO = Nothing
+    Set a = Nothing
+    Set b = Nothing
+End Function
+
+Public Sub getUpdatedFiles(aPath As String, bPath As String, tPath As String)
+    Dim FSO As FileSystemObject
+    Dim aFol As Folder
+    Dim bFol As Folder
+    Dim tFile As File
+    Dim tFol As Folder
+    Set FSO = New FileSystemObject
+    Set aFol = FSO.GetFolder(aPath & tPath)
+    Set bFol = FSO.GetFolder(bPath & tPath)
+    For Each tFol In bFol.SubFolders
+        Dim nPath As String
+        nPath = Right(tFol.path, Len(tFol.path) - Len(bFol.path))
+        getUpdatedFiles aFol.path, bFol.path, nPath
+    Next
+    For Each tFile In bFol.Files
+        If updatedFile(aFol.path & "\" & tFile.name, bFol.path & "\" & tFile.name) Then
+            FSO.CopyFile tFile.path, aFol.path & "\" & tFile.name, True
+        End If
+    Next
+End Sub
+
 Public Function loadRoster() As Integer
+rt:
     Dim we As String
     we = Format(week, "mm.dd.yy")
     Dim wb As Workbook
@@ -1453,8 +1479,8 @@ Public Function loadRoster() As Integer
     i = 0
     xlFile = sharePointPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     On Error GoTo 10
-    Application.Visible = True
     Workbooks.Open xlFile
+    Application.Visible = True
     SetAttr xlFile, vbNormal
     On Error GoTo 0
     Set bk = Workbooks(jobNum & "_Week_" & we & ".xlsx")
@@ -1463,7 +1489,14 @@ Public Function loadRoster() As Integer
         If tmp.Value > aVal Then aVal = tmp.Value
         If tmp.Offset(0, 1).Value > bVal Then bVal = tmp.Offset(0, 1).Value
     Next tmp
+    Dim x As Integer
+
     ReDim weekRoster(aVal, eCount)
+    For i = 0 To aVal
+        For x = 0 To eCount
+            Set weekRoster(i, x) = Nothing
+        Next
+    Next
     For Each tmp In bk.Worksheets("Save").Range("A1", bk.Worksheets("SAVE").Range("A1").End(xlDown))
         Dim xlEmp As Employee
         Set xlEmp = New Employee
@@ -1474,17 +1507,16 @@ Public Function loadRoster() As Integer
         xlEmp.emPerDiem = tmp.Offset(0, 6)
        Set weekRoster(tmp.Offset(0, 0).Value, tmp.Offset(0, 1).Value) = xlEmp
     Next tmp
-    bk.Worksheets("SAVE").Visible = False
+    bk.Worksheets("SAVE").Visible = xlVeryHidden
     wb.Activate
     bk.Close False
-    
     
     loadRoster = 1
     Exit Function
 10:
     loadRoster = -1
     On Error Resume Next
-    For i = 1 To Workbooks.count
+    For i = 1 To Application.Workbooks.count
         Workbooks(i).Close False
     Next
     

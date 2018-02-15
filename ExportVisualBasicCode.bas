@@ -198,7 +198,7 @@ Public Function clearFolder(xFolder As String) As Integer
     Set FSO = New FileSystemObject
 retry:
     On Error GoTo close_file
-    Dim xFile As file
+    Dim xFile As File
     If Not FSO.FolderExists(xFolder) Then
         Call FSO.CreateFolder(xFolder)
         clearFolder = 1
@@ -348,7 +348,7 @@ End Sub
 Public Sub ImportModules(Optional codeFolder As String)
     Dim wkbTarget As Excel.Workbook
     Dim objFSO As Scripting.FileSystemObject
-    Dim objFile As Scripting.file
+    Dim objFile As Scripting.File
     Dim szTargetWorkbook As String
     Dim szImportPath As String
     Dim szFileName As String

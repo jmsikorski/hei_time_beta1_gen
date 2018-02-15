@@ -153,7 +153,9 @@ Private Sub spDone_Click()
     lApp.Quit
     Set lApp = Nothing
     fn = Now
-    MsgBox "Time to complete: " & Format(fn - st, "mm:ss")
+    Debug.Print st
+    Debug.Print fn
+    MsgBox "Time to complete: " & Format(fn - st, "h:mm:ss")
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
     Application.EnableEvents = True

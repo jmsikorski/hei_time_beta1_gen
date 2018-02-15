@@ -25,25 +25,15 @@ Private Sub smBuild_Click()
     lastWE = Format(calcWeek(Date - 7), "mm.dd.yy")
     we = Format(week, "mm.dd.yy")
     xlFile = jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
-    lwXLFile = jobPath & jobNum & "\Week_" & lastWE & "\TimePackets\" & jobNum & "_Week_" & lastWE & ".xlsx"
+    lwXLFile = sharePointPath & jobNum & "\Week_" & lastWE & "\TimePackets\" & jobNum & "_Week_" & lastWE & ".xlsx"
     
 try_again:
-    If FSO.FileExists(lwXLFile) Then
-        ans = MsgBox("Copy from last week?", vbYesNoCancel + vbQuestion, "COPY?")
-        If ans = vbYes Then
-            MkDir jobPath & jobNum & "\Week_" & we
-            MkDir jobPath & jobNum & "\Week_" & we & "\TimePackets"
-            FSO.CopyFile lwXLFile, xlFile
-            smEdit_Click
-        ElseIf ans = vbCancel Then
-            GoTo clean_up
-        End If
-    End If
     If testFileExist(sharePointPath & xlFile) > 0 Then
         On Error Resume Next
         ans = MsgBox("The packet already exists, Are you sure you want to overwrite it?", vbYesNo + vbQuestion)
         If ans = vbYes Then
             Kill jobPath & xlFile
+            Kill sharePointPath & xlFile
             xStrPath = jobPath & jobNum & "\Week_" & we & "\TimeSheets\"
             killFile = Dir(xStrPath & "\*.xlsx")
             Do While killFile <> ""
@@ -60,6 +50,20 @@ try_again:
             Exit Sub
         End If
         On Error GoTo 0
+    End If
+    If FSO.FileExists(lwXLFile) Then
+        ans = MsgBox("Copy from last week?", vbYesNoCancel + vbQuestion, "COPY?")
+        If ans = vbYes Then
+            On Error Resume Next
+            MkDir jobPath & jobNum & "\Week_" & we
+            MkDir jobPath & jobNum & "\Week_" & we & "\TimePackets"
+            FSO.CopyFile lwXLFile, jobPath & xlFile, True
+            FSO.CopyFile lwXLFile, sharePointPath & xlFile, True
+            On Error GoTo 0
+            smEdit_Click
+        ElseIf ans = vbCancel Then
+            GoTo clean_up
+        End If
     End If
 clean_up:
     Set FSO = Nothing
@@ -84,8 +88,8 @@ Public Sub smExit_Click()
 End Sub
 
 Private Sub smSubmit_Click()
+        
     timeCard.genTimeCard
-    
     timeCard.updatePacket
     MsgBox "Time Cards Complete"
     Unload Me
