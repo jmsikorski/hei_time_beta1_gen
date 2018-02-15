@@ -18,6 +18,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Private Sub loginButton_Click()
     Me.Hide
 End Sub
@@ -27,7 +28,6 @@ Public Sub mCancel_Click()
     Dim unLockIn As String
     Dim ans As Integer, attempt As Integer
     Dim correct As Boolean
-    correct = False
     attempt = 1
     ans = MsgBox("This file is locked" & vbNewLine & "Are you sure you want to quit?", 4147, "EXIT")
     If ans = 6 Then

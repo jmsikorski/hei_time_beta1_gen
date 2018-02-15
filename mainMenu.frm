@@ -18,6 +18,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Private Sub ComboBox1_Change()
     On Error GoTo 1
     job = ComboBox1.Value
@@ -27,7 +28,6 @@ Private Sub ComboBox1_Change()
     jobName = tEmp(1)
 1:
 End Sub
-
 Public Sub mCancel_Click()
     Me.Hide
     loginMenu.Show
@@ -40,7 +40,7 @@ End Sub
 Private Sub pjSuper_Click()
     jobPath = ThisWorkbook.path & "\Data\"
     sharePointPath = "C:\Users\" & Environ$("username") & "\Helix Electric Inc\TeslaTimeCard - Documents\Time Card Files\Data\"
-    getUpdatedFiles jobPath, sharePointPath, jobNum & "\Week_" & Format(calcWeek(week), "mm.dd.yy")
+    getUpdatedFiles jobPath, sharePointPath, jobNum & "\Week_" & Format(calcWeek(Date), "mm.dd.yy")
     If TypeName(mMenu) <> "mainMenu" Then
         job = "ERROR"
     Else

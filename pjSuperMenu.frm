@@ -13,6 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Private Sub smBuild_Click()
     Dim we As String
     Dim xlFile As String
@@ -27,7 +28,6 @@ Private Sub smBuild_Click()
     xlFile = jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     lwXLFile = sharePointPath & jobNum & "\Week_" & lastWE & "\TimePackets\" & jobNum & "_Week_" & lastWE & ".xlsx"
     
-try_again:
     If testFileExist(sharePointPath & xlFile) > 0 Then
         On Error Resume Next
         ans = MsgBox("The packet already exists, Are you sure you want to overwrite it?", vbYesNo + vbQuestion)

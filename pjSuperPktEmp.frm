@@ -15,6 +15,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
+
 Private Sub nLead_Click()
     Dim thisMenu As String
     For i = 1 To UBound(menuList)
@@ -27,7 +28,6 @@ Private Sub nLead_Click()
         MsgBox ("No more leads")
     Else
         loadRoster i - 1
-        Me.Hide
         menuList(i).Show
     End If
 End Sub

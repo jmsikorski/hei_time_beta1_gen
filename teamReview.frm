@@ -18,6 +18,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Private Sub UserForm_Initialize()
 '        Dim eLabel As Label
 '        Set eLabel = Me.Controls.Add("Forms.Label.1", "empLabel" & i)
@@ -27,5 +28,4 @@ Private Sub UserForm_Initialize()
 '            .Text = "Lead: " & weekRoster(0, 0).getFName & " " & weekRoster(0, 0).getLName
 '        End With
 '        For i = 0 To UBound(weekRoster, 2)
-'
 End Sub

@@ -19,6 +19,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Private Sub mCancel_Click()
     mainMenu.mCancel_Click
 End Sub
@@ -27,7 +28,6 @@ Private Sub reqSubmit_Click()
     Dim xSht As Worksheet
     Dim xOutlookObj As Object
     Dim xEmailObj As Object
-    Dim send_to As String
     On Error GoTo 0
     Set xOutlookObj = CreateObject("Outlook.Application")
     Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
