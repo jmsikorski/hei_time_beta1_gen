@@ -19,6 +19,8 @@ Public tReview As teamReview
 Public Const eCount = 15
 Public xPass As String
 Public lApp As Excel.Application
+Public xOutlookObj As Object
+
 Public Const holiday = "88080-08"
 Public Enum mType
     mainMenu = 1
@@ -527,6 +529,7 @@ rt:
     End If
     Dim ln As Integer
     ln = 0
+    Set xOutlookObj = CreateObject("Outlook.Application")
     For Each ls In bks
         ls.Worksheets("LEAD").Activate
         ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Activate
@@ -535,6 +538,7 @@ rt:
         send_leadSheet ebks(ln, 0), ebks(ln, 1)
         ln = ln + 1
     Next ls
+    Set xOutlookObj = Nothing
     FSO.CopyFolder jobPath, spPath
     bk.Close False
     ThisWorkbook.Protect xPass
@@ -565,7 +569,6 @@ Public Sub setDataValidation(ws As Worksheet)
 End Sub
 
 Public Sub send_leadSheet(addr As String, lnk As String)
-    Dim xOutlookObj As Object
     Dim xEmailObj As Object ' Outlook.MailItem
 'GET DEFAULT EMAIL SIGNATURE
     On Error Resume Next
@@ -579,7 +582,6 @@ Public Sub send_leadSheet(addr As String, lnk As String)
     signature = CreateObject("Scripting.FileSystemObject").GetFile(signature).OpenAsTextStream(1, -2).ReadAll
     
     On Error GoTo 0
-    Set xOutlookObj = CreateObject("Outlook.Application")
     Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
     With xEmailObj
         .To = LCase(addr)
