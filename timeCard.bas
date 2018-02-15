@@ -1457,6 +1457,7 @@ Public Sub getUpdatedFiles(aPath As String, bPath As String, tPath As String)
     Dim bFol As Folder
     Dim tFile As File
     Dim tFol As Folder
+    Dim tFolName As String
     Set FSO = New FileSystemObject
     Set bFol = FSO.GetFolder(bPath & tPath)
     Dim i As Integer
@@ -1464,16 +1465,15 @@ rt:
     If Not FSO.FolderExists(aPath & tPath) Then
         Dim tmp() As String
         tmp = Split(aPath & tPath, "\")
-        tFol = tmp(0)
+        tFolName = tmp(0)
         For i = 1 To UBound(tmp)
-            tFol = tFol & "\" & tmp(1)
-            If Not FSO.FolderExists(tFol) Then
-                GoTo rt
-                FSO.CreateFolder tFol
+            tFolName = tFolName & "\" & tmp(i)
+            If Not FSO.FolderExists(tFolName) Then
+                FSO.CreateFolder tFolName
             End If
         Next
     End If
-    Set aFol = FSO.GetFolder(aPath)
+    Set aFol = FSO.GetFolder(aPath & tPath)
     For Each tFol In bFol.SubFolders
         Dim nPath As String
         nPath = Right(tFol.path, Len(tFol.path) - Len(bFol.path))
