@@ -98,7 +98,6 @@ Private Sub smSubmit_Click()
     Application.Visible = False
     lApp.Workbooks.Open ThisWorkbook.path & "\loadingtimer.xlsm"
     lApp.Run "'loadingtimer.xlsm'!main"
-    Me.Visible = False
     timeCard.genTimeCard
     timeCard.updatePacket
     lApp.Run "'loadingtimer.xlsm'!stopLoading"

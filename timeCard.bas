@@ -1187,7 +1187,7 @@ Public Sub genTimeCard()
     wb_tc.SaveAs xlPath & xlFile
     Dim cnt As Integer
     Dim eCnt As Integer
-    eCnt = 1
+    eCnt = 0
     cnt = 0
     Dim tEmp As Variant
     For Each tEmp In weekRoster
@@ -1202,6 +1202,7 @@ Public Sub genTimeCard()
         If tEmp Is Nothing Then
             Exit For
         Else
+            eCnt = eCnt + 1
             lApp.Run "'loadingtimer.xlsm'!update", "Generating Time Card " & eCnt & " of " & cnt
             shtCnt = shtCnt + 1
             wb_tc.Worksheets(1).Copy after:=wb_tc.Worksheets(wb_tc.Sheets.count)
@@ -1242,7 +1243,6 @@ rep_add:
                 Next
             End With
         End If
-        eCnt = eCnt + 1
     Next
     wb_tc.Worksheets(1).Delete
     wb_tc.Activate
@@ -1453,7 +1453,7 @@ Public Function updatedFile(aFile As String, bFile As String)
     Set b = Nothing
 End Function
 
-Public Sub getUpdatedFiles(aPath As String, bPath As String, tPath As String)
+Public Sub getUpdatedFiles(dest As String, src As String, tPath As String)
     Dim FSO As FileSystemObject
     Dim aFol As Folder
     Dim bFol As Folder
@@ -1461,12 +1461,12 @@ Public Sub getUpdatedFiles(aPath As String, bPath As String, tPath As String)
     Dim tFol As Folder
     Dim tFolName As String
     Set FSO = New FileSystemObject
-    Set bFol = FSO.GetFolder(bPath & tPath)
+    Set bFol = FSO.GetFolder(src & tPath)
     Dim i As Integer
 rt:
-    If Not FSO.FolderExists(aPath & tPath) Then
+    If Not FSO.FolderExists(dest & tPath) Then
         Dim tmp() As String
-        tmp = Split(aPath & tPath, "\")
+        tmp = Split(dest & tPath, "\")
         tFolName = tmp(0)
         For i = 1 To UBound(tmp)
             tFolName = tFolName & "\" & tmp(i)
@@ -1475,7 +1475,7 @@ rt:
             End If
         Next
     End If
-    Set aFol = FSO.GetFolder(aPath & tPath)
+    Set aFol = FSO.GetFolder(dest & tPath)
     For Each tFol In bFol.SubFolders
         Dim nPath As String
         nPath = Right(tFol.path, Len(tFol.path) - Len(bFol.path))
