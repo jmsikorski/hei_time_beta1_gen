@@ -155,6 +155,9 @@ auth_retry:
     ElseIf ld = True Then
         mMenu.Show
     End If
+    If Application.Visible = False Then
+        Application.Visible = True
+    End If
     Exit Sub
 quit_sub:
     MsgBox "YOU ARE NOT AUTHORIZED TO VIEW THIS FILE!", vbCritical + vbOKOnly, "EXIT!"
