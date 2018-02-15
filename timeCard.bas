@@ -316,6 +316,7 @@ Public Function loadShifts() As Integer
     n = 0
     Dim l As Integer
     For l = 0 To UBound(weekRoster)
+        lApp.Run "'loadingtimer.xlsm'!update", "Load Lead Cards " & l & " of " & UBound(weekRoster)
         Dim e As Integer
         For e = 0 To UBound(weekRoster, 2)
             n = 0
@@ -1163,7 +1164,6 @@ Public Sub insertRoster(index As Integer)
 End Sub
 
 Public Sub genTimeCard()
-    Application.DisplayAlerts = False
     Dim xlPath As String
     Dim xlFile As String
     Dim we As String
@@ -1181,13 +1181,22 @@ Public Sub genTimeCard()
     Set wb_tc = Workbooks("Master TC.xlsx")
     wb_tc.SaveAs xlPath & xlFile
     Dim cnt As Integer
-    cnt = 1
+    Dim eCnt As Integer
+    eCnt = 1
+    cnt = 0
     Dim tEmp As Variant
+    For Each tEmp In weekRoster
+        If tEmp Is Nothing Then
+            Exit For
+        Else
+        cnt = cnt + 1
+    Next
     ThisWorkbook.Unprotect xPass
     For Each tEmp In weekRoster
         If tEmp Is Nothing Then
             Exit For
         Else
+            lApp.Run "'loadingtimer.xlsm'!update", "Generating Time Card " & eCnt & " of " & cnt
             shtCnt = shtCnt + 1
             wb_tc.Worksheets(1).Copy after:=wb_tc.Worksheets(wb_tc.Sheets.count)
             With wb_tc.Worksheets(wb_tc.Sheets.count)
@@ -1227,7 +1236,7 @@ rep_add:
                 Next
             End With
         End If
-        cnt = cnt + 1
+        eCnt = eCnt + 1
     Next
     wb_tc.Worksheets(1).Delete
     wb_tc.Activate

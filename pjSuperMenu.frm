@@ -88,10 +88,25 @@ Public Sub smExit_Click()
 End Sub
 
 Private Sub smSubmit_Click()
-        
+    Dim st As Date
+    Dim fn As Date
+    st = Now
+    Application.DisplayAlerts = False
+    Application.ScreenUpdating = False
+    Application.EnableEvents = False
+    Set lApp = New Excel.Application
+    lApp.Workbooks.Open ThisWorkbook.path & "\loadingtimer.xlsm"
+    lApp.Run "'loadingtimer.xlsm'!main"
     timeCard.genTimeCard
     timeCard.updatePacket
-    MsgBox "Time Cards Complete"
+    lApp.Run "'loadingtimer.xlsm'!stopLoading"
+    lApp.Quit
+    Set lApp = Nothing
+    fn = Now
+    MsgBox "Time to complete: " & Format(fn - st, "h:mm:ss")
+    Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
+    Application.EnableEvents = True
     Unload Me
     mMenu.Show
 End Sub
