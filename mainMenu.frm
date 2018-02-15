@@ -40,7 +40,7 @@ End Sub
 Private Sub pjSuper_Click()
     jobPath = ThisWorkbook.path & "\Data\"
     sharePointPath = "C:\Users\" & Environ$("username") & "\Helix Electric Inc\TeslaTimeCard - Documents\Time Card Files\Data\"
-    getUpdatedFiles jobNum & "\Week_" & Format(calcWeek(Now), "mm.dd.yy")
+    getUpdatedFiles jobPath, sharePointPath, jobNum & "\Week_" & Format(calcWeek(week), "mm.dd.yy")
     If TypeName(mMenu) <> "mainMenu" Then
         job = "ERROR"
     Else
