@@ -66,6 +66,7 @@ Public Sub main(Optional logout As Boolean)
         GoTo relogin
     End If
     Application.WindowState = xlMaximized
+    Application.Visible = False
     xPass = getXPass
     On Error GoTo quit_sub
     ThisWorkbook.Unprotect xPass

@@ -24,7 +24,6 @@ Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
 End Sub
 
 Private Sub Workbook_Open()
-    Application.Visible = False
     main
 End Sub
 

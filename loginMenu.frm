@@ -46,6 +46,9 @@ Public Sub mCancel_Click()
             If sMenu.Visible = True Then
                 sMenu.Hide
             End If
+            If Application.Visible = False Then
+                Application.Visible = True
+            End If
             End
         End If
         Do While correct = False And attempt > 0
@@ -63,8 +66,8 @@ Public Sub mCancel_Click()
                 If sMenu.Visible = True Then
                     sMenu.Hide
                 End If
-                If Application.WindowState = xlMinimized Then
-                    Application.WindowState = xlMaximized
+                If Application.Visible = False Then
+                    Application.Visible = True
                 End If
                 On Error GoTo 0
                 attempt = 0
@@ -76,11 +79,13 @@ Public Sub mCancel_Click()
                 MsgBox "You have made 3 failed attempts!", 16, "FAILED UNLOCK"
                 Application.DisplayAlerts = False
                 Unload Me
+                If Application.Visible = False Then
+                    Application.Visible = True
+                End If
                 ThisWorkbook.Close
             End If
         Loop
     End If
-
 End Sub
 
 
