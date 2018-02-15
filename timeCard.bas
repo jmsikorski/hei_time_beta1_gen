@@ -618,7 +618,8 @@ Public Sub send_leadSheet(addr As String, lnk As String)
     Dim xEmailObj As Object ' Outlook.MailItem
 'GET DEFAULT EMAIL SIGNATURE
     On Error Resume Next
-    Dim olmailitem As Object
+    Const olMailItem As Long = 0
+    
     Dim signature As String
     signature = Environ("appdata") & "\Microsoft\Signatures\"
     If Dir(signature, vbDirectory) <> vbNullString Then
@@ -629,7 +630,7 @@ Public Sub send_leadSheet(addr As String, lnk As String)
     signature = CreateObject("Scripting.FileSystemObject").GetFile(signature).OpenAsTextStream(1, -2).ReadAll
     
     On Error GoTo 0
-    Set xEmailObj = xOutlookObj.CreateItem(olmailitem)
+    Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
     With xEmailObj
         .To = LCase(addr)
         .Subject = "Lead Sheet for " & jobNum & " Week Ending " & week

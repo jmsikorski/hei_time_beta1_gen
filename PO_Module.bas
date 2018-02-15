@@ -19,7 +19,7 @@ Public Sub send_req()
     signature = CreateObject("Scripting.FileSystemObject").GetFile(signature).OpenAsTextStream(1, -2).ReadAll
     On Error GoTo 0
     Set xOutlookObj = CreateObject("Outlook.Application")
-    Set xEmailObj = xOutlookObj.CreateItem(olmailitem)
+    Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
     With xEmailObj
         .To = ThisWorkbook.Worksheets("INSTRUCTIONS").Range("email_to")
         .CC = ThisWorkbook.Worksheets("INSTRUCTIONS").Range("email_cc")

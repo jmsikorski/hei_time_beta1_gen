@@ -30,7 +30,7 @@ Private Sub reqSubmit_Click()
     Dim send_to As String
     On Error GoTo 0
     Set xOutlookObj = CreateObject("Outlook.Application")
-    Set xEmailObj = xOutlookObj.CreateItem(olmailitem)
+    Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
     Dim name As String
     Dim user As String
     Dim pw As String

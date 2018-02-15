@@ -154,12 +154,12 @@ Private Sub spDone_Click()
     lApp.Run "'loadingtimer.xlsm'!stopLoading"
     lApp.Quit
     Set lApp = Nothing
+    fn = Now
+    MsgBox "Time to complete: " & Format(fn - st, "mm:ss")
     mMenu.Show
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
     Application.EnableEvents = True
-    fn = Now
-    MsgBox "Time to complete: " & Format(fn - st, "mm:ss")
 End Sub
 
 Public Sub setSheet(menuNum As Integer)
