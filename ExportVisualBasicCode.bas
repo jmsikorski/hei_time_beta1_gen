@@ -424,7 +424,7 @@ Public Sub ImportModules(Optional codeFolder As String)
         
         ElseIf (objFSO.GetExtensionName(objFile.name) = "frm") Then
             cmpComponents.Import objFile.path
-            ThisWorkbook.VBProject.VBComponents(objFile).CodeModule.DeleteLines StartLine:=16, count:=1
+            ThisWorkbook.VBProject.VBComponents(objFile).CodeModule.DeleteLines StartLine:=1, count:=1
         ElseIf (objFSO.GetExtensionName(objFile.name) = "bas") Then
             If objFile.name <> "main_module.bas" Then
                 cmpComponents.Import objFile.path

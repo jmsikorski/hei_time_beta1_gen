@@ -13,7 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
 Private Sub spAdd_Click()
     If addlead.Visible = True Then
         Me.Hide
@@ -28,6 +27,7 @@ Private Sub spDone_Click()
     Dim tLead As Employee
     Dim tmpRoster() As Employee
     Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets("ROSTER")
     Set tLead = New Employee
     Dim lBox As Integer
     Dim tlist As Object

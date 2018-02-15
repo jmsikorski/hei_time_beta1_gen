@@ -13,9 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
 Private Sub nLead_Click()
     Dim thisMenu As String
     For i = 1 To UBound(menuList)
@@ -25,9 +22,10 @@ Private Sub nLead_Click()
         End If
     Next i
     If i = UBound(menuList) Then
-        MsgBox ("No more leads")
+        MsgBox "No more leads", vbExclamation + vbOKOnly, "STOP!"
     Else
         loadRoster i - 1
+        Me.Hide
         menuList(i).Show
     End If
 End Sub
@@ -41,7 +39,7 @@ Private Sub pLead_Click()
         End If
     Next i
     If i - 2 < 0 Then
-        MsgBox ("You are at the first lead")
+        MsgBox "You are at the first lead", vbExclamation + vbOKOnly, "STOP!"
     Else
         loadRoster i - 1
         Me.Hide
