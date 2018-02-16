@@ -1451,7 +1451,12 @@ show_hiddenApp:
         wb.Worksheets("ROSTER").Range("WEEKLY_OT_HOURS") = wb.Worksheets("ROSTER").Range("WEEKLY_OT_HOURS") + tc_wb.Worksheets(1).Range("TOTAL_OTHRS")
         tc_wb.Worksheets(1).Move after:=wb.Worksheets(wb.Sheets.count)
     Next xSht
-    
+    With wb.Worksheets("LABOR T&G TOTAL")
+        Set rng = .Range(.Range("COST_CODE"), .Range("COST_CODE").End(xlDown))
+        If hideCells(1, rng) < 0 Then
+            Stop
+        End If
+    End With
     wb.Worksheets("ROSTER").Activate
     Application.Visible = False
     wb.Save
