@@ -301,6 +301,8 @@ Public Function loadShifts() As Integer
     Dim xlPath As String
     Dim xlFile As String
     Dim we As String
+rt:
+    
     we = Format(week, "mm.dd.yy")
     xlPath = jobPath & jobNum & "\Week_" & we & "\TimeSheets\"
     lead_arr = getLeadSheets(xlPath)
@@ -309,6 +311,7 @@ Public Function loadShifts() As Integer
     For i = 0 To UBound(wb_arr)
         xlFile = xlPath & wb_arr(i)
         Workbooks.Open xlFile
+        Application.Visible = False
     Next
     Dim n As Integer
     Dim rng As Range
@@ -316,7 +319,7 @@ Public Function loadShifts() As Integer
     n = 0
     Dim l As Integer
     For l = 0 To UBound(weekRoster)
-        lApp.Run "'loadingtimer.xlsm'!update", "Load Lead Cards " & l + 1 & " of " & UBound(weekRoster)
+        lApp.Run "'loadingtimer.xlsm'!update", "Load Lead Cards " & l + 1 & " of " & UBound(weekRoster) + 1
         Dim e As Integer
         For e = 0 To UBound(weekRoster, 2)
             n = 0
@@ -360,9 +363,9 @@ Public Function loadShifts() As Integer
         n = 0
     Next l
     Dim wb As Integer
-    For wb = 0 To UBound(wb_arr)
-        Workbooks(wb_arr(wb)).Close False
-    Next
+'    For wb = 0 To UBound(wb_arr)
+'        Workbooks(wb_arr(wb)).Close False
+'    Next
     loadShifts = 1
     Exit Function
 shift_err:
@@ -634,7 +637,7 @@ Public Sub send_leadSheet(addr As String, lnk As String)
     On Error GoTo 0
     Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
     With xEmailObj
-        .to = LCase(addr)
+        .To = LCase(addr)
         .Subject = "Lead Sheet for " & jobNum & " Week Ending " & week
         
         .HTMLBody = "</head><body lang=EN-US link=""#0563C1"" vlink=""#954F72"" style='tab-interval:.5in'><div class=WordSection1><p class=MsoNormal>Your lead sheet for week " & week & " is now available for download:</p><p class=MsoNormal><a href=""" & lnk & """>HERE</a><o:p></o:p></p><p class=MsoNormal><o:p>&nbsp;</o:p></p></div></body></html>"
@@ -1183,6 +1186,7 @@ Public Sub genTimeCard()
         Stop
     End If
     Workbooks.Open ThisWorkbook.path & "\Master TC.xlsx", False
+    Application.Visible = False
     Set wb_tc = Workbooks("Master TC.xlsx")
     wb_tc.SaveAs xlPath & xlFile
     Dim cnt As Integer
@@ -1260,7 +1264,6 @@ rep_add:
     Next n
     
     ThisWorkbook.Protect xPass
-    Application.DisplayAlerts = False
     wb_tc.Save
     wb_tc.Close
     
@@ -1304,9 +1307,9 @@ Public Sub updatePacket()
     xlFile = jobNum & "_Week_" & we & ".xlsx"
     xlTCFile = jobNum & "_Week_" & we & "_TimeCards.xlsx"
     
-    Application.DisplayAlerts = False
     Workbooks.Open xlPath & xlFile
     Workbooks.Open xlPath & xlTCFile
+    Application.Visible = False
     Set wb = Workbooks(xlFile)
     Set tc_wb = Workbooks(xlTCFile)
     Dim cnt As Integer
@@ -1314,6 +1317,8 @@ Public Sub updatePacket()
     Dim rng As Range
     Dim s As Variant
     Set rng = wb.Worksheets("ROSTER").Range("emp_num")
+rt:
+    lApp.Run "'loadingtimer.xlsm'!update", "Calculating Per Diem"
     For Each tEmp In weekRoster
         If tEmp Is Nothing Then
         Else
@@ -1332,23 +1337,20 @@ retry_emp:
             End If
         End If
     Next
-'    tc_wb.Worksheets.Add after:=tc_wb.Worksheets(tc_wb.Sheets.count)
-    Application.DisplayAlerts = False
-    'NEW
     Dim wb_arr() As String
     Dim lead_arr As String
     Dim xlLeadPath As String
     Dim xlLeadFile As String
     Dim leadBook As Workbook
-    
     xlLeadPath = jobPath & jobNum & "\Week_" & we & "\TimeSheets\"
     lead_arr = getLeadSheets(xlLeadPath)
     wb_arr = Split(lead_arr, ",")
     Dim i As Integer
-    For i = 0 To UBound(wb_arr)
-        xlLeadFile = xlLeadPath & wb_arr(i)
-        Workbooks.Open xlLeadFile
-    Next
+'    For i = 0 To UBound(wb_arr)
+'        xlLeadFile = xlLeadPath & wb_arr(i)
+'        Workbooks.Open xlLeadFile
+'    Next
+    Application.Visible = False
     Dim n As Integer
     Dim trng As Range
     Dim moveShts() As String
@@ -1356,6 +1358,7 @@ retry_emp:
     Dim xSht As Integer
     Dim l As Integer
     For xSht = 0 To UBound(moveShts)
+        lApp.Run "'loadingtimer.xlsm'!update", "Importing " & StrConv((moveShts(xSht)), vbProperCase) & " to Packet"
         For l = 0 To UBound(wb_arr)
         n = 0
         Do While Left(wb_arr(n), Len(wb_arr(n)) - 19) <> weekRoster(l, 0).getLName
@@ -1376,10 +1379,12 @@ retry_emp:
     For wbn = 0 To UBound(wb_arr)
         Workbooks(wb_arr(wbn)).Close False
     Next wbn
-    'OLD
     wb.Worksheets("ROSTER").Range("WEEKLY_HOURS").Value = 0
     wb.Worksheets("ROSTER").Range("WEEKLY_OT_HOURS").Value = 0
-    For xSht = 0 To tc_wb.Sheets.count - 1
+    Dim tCnt As Integer
+    tCnt = tc_wb.Sheets.count
+    For xSht = 0 To tCnt - 1
+        lApp.Run "'loadingtimer.xlsm'!update", "Importing Time Card " & xSht + 1 & " of " & tCnt
         For i = 1 To wb.Sheets.count
             If wb.Worksheets(i).name = tc_wb.Worksheets(1).name Then
                 On Error GoTo show_hiddenApp
@@ -1399,9 +1404,10 @@ show_hiddenApp:
     Next xSht
     
     wb.Worksheets("ROSTER").Activate
-    wb.Close True, wb.path & "\" & wb.name
-'    Kill xlPath & xlTCFile
-    
+    Application.Visible = False
+    wb.Save
+    wb.Close False
+    timeCard.getUpdatedFiles sharePointPath, jobPath, jobNum
     
 End Sub
 
@@ -1419,26 +1425,26 @@ Public Sub showHiddenApps()
     Set oXLApp = Nothing
 End Sub
 
-Public Function updatedFile(aFile As String, bFile As String)
+Public Function updatedFile(src As String, dest As String)
     Dim FSO As FileSystemObject
     Dim a As File
     Dim b As File
     
     Set FSO = New FileSystemObject
     On Error Resume Next
-    Set a = FSO.GetFile(aFile)
-    Set b = FSO.GetFile(bFile)
+    Set a = FSO.GetFile(src)
+    Set b = FSO.GetFile(dest)
     On Error GoTo 0
     If Err.Number <> 0 Then
         Err.Clear
     End If
     If a Is Nothing Then
-        Debug.Print aFile & " Not found!"
+        Debug.Print src & " Not found!"
         updatedFile = True
         Exit Function
     End If
     If b Is Nothing Then
-        Debug.Print bFile & " Not found!"
+        Debug.Print dest & " Not found!"
         updatedFile = True
         Exit Function
     End If
@@ -1500,13 +1506,13 @@ rt:
     Dim bVal As Integer
     Dim i As Integer
     Dim tmp As Range
+    lApp.Run "'loadingtimer.xlsm'!update", "Building Roster"
     ReDim weekRoster(0, eCount)
     i = 0
-    xlFile = sharePointPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
+    xlFile = jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     On Error GoTo 10
     Workbooks.Open xlFile
-    Application.Visible = True
-    SetAttr xlFile, vbNormal
+    Application.Visible = False
     On Error GoTo 0
     Set bk = Workbooks(jobNum & "_Week_" & we & ".xlsx")
     bk.Worksheets("SAVE").Visible = xlSheetVisible
@@ -1533,7 +1539,7 @@ rt:
        Set weekRoster(tmp.Offset(0, 0).Value, tmp.Offset(0, 1).Value) = xlEmp
     Next tmp
     bk.Worksheets("SAVE").Visible = xlVeryHidden
-    wb.Activate
+    test_code.print_roster
     bk.Close False
     
     loadRoster = 1

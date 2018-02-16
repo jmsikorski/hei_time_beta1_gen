@@ -95,7 +95,6 @@ Private Sub smSubmit_Click()
     Application.EnableEvents = False
     Set lApp = New Excel.Application
     Unload Me
-    Application.Visible = False
     lApp.Workbooks.Open ThisWorkbook.path & "\loadingtimer.xlsm"
     lApp.Run "'loadingtimer.xlsm'!main"
     timeCard.genTimeCard
