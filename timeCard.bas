@@ -42,7 +42,7 @@ End Sub
 
 Public Sub t123()
     ThisWorkbook.Unprotect getXPass
-    Sheet5.Unprotect getXPass
+    Sheet5.Unprotect
 End Sub
 
 Public Function getSharePointLink(xlPath As String) As String
@@ -590,7 +590,7 @@ rt:
         ln = ln + 1
     Next ls
     Set xOutlookObj = Nothing
-    FSO.CopyFolder xlPath, spPath, True
+'    FSO.CopyFolder xlPath, spPath, True
     bk.Close False
     ThisWorkbook.Protect xPass
 
@@ -904,7 +904,7 @@ Public Sub savePacket()
         Kill xlFile
     End If
     bk.SaveAs xlFile
-    FSO.CopyFolder xlPath, spPath, True
+'    FSO.CopyFolder xlPath, spPath, True
     
     On Error GoTo 0
 End Sub
@@ -1664,7 +1664,6 @@ Public Function hideCells(t As Integer, fullRange As Range) As Integer
         Case 1:
             For Each rng In fullRange
                 If rng = vbNullString Then
-                    rng.Select
                     rng.EntireColumn.Hidden = True
                     cnt = cnt + 1
                 End If
@@ -1672,7 +1671,6 @@ Public Function hideCells(t As Integer, fullRange As Range) As Integer
         Case 2:
             For Each rng In fullRange
                 If rng = vbNullString Then
-                    rng.Select
                     rng.EntireRow.Hidden = True
                     cnt = cnt + 1
                 End If
