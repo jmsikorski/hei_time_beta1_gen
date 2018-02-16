@@ -1399,7 +1399,7 @@ retry_emp:
     Dim trng As Range
     Dim moveShts() As String
     Set rng = wb.Worksheets("LABOR T&G TOTAL").Range("lead_table")
-    For i = 0 To UBound(weekRoster)
+    For i = 1 To UBound(weekRoster)
         rng.EntireColumn.Insert xlShiftToRight, rng
         rng.Copy rng.Offset(0, -6)
     Next
@@ -1453,7 +1453,7 @@ show_hiddenApp:
     Next xSht
     With wb.Worksheets("LABOR T&G TOTAL")
         Set rng = .Range(.Range("COST_CODE"), .Range("COST_CODE").End(xlDown))
-        If hideCells(1, rng) < 0 Then
+        If hideCells(2, rng) < 0 Then
             Stop
         End If
     End With
