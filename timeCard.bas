@@ -1320,7 +1320,6 @@ Public Sub updatePacket()
     Set tc_wb = Workbooks(xlTCFile)
     cnt = 0
     Set rng = wb.Worksheets("ROSTER").Range("emp_num")
-rt:
     lApp.Run "'loadingtimer.xlsm'!update", "Calculating Per Diem"
     For Each tEmp In weekRoster
         If tEmp Is Nothing Then
@@ -1340,34 +1339,48 @@ retry_emp:
             End If
         End If
     Next
+    lApp.Run "'loadingtimer.xlsm'!update", "Generating Reports"
+    ActiveSheet.Range("B4", "C46").Value = vbNullString
     With wb.Worksheets("TOTAL HOURS FROM TC's")
         Set rng = .Cells(.Range("tHead").Row, .Range("tHead").Column).Offset(1, 0)
         For Each tEmp In weekRoster
             If tEmp Is Nothing Then
             Else
                 For Each s In tEmp.getShifts
-                    pCode = s.getPhase
-                    pDesc = s.getPhaseDesc
-                    For i = 0 To rng.End(xlDown).Rows.count
+                    If s.getHrs > 0 Then
+                        pCode = s.getPhase
+                        If pCode = -1 Then
+                            pCode = holiday
+                            pDesc = "Holiday"
+                        Else
+                            pDesc = s.getPhaseDesc
+                        End If
+                    End If
+                    For i = 0 To .Range("PHASE_CODE").Rows.count
+                        Debug.Print pCode & " " & pDesc
                         If rng.Offset(i, 0) = vbNullString Then
                             rng.Offset(i, 0) = pCode
                             rng.Offset(i, 1) = pDesc
+                            Exit For
                         ElseIf rng.Offset(i, 0) = pCode Then
                             Exit For
-                        ElseIf i = rng.End(xlDown).Rows.count Then
-                            rng.Offset(i, 0).EntireRow.Insert
-                            rng.Offset(i + 1, 0) = pCode
-                            rng.Offset(i + 1, 1) = pDesc
-                        Else
-                            i = i + 1
                         End If
                     Next
+                    If i = 45 Then
+                        rng.Offset(i, 0).EntireRow.Insert
+                        rng.Offset(i + 1, 0) = pCode
+                        rng.Offset(i + 1, 1) = pDesc
+                    End If
                 Next
             End If
         Next
+        If hideCells(1, .Range("tHead")) < 0 Then
+            Stop
+        End If
+        If hideCells(2, .Range("PHASE_CODE")) < 0 Then
+            Stop
+        End If
     End With
-    
-    
     Dim wb_arr() As String
     Dim lead_arr As String
     Dim xlLeadPath As String
@@ -1385,6 +1398,11 @@ retry_emp:
     Dim n As Integer
     Dim trng As Range
     Dim moveShts() As String
+    Set rng = wb.Worksheets("LABOR T&G TOTAL").Range("lead_table")
+    For i = 0 To UBound(weekRoster)
+        rng.EntireColumn.Insert xlShiftToRight, rng
+        rng.Copy rng.Offset(0, -6)
+    Next
     moveShts = Split("Labor Tracking & Goals,DAILY JOB REPORT,DAILY SIGN IN,TOOLBOX SIGN IN,LABOR RELEASE,EMPLOYEE EVALUATION", ",")
     Dim xSht As Integer
     Dim l As Integer
@@ -1650,14 +1668,13 @@ Public Function hideCells(t As Integer, fullRange As Range) As Integer
             For Each rng In fullRange
                 If rng = vbNullString Then
                     rng.Select
-                    rng.EntireColumn.Hidden = True
+                    rng.EntireRow.Hidden = True
                     cnt = cnt + 1
                 End If
             Next
         Case Default:
             cnt = 0
         End Select
-        MsgBox cnt
         hideCells = cnt
 End Function
 
