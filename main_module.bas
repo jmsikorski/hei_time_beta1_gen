@@ -46,3 +46,17 @@ Public Sub HideBooks()
     On Error GoTo 0
 End Sub
 
+Sub delSheets()
+    Application.DisplayAlerts = False
+    Dim ws As Worksheet
+    For Each ws In ActiveWorkbook.Sheets
+        ws.Visible = True
+        ws.Unprotect
+        Debug.Print ws.name
+        If MsgBox("Delete " & ws.name & "?", vbYesNo) = vbYes Then
+            ws.Delete
+        End If
+    Next
+    Application.DisplayAlerts = True
+End Sub
+
