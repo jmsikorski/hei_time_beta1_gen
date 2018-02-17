@@ -394,12 +394,12 @@ Public Sub makeWeekPath(w As String)
     Set FSO = New FileSystemObject
     
     tmp(0) = jobPath & jobNum & "\Week_" & w & "\TimePackets\"
-    tmp(1) = sharePointPath & jobNum & "\Week_" & w & "\TimePackets\"
-    tmp(2) = sharePointPath & jobNum & "\Week_" & w & "\TimeSheets\"
-    tmp(3) = jobPath & jobNum & "\Week_" & w & "\TimeSheets\"
+    tmp(1) = jobPath & jobNum & "\Week_" & w & "\TimeSheets\"
+    tmp(2) = sharePointPath & jobNum & "\Week_" & w & "\TimePackets\"
+    tmp(3) = sharePointPath & jobNum & "\Week_" & w & "\TimeSheets\"
     Dim i As Integer
     Dim x As Integer
-    For i = 0 To 3
+    For i = 0 To 1 'Change to 3 for Sharepoint
         On Error Resume Next
         new_path = Split(tmp(i), "\")
         x = 0
@@ -1407,7 +1407,7 @@ retry_emp:
     Dim xSht As Integer
     Dim l As Integer
     For xSht = 0 To UBound(moveShts)
-        lApp.Run "'loadingtimer.xlsm'!update", "Importing " & StrConv((moveShts(xSht)), vbProperCase) & " to Packet"
+        lApp.Run "'loadingtimer.xlsm'!update", "Importing " & StrConv((moveShts(xSht)), vbProperCase)
         For l = 0 To UBound(wb_arr)
         n = 0
         Do While Left(wb_arr(n), Len(wb_arr(n)) - 19) <> weekRoster(l, 0).getLName
