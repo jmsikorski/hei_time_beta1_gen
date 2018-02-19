@@ -542,10 +542,11 @@ Public Sub genLeadSheets()
                 Set rng = .Range(.ListObjects(day).HeaderRowRange, .ListObjects(day).HeaderRowRange.Offset(e_cnt, 0))
                 .ListObjects(day).Resize rng
                 If tr < 7 Then
+Application.Visible = True
                     rng.End(xlDown).Offset(1, 0).EntireRow.Clear
-                    With rng.End(xlDown).Offset(1, 0).Borders(xlEdgeTop)
+                    With .Range(rng.End(xlDown).Offset(1, 0), rng.End(xlDown).Offset(1, 8)).Borders(xlEdgeTop)
                         .LineStyle = xlContinuous
-                        .Weight = xlThick
+                        .Weight = xlMedium
                         .ColorIndex = xlAutomatic
                     End With
                     .Range(rng.End(xlDown).Offset(2, 0), .ListObjects(nday).HeaderRowRange.Offset(-2, 0)).EntireRow.Delete
