@@ -542,7 +542,6 @@ Public Sub genLeadSheets()
                 Set rng = .Range(.ListObjects(day).HeaderRowRange, .ListObjects(day).HeaderRowRange.Offset(e_cnt, 0))
                 .ListObjects(day).Resize rng
                 If tr < 7 Then
-Application.Visible = True
                     rng.End(xlDown).Offset(1, 0).EntireRow.Clear
                     With .Range(rng.End(xlDown).Offset(1, 0), rng.End(xlDown).Offset(1, 8)).Borders(xlEdgeTop)
                         .LineStyle = xlContinuous
@@ -552,11 +551,17 @@ Application.Visible = True
                     .Range(rng.End(xlDown).Offset(2, 0), .ListObjects(nday).HeaderRowRange.Offset(-2, 0)).EntireRow.Delete
                 Else
                     rng.End(xlDown).Offset(1, 0).EntireRow.Clear
+                    With .Range(rng.End(xlDown).Offset(1, 0), rng.End(xlDown).Offset(1, 8)).Borders(xlEdgeTop)
+                        .LineStyle = xlContinuous
+                        .Weight = xlMedium
+                        .ColorIndex = xlAutomatic
+                    End With
                     Set rng = rng.End(xlDown).Offset(2, 0)
                     .Range(rng, rng.Offset(300, 0)).EntireRow.Delete
                     Exit For
                 End If
-'                .ListObjects(nday).DataBodyRange = .ListObjects("Monday").DataBodyRange.Value
+                Application.Visible = True
+                .ListObjects(nday).DataBodyRange = .ListObjects("Monday").DataBodyRange.Value
             Next tr
         End With
 '        For n = 1 To 7
@@ -564,7 +569,7 @@ Application.Visible = True
 '                ls.Worksheets("LEAD").ListObjects(n).ListRows(e_cnt + 1).Delete
 '            Next p
 '        Next n
-        copy_tables ls
+'        copy_tables ls
         If genRoster(bk, ls.Worksheets("ROSTER"), i + 1) = -1 Then
             MsgBox ("ERROR PRINTING ROSTER")
         End If
@@ -590,6 +595,7 @@ Application.Visible = True
     For Each ls In bks
         ls.Worksheets("LEAD").Activate
         ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Activate
+        ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Select
         ls.Save
         ls.Close
         send_leadSheet ebks(ln, 0), ebks(ln, 1)
