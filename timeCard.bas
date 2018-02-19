@@ -511,8 +511,8 @@ Public Sub genLeadSheets()
                 End With
             End If
         Next x
+        setDataValidation ls.Worksheets("LEAD")
         With ls.Worksheets("LEAD")
-            Application.Visible = True
             .Unprotect
             Dim tr As Integer
             For tr = 1 To 7
@@ -573,7 +573,6 @@ Public Sub genLeadSheets()
         If genRoster(bk, ls.Worksheets("ROSTER"), i + 1) = -1 Then
             MsgBox ("ERROR PRINTING ROSTER")
         End If
-        setDataValidation ls.Worksheets("LEAD")
         ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
         bk.Worksheets("SAVE").Visible = xlVeryHidden
         ls.Worksheets("ROSTER").Visible = xlVeryHidden
@@ -595,7 +594,7 @@ Public Sub genLeadSheets()
     For Each ls In bks
         ls.Worksheets("LEAD").Activate
         ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Activate
-        ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Select
+'        ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Select
         ls.Save
         ls.Close
         send_leadSheet ebks(ln, 0), ebks(ln, 1)
