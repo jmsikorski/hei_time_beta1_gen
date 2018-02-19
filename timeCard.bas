@@ -612,7 +612,6 @@ Public Sub setDataValidation(ws As Worksheet)
     Dim i As Integer, c As Integer, r As Integer
     Dim vData As String
     On Error Resume Next
-    Application.Visible = True
     For i = 1 To 7
         Set rng = ws.ListObjects(i).Range(1, 6)
         rng.Validation.Delete
@@ -641,6 +640,19 @@ Public Sub setDataValidation(ws As Worksheet)
                 .InCellDropdown = False
             End With
         Next
+        Set rng = ws.ListObjects(i).ListColumns(6).DataBodyRange.Offset(1, 0)
+        rng.Validation.Delete
+        Debug.Print rng.Address
+        vData = "=DATA!" & ws.Parent.Worksheets("DATA").Cells(rng.Row, 20).Address
+        rng.Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
+        Operator:=xlEqual, Formula1:=vData
+        Debug.Print rng.Validation.Formula1
+        With rng.Validation
+            .ErrorMessage = "The Formula in this cell cannot be changed!" & vbNewLine & _
+            "Correct Formula is: =IFERROR(INDIRECT(CONCATENATE(""DATA!T"",ROW())),"""")"
+            .IgnoreBlank = False
+            .InCellDropdown = False
+        End With
         Dim cnt As Integer
         cnt = 9
         Set rng = ws.ListObjects(i).Range(1, 1)
@@ -674,6 +686,22 @@ Public Sub setDataValidation(ws As Worksheet)
                 End With
             Next
             cnt = cnt + 1
+        Next
+        cnt = cnt - 1
+        Set rng = ws.ListObjects(i).ListColumns(1).DataBodyRange.Offset(1, 0)
+        For c = 0 To 2
+            rng.Offset(0, c).Validation.Delete
+            Debug.Print rng.Offset(0, c).Address
+            vData = ws.Parent.Worksheets("ROSTER").Cells(cnt, c + 2).Value
+            rng.Offset(0, c).Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
+            Operator:=xlEqual, Formula1:=vData
+            Debug.Print rng.Offset(0, c).Validation.Formula1
+            With rng.Offset(0, c).Validation
+                .ErrorMessage = "The Value in this cell cannot be changed!" & vbNewLine & _
+                "Correct Value is: " & vData
+                .IgnoreBlank = False
+                .InCellDropdown = False
+            End With
         Next
     Next
     Err.Clear
