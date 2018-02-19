@@ -225,9 +225,8 @@ End Sub
 Public Sub copy_tables(ByRef wb As Workbook)
     Dim ws As Worksheet
     Dim tbl As ListObject
-    Exit Sub
-    Set tbl = ws.ListObjects("Monday")
     Set ws = wb.Worksheets("LEAD")
+    Set tbl = ws.ListObjects("Monday")
     ws.Unprotect
     Dim i As Integer
     For i = 2 To 7
@@ -455,7 +454,6 @@ Public Sub genLeadSheets()
         Dim ls As Workbook
         lsPath = iTemp.getLName & "_Week_" & we & ".xlsx"
         lsPath = xlPath & "\" & lsPath
-rt:
         e_cnt = 1
         Workbooks.Open ThisWorkbook.path & "\Lead Card.xlsx"
         Workbooks.Open ThisWorkbook.path & "\UnitGoals.xlsx"
@@ -541,17 +539,23 @@ rt:
                     day = "Sunday"
                     nday = vbNullString
                 End If
-                Set rng = .Range(.ListObjects(day).HeaderRowRange, .ListObjects(day).HeaderRowRange.Offset(e_cnt + 1, 0))
+                Set rng = .Range(.ListObjects(day).HeaderRowRange, .ListObjects(day).HeaderRowRange.Offset(e_cnt, 0))
                 .ListObjects(day).Resize rng
-                .ListObjects(day).DataBodyRange = rng
                 If tr < 7 Then
                     rng.End(xlDown).Offset(1, 0).EntireRow.Clear
+                    With rng.End(xlDown).Offset(1, 0).Borders(xlEdgeTop)
+                        .LineStyle = xlContinuous
+                        .Weight = xlThick
+                        .ColorIndex = xlAutomatic
+                    End With
                     .Range(rng.End(xlDown).Offset(2, 0), .ListObjects(nday).HeaderRowRange.Offset(-2, 0)).EntireRow.Delete
                 Else
                     rng.End(xlDown).Offset(1, 0).EntireRow.Clear
                     Set rng = rng.End(xlDown).Offset(2, 0)
                     .Range(rng, rng.Offset(300, 0)).EntireRow.Delete
+                    Exit For
                 End If
+'                .ListObjects(nday).DataBodyRange = .ListObjects("Monday").DataBodyRange.Value
             Next tr
         End With
 '        For n = 1 To 7
