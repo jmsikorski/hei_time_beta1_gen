@@ -560,7 +560,6 @@ Public Sub genLeadSheets()
                     .Range(rng, rng.Offset(300, 0)).EntireRow.Delete
                     Exit For
                 End If
-                Application.Visible = True
                 .ListObjects(nday).DataBodyRange = .ListObjects("Monday").DataBodyRange.Value
             Next tr
         End With
@@ -1207,6 +1206,7 @@ Public Sub genTimeCard()
     we = Format(week, "mm.dd.yy")
     xlPath = jobPath & jobNum & "\Week_" & we & "\TimePackets\"
     xlFile = jobNum & "_Week_" & we & "_TimeCards.xlsx"
+    lApp.Run "'loadingtimer.xlsm'!update", "Building Roster"
     If loadRoster = -1 Then GoTo load_err
     If timeCard.loadShifts = -1 Then
         Stop
@@ -1586,9 +1586,6 @@ rt:
     Dim bVal As Integer
     Dim i As Integer
     Dim tmp As Range
-    If Not lApp Is Nothing Then
-        lApp.Run "'loadingtimer.xlsm'!update", "Building Roster"
-    End If
     ReDim weekRoster(0, eCount)
     i = 0
     xlFile = jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
