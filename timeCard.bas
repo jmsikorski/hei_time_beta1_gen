@@ -613,8 +613,20 @@ Public Sub setDataValidation(ws As Worksheet)
     Dim vData As String
     On Error Resume Next
     Application.Visible = True
-rt:
     For i = 1 To 7
+        Set rng = ws.ListObjects(i).Range(1, 6)
+        rng.Validation.Delete
+        Debug.Print rng.Address
+        vData = "=DATA!" & ws.Parent.Worksheets("DATA").Cells(rng.Row, 20).Address
+        rng.Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
+        Operator:=xlEqual, Formula1:=vData
+        Debug.Print rng.Validation.Formula1
+        With rng.Validation
+            .ErrorMessage = "The Formula in this cell cannot be changed!" & vbNewLine & _
+            "Correct Formula is: =IFERROR(INDIRECT(CONCATENATE(""DATA!T"",ROW())),"""")"
+            .IgnoreBlank = False
+            .InCellDropdown = False
+        End With
         For Each rng In ws.ListObjects(i).ListColumns(6).DataBodyRange
             rng.Validation.Delete
             Debug.Print rng.Address
