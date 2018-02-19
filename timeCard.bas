@@ -512,6 +512,7 @@ Public Sub genLeadSheets()
             End If
         Next x
         With ls.Worksheets("LEAD")
+            Application.Visible = True
             .Unprotect
             Dim tr As Integer
             For tr = 1 To 7
@@ -539,24 +540,24 @@ Public Sub genLeadSheets()
                     day = "Sunday"
                     nday = vbNullString
                 End If
-                Set rng = .Range(.ListObjects(day).HeaderRowRange, .ListObjects(day).HeaderRowRange.Offset(e_cnt, 0))
+                Set rng = .Range(.ListObjects(day).HeaderRowRange, .ListObjects(day).HeaderRowRange.Offset(e_cnt + 1, 0))
                 .ListObjects(day).Resize rng
                 If tr < 7 Then
-                    rng.End(xlDown).Offset(1, 0).EntireRow.Clear
-                    With .Range(rng.End(xlDown).Offset(1, 0), rng.End(xlDown).Offset(1, 8)).Borders(xlEdgeTop)
+                    rng.End(xlDown).Offset(2, 0).EntireRow.Clear
+                    With .Range(rng.End(xlDown).Offset(2, 0), rng.End(xlDown).Offset(2, 8)).Borders(xlEdgeTop)
                         .LineStyle = xlContinuous
                         .Weight = xlMedium
                         .ColorIndex = xlAutomatic
                     End With
-                    .Range(rng.End(xlDown).Offset(2, 0), .ListObjects(nday).HeaderRowRange.Offset(-2, 0)).EntireRow.Delete
+                    .Range(rng.End(xlDown).Offset(3, 0), .ListObjects(nday).HeaderRowRange.Offset(-2, 0)).EntireRow.Delete
                 Else
-                    rng.End(xlDown).Offset(1, 0).EntireRow.Clear
-                    With .Range(rng.End(xlDown).Offset(1, 0), rng.End(xlDown).Offset(1, 8)).Borders(xlEdgeTop)
+                    rng.End(xlDown).Offset(2, 0).EntireRow.Clear
+                    With .Range(rng.End(xlDown).Offset(2, 0), rng.End(xlDown).Offset(2, 8)).Borders(xlEdgeTop)
                         .LineStyle = xlContinuous
                         .Weight = xlMedium
                         .ColorIndex = xlAutomatic
                     End With
-                    Set rng = rng.End(xlDown).Offset(2, 0)
+                    Set rng = rng.End(xlDown).Offset(3, 0)
                     .Range(rng, rng.Offset(300, 0)).EntireRow.Delete
                     Exit For
                 End If
