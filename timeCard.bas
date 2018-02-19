@@ -1575,7 +1575,9 @@ rt:
     Dim bVal As Integer
     Dim i As Integer
     Dim tmp As Range
-    lApp.Run "'loadingtimer.xlsm'!update", "Building Roster"
+    If Not lApp Is Nothing Then
+        lApp.Run "'loadingtimer.xlsm'!update", "Building Roster"
+    End If
     ReDim weekRoster(0, eCount)
     i = 0
     xlFile = jobPath & jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
