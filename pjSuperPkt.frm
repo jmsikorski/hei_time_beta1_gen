@@ -24,6 +24,7 @@ Private Sub spAdd_Click()
 End Sub
 
 Private Sub spDone_Click()
+rt:
     Dim tLead As Employee
     Dim tmpRoster() As Employee
     Dim ws As Worksheet
@@ -128,6 +129,7 @@ Private Sub spDone_Click()
     For i = 0 To UBound(weekRoster)
         With menuList(i)
             addMenu (4) 'mType.pjSuperPktEmp)
+            GoTo rt
             menuList(i).setSheet (i)
         End With
     Next i

@@ -652,7 +652,7 @@ Public Sub send_leadSheet(addr As String, lnk As String)
     On Error GoTo 0
     Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
     With xEmailObj
-        .to = LCase(addr)
+        .To = LCase(addr)
         .Subject = "Lead Sheet for " & jobNum & " Week Ending " & week
         
         .HTMLBody = "</head><body lang=EN-US link=""#0563C1"" vlink=""#954F72"" style='tab-interval:.5in'><div class=WordSection1><p class=MsoNormal>Your lead sheet for week " & week & " is now available for download:</p><p class=MsoNormal><a href=""" & lnk & """>HERE</a><o:p></o:p></p><p class=MsoNormal><o:p>&nbsp;</o:p></p></div></body></html>"
