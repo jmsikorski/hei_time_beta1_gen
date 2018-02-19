@@ -59,7 +59,7 @@ Private Sub reqSubmit_Click()
     rng.Offset(0, 1).Value = pw
     rng.Offset(0, 2).Value = "NO"
     With xEmailObj
-        .To = "jsikorski@helixelectric.com"
+        .to = "jsikorski@helixelectric.com"
         .Subject = "Time Card User Request"
         .Body = name & vbNewLine & user & vbNewLine & mgr
         .display ' REMOVE AFTER BETA

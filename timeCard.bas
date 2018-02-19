@@ -562,7 +562,7 @@ rt:
         If genRoster(bk, ls.Worksheets("ROSTER"), i + 1) = -1 Then
             MsgBox ("ERROR PRINTING ROSTER")
         End If
-        setDataValidation ls.Worksheets(Sheet5.name)
+        setDataValidation ls.Worksheets("LEAD")
         ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
         bk.Worksheets("SAVE").Visible = xlVeryHidden
         ls.Worksheets("ROSTER").Visible = xlVeryHidden
@@ -604,15 +604,29 @@ Public Sub setDataValidation(ws As Worksheet)
     For i = 1 To 7
         For Each rng In ws.ListObjects(i).ListColumns(6).DataBodyRange
             rng.Validation.Delete
-            vData = "=DATA!" & Sheet4.Cells(rng.Row, 20).Address
+            vData = "=DATA!" & ws.Parent.Worksheets("DATA").Cells(rng.Row, 20).Address
             rng.Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
             Operator:=xlEqual, Formula1:=vData
             With rng.Validation
-                .Errorwsssage = "The Formula in this cell cannot be changed!" & vbNewLine & _
+                .ErrorMessage = "The Formula in this cell cannot be changed!" & vbNewLine & _
                 "Correct Formula is: =IFERROR(INDIRECT(CONCATENATE(""DATA!T"",ROW())),"""")"
                 .IgnoreBlank = False
                 .InCellDropdown = False
             End With
+        Next
+        For Each rng In ws.ListObjects(i).ListColumns(1).DataBodyRange
+            For c = 0 To 2
+                rng.Offset(0, c).Validation.Delete
+                vData = "=ROSTER!" & ws.Parent.Worksheets("ROSTER").Cells(rng.Offset(0, c).Row + 5, c + 2).Address
+                rng.Offset(0, c).Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
+                Operator:=xlEqual, Formula1:=vData
+                With rng.Offset(0, c).Validation
+                    .ErrorMessage = "The Formula in this cell cannot be changed!" & vbNewLine & _
+                    "Correct Formula is: " & vData
+                    .IgnoreBlank = False
+                    .InCellDropdown = False
+                End With
+            Next
         Next
     Next
     Err.Clear
@@ -637,7 +651,7 @@ Public Sub send_leadSheet(addr As String, lnk As String)
     On Error GoTo 0
     Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
     With xEmailObj
-        .To = LCase(addr)
+        .to = LCase(addr)
         .Subject = "Lead Sheet for " & jobNum & " Week Ending " & week
         
         .HTMLBody = "</head><body lang=EN-US link=""#0563C1"" vlink=""#954F72"" style='tab-interval:.5in'><div class=WordSection1><p class=MsoNormal>Your lead sheet for week " & week & " is now available for download:</p><p class=MsoNormal><a href=""" & lnk & """>HERE</a><o:p></o:p></p><p class=MsoNormal><o:p>&nbsp;</o:p></p></div></body></html>"
