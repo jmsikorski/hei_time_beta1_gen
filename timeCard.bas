@@ -618,7 +618,7 @@ Public Sub setDataValidation(ws As Worksheet)
         For Each rng In ws.ListObjects(i).ListColumns(1).DataBodyRange
             For c = 0 To 2
                 rng.Offset(0, c).Validation.Delete
-                vData = "=ROSTER!" & ws.Parent.Worksheets("ROSTER").Cells(rng.Offset(0, c).Row + 5, c + 2).Address
+                vData = ws.Parent.Worksheets("ROSTER").Cells(rng.Offset(0, c).Row + 5, c + 2).Value
                 rng.Offset(0, c).Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
                 Operator:=xlEqual, Formula1:=vData
                 With rng.Offset(0, c).Validation
