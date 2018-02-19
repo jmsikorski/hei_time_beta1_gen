@@ -511,7 +511,6 @@ Public Sub genLeadSheets()
                 End With
             End If
         Next x
-        setDataValidation ls.Worksheets("LEAD")
         With ls.Worksheets("LEAD")
             .Unprotect
             Dim tr As Integer
@@ -573,6 +572,7 @@ Public Sub genLeadSheets()
         If genRoster(bk, ls.Worksheets("ROSTER"), i + 1) = -1 Then
             MsgBox ("ERROR PRINTING ROSTER")
         End If
+        setDataValidation ls.Worksheets("LEAD")
         ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
         bk.Worksheets("SAVE").Visible = xlVeryHidden
         ls.Worksheets("ROSTER").Visible = xlVeryHidden
@@ -612,12 +612,15 @@ Public Sub setDataValidation(ws As Worksheet)
     Dim i As Integer, c As Integer, r As Integer
     Dim vData As String
     On Error Resume Next
+    Application.Visible = True
     For i = 1 To 7
         For Each rng In ws.ListObjects(i).ListColumns(6).DataBodyRange
             rng.Validation.Delete
+            Debug.Print rng.Address
             vData = "=DATA!" & ws.Parent.Worksheets("DATA").Cells(rng.Row, 20).Address
             rng.Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
             Operator:=xlEqual, Formula1:=vData
+            Debug.Print rng.Validation.Formula1
             With rng.Validation
                 .ErrorMessage = "The Formula in this cell cannot be changed!" & vbNewLine & _
                 "Correct Formula is: =IFERROR(INDIRECT(CONCATENATE(""DATA!T"",ROW())),"""")"
@@ -628,9 +631,11 @@ Public Sub setDataValidation(ws As Worksheet)
         For Each rng In ws.ListObjects(i).ListColumns(1).DataBodyRange
             For c = 0 To 2
                 rng.Offset(0, c).Validation.Delete
-                vData = ws.Parent.Worksheets("ROSTER").Cells(rng.Offset(0, c).Row + 5, c + 2).Value
+                Debug.Print rng.Offset(0, c).Address
+                vData = "=" & ws.Parent.Worksheets("ROSTER").Cells(rng.Offset(0, c).Row + 5, c + 2).Value
                 rng.Offset(0, c).Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
                 Operator:=xlEqual, Formula1:=vData
+                Debug.Print rng.Offset(0, c).Validation.Formula1
                 With rng.Offset(0, c).Validation
                     .ErrorMessage = "The Formula in this cell cannot be changed!" & vbNewLine & _
                     "Correct Formula is: " & vData
