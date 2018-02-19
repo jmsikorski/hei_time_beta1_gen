@@ -489,12 +489,12 @@ rt:
         ls.Worksheets("Labor Tracking & Goals").Unprotect
         ls.Worksheets("Labor Tracking & Goals").Range("lead_name") = iTemp.getFullname
         ls.Worksheets("Labor Tracking & Goals").Protect
-'        With ls.Worksheets("LEAD").Range("Monday").Cells(1, 1)
-'            ls.Worksheets("LEAD").Unprotect
-'            .Value = iTemp.getClass
-'            .Offset(0, 1).Value = iTemp.getFName & " " & iTemp.getLName
-'            .Offset(0, 2).Value = iTemp.getNum
-'        End With
+        With ls.Worksheets("LEAD").Range("Monday").Cells(1, 1)
+            ls.Worksheets("LEAD").Unprotect
+            .Value = iTemp.getClass
+            .Offset(0, 1).Value = iTemp.getFName & " " & iTemp.getLName
+            .Offset(0, 2).Value = iTemp.getNum
+        End With
         ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
         bks.Add ls
         Dim x As Integer
@@ -504,13 +504,13 @@ rt:
             If xTemp Is Nothing Then
             Else
                 e_cnt = e_cnt + 1
-'                With ls.Worksheets("LEAD").Range("Monday").Cells(x + 1, 1)
-'                    ls.Worksheets("LEAD").Unprotect
-'                    .Value = xTemp.getClass
-'                    .Offset(0, 1).Value = xTemp.getFName & " " & xTemp.getLName
-'                    .Offset(0, 2).Value = xTemp.getNum
-'                    ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
-'                End With
+                With ls.Worksheets("LEAD").Range("Monday").Cells(x + 1, 1)
+                    ls.Worksheets("LEAD").Unprotect
+                    .Value = xTemp.getClass
+                    .Offset(0, 1).Value = xTemp.getFName & " " & xTemp.getLName
+                    .Offset(0, 2).Value = xTemp.getNum
+                    ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
+                End With
             End If
         Next x
         With ls.Worksheets("LEAD")
@@ -543,6 +543,7 @@ rt:
                 End If
                 Set rng = .Range(.ListObjects(day).HeaderRowRange, .ListObjects(day).HeaderRowRange.Offset(e_cnt + 1, 0))
                 .ListObjects(day).Resize rng
+                .ListObjects(day).DataBodyRange = rng
                 If tr < 7 Then
                     rng.End(xlDown).Offset(1, 0).EntireRow.Clear
                     .Range(rng.End(xlDown).Offset(2, 0), .ListObjects(nday).HeaderRowRange.Offset(-2, 0)).EntireRow.Delete
