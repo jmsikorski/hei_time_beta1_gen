@@ -613,6 +613,7 @@ Public Sub setDataValidation(ws As Worksheet)
     Dim vData As String
     On Error Resume Next
     Application.Visible = True
+rt:
     For i = 1 To 7
         For Each rng In ws.ListObjects(i).ListColumns(6).DataBodyRange
             rng.Validation.Delete
@@ -628,21 +629,39 @@ Public Sub setDataValidation(ws As Worksheet)
                 .InCellDropdown = False
             End With
         Next
+        Dim cnt As Integer
+        cnt = 9
+        Set rng = ws.ListObjects(i).Range(1, 1)
+        For c = 0 To 2
+            rng.Offset(0, c).Validation.Delete
+            Debug.Print rng.Offset(0, c).Address
+            vData = ws.Parent.Worksheets("ROSTER").Cells(cnt, c + 2).Value
+            rng.Offset(0, c).Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
+            Operator:=xlEqual, Formula1:=vData
+            Debug.Print rng.Offset(0, c).Validation.Formula1
+            With rng.Offset(0, c).Validation
+                .ErrorMessage = "The Value in this cell cannot be changed!" & vbNewLine & _
+                "Correct Value is: " & vData
+                .IgnoreBlank = False
+                .InCellDropdown = False
+            End With
+        Next
         For Each rng In ws.ListObjects(i).ListColumns(1).DataBodyRange
             For c = 0 To 2
                 rng.Offset(0, c).Validation.Delete
                 Debug.Print rng.Offset(0, c).Address
-                vData = "=" & ws.Parent.Worksheets("ROSTER").Cells(rng.Offset(0, c).Row + 5, c + 2).Value
+                vData = ws.Parent.Worksheets("ROSTER").Cells(cnt, c + 2).Value
                 rng.Offset(0, c).Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
                 Operator:=xlEqual, Formula1:=vData
                 Debug.Print rng.Offset(0, c).Validation.Formula1
                 With rng.Offset(0, c).Validation
-                    .ErrorMessage = "The Formula in this cell cannot be changed!" & vbNewLine & _
-                    "Correct Formula is: " & vData
+                    .ErrorMessage = "The Value in this cell cannot be changed!" & vbNewLine & _
+                    "Correct Value is: " & vData
                     .IgnoreBlank = False
                     .InCellDropdown = False
                 End With
             Next
+            cnt = cnt + 1
         Next
     Next
     Err.Clear
