@@ -183,13 +183,20 @@ End Sub
 Public Sub BreakLinks()
     'Updateby20140318
     Dim wb As Workbook
+    Dim ws As Worksheet
     Dim link As Variant
+    For Each ws In wb
+        ws.Unprotect
+    Next
     Set wb = Application.ActiveWorkbook
     If Not IsEmpty(wb.LinkSources(xlExcelLinks)) Then
         For Each link In wb.LinkSources(xlExcelLinks)
             wb.BreakLink link, xlLinkTypeExcelLinks
         Next link
     End If
+    For Each ws In wb
+        ws.Protect
+    Next
 End Sub
 
 Public Sub addMenu(mType As Integer)
@@ -1468,7 +1475,7 @@ retry_emp:
     Dim moveShts() As String
     Set rng = wb.Worksheets("LABOR T&G TOTAL").Range("lead_table")
     For i = 1 To UBound(weekRoster)
-        rng.EntireColumn.Insert xlShiftToRight
+        rng.EntireColumn.Insert
         rng.Copy rng.Offset(0, -6)
         rng.Offset(0, -6).Formula = rng.Formula
     Next
