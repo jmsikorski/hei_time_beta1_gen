@@ -1320,6 +1320,7 @@ rep_add:
                         End If
                     End If
                 Next
+                .Range("A1").Activate
             End With
         End If
     Next
@@ -1415,7 +1416,6 @@ retry_emp:
         End If
     Next
     lApp.Run "'loadingtimer.xlsm'!update", "Generating Reports"
-    ActiveSheet.Range("B4", "C46").Value = vbNullString
     With wb.Worksheets("TOTAL HOURS FROM TC's")
         Set rng = .Cells(.Range("tHead").Row, .Range("tHead").Column).Offset(1, 0)
         For Each tEmp In weekRoster
