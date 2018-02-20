@@ -185,16 +185,16 @@ Public Sub BreakLinks()
     Dim wb As Workbook
     Dim ws As Worksheet
     Dim link As Variant
-    For Each ws In wb
+    Set wb = Application.ActiveWorkbook
+    For Each ws In wb.Sheets
         ws.Unprotect
     Next
-    Set wb = Application.ActiveWorkbook
     If Not IsEmpty(wb.LinkSources(xlExcelLinks)) Then
         For Each link In wb.LinkSources(xlExcelLinks)
             wb.BreakLink link, xlLinkTypeExcelLinks
         Next link
     End If
-    For Each ws In wb
+    For Each ws In wb.Sheets
         ws.Protect
     Next
 End Sub
@@ -1536,7 +1536,6 @@ show_hiddenApp:
     wb.Worksheets("ROSTER").Activate
     Application.Visible = False
     wb.Activate
-    BreakLinks
     wb.Save
     wb.Close False
     'timeCard.getUpdatedFiles sharePointPath, jobPath, jobNum ' Transfer updated files to sharepoint
