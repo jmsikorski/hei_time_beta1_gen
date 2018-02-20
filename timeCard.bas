@@ -180,16 +180,16 @@ quit_sub:
     'ThisWorkbook.Close False
 End Sub
 
-Sub BreakLinks()
-'Updateby20140318
-Dim wb As Workbook
-Dim link As Variant
-Set wb = Application.ActiveWorkbook
-If Not IsEmpty(wb.LinkSources(xlExcelLinks)) Then
-    For Each link In wb.LinkSources(xlExcelLinks)
-        wb.BreakLink link, xlLinkTypeExcelLinks
-    Next link
-End If
+Public Sub BreakLinks()
+    'Updateby20140318
+    Dim wb As Workbook
+    Dim link As Variant
+    Set wb = Application.ActiveWorkbook
+    If Not IsEmpty(wb.LinkSources(xlExcelLinks)) Then
+        For Each link In wb.LinkSources(xlExcelLinks)
+            wb.BreakLink link, xlLinkTypeExcelLinks
+        Next link
+    End If
 End Sub
 
 Public Sub addMenu(mType As Integer)
@@ -1470,6 +1470,7 @@ retry_emp:
     For i = 1 To UBound(weekRoster)
         rng.EntireColumn.Insert xlShiftToRight
         rng.Copy rng.Offset(0, -6)
+        rng.Offset(0, -6).Formula = rng.Formula
     Next
     moveShts = Split("Labor Tracking & Goals,DAILY JOB REPORT,DAILY SIGN IN,TOOLBOX SIGN IN,LABOR RELEASE,EMPLOYEE EVALUATION", ",")
     Dim xSht As Integer
@@ -1527,6 +1528,8 @@ show_hiddenApp:
     End With
     wb.Worksheets("ROSTER").Activate
     Application.Visible = False
+    wb.Activate
+    BreakLinks
     wb.Save
     wb.Close False
     'timeCard.getUpdatedFiles sharePointPath, jobPath, jobNum ' Transfer updated files to sharepoint
