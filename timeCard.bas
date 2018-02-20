@@ -560,7 +560,7 @@ Public Sub genLeadSheets()
                     .Range(rng, rng.Offset(300, 0)).EntireRow.Delete
                     Exit For
                 End If
-                .ListObjects(nday).DataBodyRange = .ListObjects("Monday").DataBodyRange.Value
+                .ListObjects(nday).DataBodyRange = .ListObjects("Monday").DataBodyRange
             Next tr
         End With
 '        For n = 1 To 7
@@ -667,9 +667,9 @@ Public Sub setDataValidation(ws As Worksheet)
             cnt = cnt + 1
         Next
         cnt = cnt - 2
-        Set rng = ws.ListObjects(i).ListColumns(1).DataBodyRange.End(xlDown)
+        Set rng = ws.ListObjects(i).ListColumns(1).DataBodyRange.End(xlDown).Offset(1, 0)
         For c = 0 To 2
-            rng.Offset(0, c).Validation.Delete
+            Debug.Print rng.Offset(0, c).Address
             vData = ws.Parent.Worksheets("ROSTER").Cells(cnt, c + 2).Value
             rng.Offset(0, c).Validation.Add xlValidateList, AlertStyle:=xlValidAlertStop, _
             Operator:=xlEqual, Formula1:=vData
@@ -686,6 +686,7 @@ Public Sub setDataValidation(ws As Worksheet)
 End Sub
 
 Public Sub send_leadSheet(addr As String, lnk As String)
+    Exit Sub
     Dim xEmailObj As Object ' Outlook.MailItem
 'GET DEFAULT EMAIL SIGNATURE
     On Error Resume Next
