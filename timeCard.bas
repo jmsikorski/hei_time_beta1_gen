@@ -24,6 +24,7 @@ Public Const eCount = 15
 Public xPass As String
 Public lApp As Excel.Application
 Public xOutlookObj As Object
+Public publish As Integer
 
 Public Const holiday = "88080-08"
 Public Enum mType
@@ -570,15 +571,11 @@ Public Sub genLeadSheets()
                 .ListObjects(nday).DataBodyRange = .ListObjects("Monday").DataBodyRange.Formula
             Next tr
         End With
-'        For n = 1 To 7
-'            For p = e_cnt + 1 To 15
-'                ls.Worksheets("LEAD").ListObjects(n).ListRows(e_cnt + 1).Delete
-'            Next p
-'        Next n
-'        copy_tables ls
+        
         If genRoster(bk, ls.Worksheets("ROSTER"), i + 1) = -1 Then
             MsgBox ("ERROR PRINTING ROSTER")
         End If
+        
         setDataValidation ls.Worksheets("LEAD")
         ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
         bk.Worksheets("SAVE").Visible = xlVeryHidden
@@ -598,17 +595,26 @@ Public Sub genLeadSheets()
     Dim ln As Integer
     ln = 0
     Set xOutlookObj = CreateObject("Outlook.Application")
+    Dim ans As Integer
+    Dim previewMail As Integer
+    ans = MsgBox("Email Lead Packets?", vbYesNo + vbQuestion, "EMAIL?")
+    If ans = vbYes Then
+        previewMail = MsgBox("Preview Email before sending?", vbYesNo + vbQuestion, "PREVIEW?")
+    End If
     For Each ls In bks
         ls.Worksheets("LEAD").Activate
         ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Activate
-'        ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Select
         ls.Save
         ls.Close
-        send_leadSheet ebks(ln, 0), ebks(ln, 1)
+        If ans = vbYes Then
+            send_leadSheet ebks(ln, 0), ebks(ln, 1), previewMail
+        End If
         ln = ln + 1
     Next ls
     Set xOutlookObj = Nothing
-'    FSO.CopyFolder xlPath, spPath, True
+    If publish = vbYes Then
+        FSO.CopyFolder xlPath, spPath, True
+    End If
     bk.Close False
     ThisWorkbook.Protect xPass
 
@@ -692,8 +698,7 @@ Public Sub setDataValidation(ws As Worksheet)
     On Error GoTo 0
 End Sub
 
-Public Sub send_leadSheet(addr As String, lnk As String)
-    Exit Sub
+Public Sub send_leadSheet(addr As String, lnk As String, view As Integer)
     Dim xEmailObj As Object ' Outlook.MailItem
 'GET DEFAULT EMAIL SIGNATURE
     On Error Resume Next
@@ -713,10 +718,12 @@ Public Sub send_leadSheet(addr As String, lnk As String)
     With xEmailObj
         .To = LCase(addr)
         .Subject = "Lead Sheet for " & jobNum & " Week Ending " & week
-        
         .HTMLBody = "</head><body lang=EN-US link=""#0563C1"" vlink=""#954F72"" style='tab-interval:.5in'><div class=WordSection1><p class=MsoNormal>Your lead sheet for week " & week & " is now available for download:</p><p class=MsoNormal><a href=""" & lnk & """>HERE</a><o:p></o:p></p><p class=MsoNormal><o:p>&nbsp;</o:p></p></div></body></html>"
-        .display
+        If view = vbYes Then
+            .display
+        Else
 '            .Send
+        End If
     End With
 End Sub
 
@@ -978,8 +985,9 @@ Public Sub savePacket()
         Kill xlFile
     End If
     bk.SaveAs xlFile
-'    FSO.CopyFolder xlPath, spPath, True
-    
+    If publish = vbYes Then
+        FSO.CopyFolder xlPath, spPath, True
+    End If
     On Error GoTo 0
 End Sub
 
@@ -1343,7 +1351,6 @@ rep_add:
     wb_tc.Save
     wb_tc.Close
     
-    
     Exit Sub
 load_err:
     MsgBox "No Packet Found!"
@@ -1464,7 +1471,7 @@ retry_emp:
     xlLeadPath = jobPath & jobNum & "\Week_" & we & "\TimeSheets\"
     lead_arr = getLeadSheets(xlLeadPath)
     wb_arr = Split(lead_arr, ",")
-
+' ONLY NEEDED IF NOT CALLED AFTER GENTIMECARD AND LEAD SHEETS ARE NOT ALREADY OPEN
 '    For i = 0 To UBound(wb_arr)
 '        xlLeadFile = xlLeadPath & wb_arr(i)
 '        Workbooks.Open xlLeadFile
@@ -1538,8 +1545,9 @@ show_hiddenApp:
     wb.Activate
     wb.Save
     wb.Close False
-    'timeCard.getUpdatedFiles sharePointPath, jobPath, jobNum ' Transfer updated files to sharepoint
-    
+    If publish = vbYes Then
+        timeCard.getUpdatedFiles sharePointPath, jobPath, jobNum ' Transfer updated files to sharepoint
+    End If
 End Sub
 
 Public Sub showHiddenApps()

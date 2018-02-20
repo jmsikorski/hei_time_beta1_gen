@@ -21,13 +21,27 @@ Private Sub smBuild_Click()
     Dim lastWE As String
     Dim ans As Integer
     Dim FSO As FileSystemObject
+    Dim testPacket As Boolean
     Set FSO = New FileSystemObject
     lastWE = Format(calcWeek(Date - 7), "mm.dd.yy")
     we = Format(week, "mm.dd.yy")
     xlFile = jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     lwXLFile = sharePointPath & jobNum & "\Week_" & lastWE & "\TimePackets\" & jobNum & "_Week_" & lastWE & ".xlsx"
-    
-    If testFileExist(sharePointPath & xlFile) > 0 Or testFileExist(jobPath & xlFile) > 0 Then
+
+    If publish = vbYes Then
+        If testFileExist(sharePointPath & xlFile) > 0 Or testFileExist(jobPath & xlFile) > 0 Then
+            testPacket = True
+        Else
+            testPacket = False
+        End If
+    Else
+        If testFileExist(jobPath & xlFile) > 0 Then
+            testPacket = True
+        Else
+            testPacket = False
+        End If
+    End If
+    If testPacket Then
         On Error Resume Next
         ans = MsgBox("The packet already exists, Are you sure you want to overwrite it?", vbYesNo + vbQuestion)
         If ans = vbYes Then
@@ -112,6 +126,7 @@ Private Sub smSubmit_Click()
 End Sub
 
 Private Sub UserForm_Initialize()
+    publish = MsgBox("Upload to " & spPath & " ?", vbQuestion + vbYesNo, "UPLOAD?")
     With Me
         .StartUpPosition = 0
         .Left = Application.Left + (0.5 * Application.Width) - (0.5 * .Width)
