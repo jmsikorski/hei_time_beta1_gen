@@ -126,7 +126,7 @@ Private Sub smSubmit_Click()
 End Sub
 
 Private Sub UserForm_Initialize()
-    publish = MsgBox("Upload to " & spPath & " ?", vbQuestion + vbYesNo, "UPLOAD?")
+    publish = MsgBox("Upload to Sharepoint?", vbQuestion + vbYesNo, "UPLOAD?")
     With Me
         .StartUpPosition = 0
         .Left = Application.Left + (0.5 * Application.Width) - (0.5 * .Width)

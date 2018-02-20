@@ -6,7 +6,7 @@ End Sub
 Public Sub showBooks()
     If Environ$("username") = "jsikorski" Then
         On Error Resume Next
-        ActiveWorkbook.Unprotect xPass
+        ActiveWorkbook.Unprotect getXPass
         For i = 1 To ThisWorkbook.Sheets.count
             If ThisWorkbook.Worksheets(i).Visible = xlVeryHidden Then
                 ThisWorkbook.Worksheets(i).Visible = True

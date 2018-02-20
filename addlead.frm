@@ -60,7 +60,6 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
 End Sub
 
 Private Sub xcl_Click()
-    Stop
     Unload Me
     If addlead.Visible = True Then
         addlead.Hide
