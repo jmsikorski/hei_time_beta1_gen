@@ -560,7 +560,7 @@ Public Sub genLeadSheets()
                     .Range(rng, rng.Offset(300, 0)).EntireRow.Delete
                     Exit For
                 End If
-                .ListObjects(nday).DataBodyRange = .ListObjects("Monday").DataBodyRange
+                .ListObjects(nday).DataBodyRange = .ListObjects("Monday").DataBodyRange.Formula
             Next tr
         End With
 '        For n = 1 To 7
@@ -1468,7 +1468,7 @@ retry_emp:
     Dim moveShts() As String
     Set rng = wb.Worksheets("LABOR T&G TOTAL").Range("lead_table")
     For i = 1 To UBound(weekRoster)
-        rng.EntireColumn.Insert xlShiftToRight, rng
+        rng.EntireColumn.Insert xlShiftToRight
         rng.Copy rng.Offset(0, -6)
     Next
     moveShts = Split("Labor Tracking & Goals,DAILY JOB REPORT,DAILY SIGN IN,TOOLBOX SIGN IN,LABOR RELEASE,EMPLOYEE EVALUATION", ",")
