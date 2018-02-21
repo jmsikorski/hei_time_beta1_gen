@@ -35,12 +35,14 @@ Public Enum mType
 End Enum
 
 Public Sub a()
+    On Error Resume Next
     Application.EnableEvents = True
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
     Application.Visible = True
     lApp.Quit
     Set lApp = Nothing
+    On Error GoTo 0
 End Sub
 
 Public Sub t123()
@@ -1265,10 +1267,6 @@ Public Sub genTimeCard()
     xlPath = jobPath & jobNum & "\Week_" & we & "\TimePackets\"
     xlFile = jobNum & "_Week_" & we & "_TimeCards.xlsx"
     lApp.Run "'loadingtimer.xlsm'!update", "Building Roster"
-    If loadRoster = -1 Then GoTo load_err
-    If timeCard.loadShifts = -1 Then
-        Stop
-    End If
     Workbooks.Open ThisWorkbook.path & "\Master TC.xlsx"
     
     Application.Visible = False
@@ -1424,46 +1422,88 @@ retry_emp:
         End If
     Next
     lApp.Run "'loadingtimer.xlsm'!update", "Generating Reports"
-    With wb.Worksheets("TOTAL HOURS FROM TC's")
-        Set rng = .Cells(.Range("tHead").Row, .Range("tHead").Column).Offset(1, 0)
-        For Each tEmp In weekRoster
-            If tEmp Is Nothing Then
-            Else
-                For Each s In tEmp.getShifts
-                    If s.getHrs > 0 Then
-                        pCode = s.getPhase
-                        If pCode = -1 Then
-                            pCode = holiday
-                            pDesc = "Holiday"
-                        Else
-                            pDesc = s.getPhaseDesc
-                        End If
+    Dim pCodes() As String
+    ReDim pCodes(0)
+    Dim pFound As Boolean
+    pFound = False
+    For Each tEmp In weekRoster
+        If tEmp Is Nothing Then
+        Else
+            For Each s In tEmp.getShifts
+                If s.getHrs > 0 Then
+                    pCode = s.getPhase
+                    If pCode = -1 Then
+                        pCode = holiday
                     End If
-                    For i = 0 To .Range("PHASE_CODE").Rows.count
-                        Debug.Print pCode & " " & pDesc
-                        If rng.Offset(i, 0) = vbNullString Then
-                            rng.Offset(i, 0) = pCode
-                            rng.Offset(i, 1) = pDesc
-                            Exit For
-                        ElseIf rng.Offset(i, 0) = pCode Then
+                End If
+                Debug.Print pCode
+                pFound = False
+                For i = 0 To UBound(pCodes)
+                    If pCodes(i) = pCode Then
+                        pFound = True
+                        Exit For
+                    End If
+                Next
+                If pFound Then
+                Else
+                    Dim t As Integer
+                    For t = 0 To UBound(pCodes)
+                        If pCodes(t) > pCode Or pCodes(t) = vbNullString Then
+                            Dim t2 As Integer
+                            t2 = UBound(pCodes)
+                            Do While t2 > t
+                                pCodes(t2) = pCodes(t2 - 1)
+                                t2 = t2 - 1
+                            Loop
+                            pCodes(t) = pCode
+                            ReDim Preserve pCodes(UBound(pCodes) + 1)
                             Exit For
                         End If
                     Next
-                    If i = 45 Then
-                        rng.Offset(i, 0).EntireRow.Insert
-                        rng.Offset(i + 1, 0) = pCode
-                        rng.Offset(i + 1, 1) = pDesc
-                    End If
-                Next
-            End If
-        Next
-        If hideCells(1, .Range("tHead")) < 0 Then
-            Stop
+                End If
+            Next
         End If
-        If hideCells(2, .Range("PHASE_CODE")) < 0 Then
-            Stop
-        End If
-    End With
+    Next
+'    With wb.Worksheets("TOTAL HOURS FROM TC's")
+'        Set rng = .Cells(.Range("tHead").Row, .Range("tHead").Column).Offset(1, 0)
+'        For Each tEmp In weekRoster
+'            If tEmp Is Nothing Then
+'            Else
+'                For Each s In tEmp.getShifts
+'                    If s.getHrs > 0 Then
+'                        pCode = s.getPhase
+'                        If pCode = -1 Then
+'                            pCode = holiday
+'                            pDesc = "Holiday"
+'                        Else
+'                            pDesc = s.getPhaseDesc
+'                        End If
+'                    End If
+'                    For i = 0 To .Range("PHASE_CODE").Rows.count
+'                        Debug.Print pCode & " " & pDesc
+'                        If rng.Offset(i, 0) = vbNullString Then
+'                            rng.Offset(i, 0) = pCode
+'                            rng.Offset(i, 1) = pDesc
+'                            Exit For
+'                        ElseIf rng.Offset(i, 0) = pCode Then
+'                            Exit For
+'                        End If
+'                    Next
+'                    If i = 45 Then
+'                        rng.Offset(i, 0).EntireRow.Insert
+'                        rng.Offset(i + 1, 0) = pCode
+'                        rng.Offset(i + 1, 1) = pDesc
+'                    End If
+'                Next
+'            End If
+'        Next
+'        If hideCells(1, .Range("tHead")) < 0 Then
+'            Stop
+'        End If
+'        If hideCells(2, .Range("PHASE_CODE")) < 0 Then
+'            Stop
+'        End If
+'    End With
     Dim wb_arr() As String
     Dim lead_arr As String
     Dim xlLeadPath As String
@@ -1485,6 +1525,17 @@ retry_emp:
     For i = 1 To UBound(weekRoster)
         rng.Insert
         rng.Copy rng.Offset(0, -6)
+    Next
+    Dim c As Integer
+    c = UBound(weekRoster) + 1
+    c = c * 6 + 9
+    c = c + 1
+    Set rng = wb.Worksheets("LABOR T&G TOTAL").Cells(1, c)
+    rng.ColumnWidth = 18
+    rng.Offset(0, 1).ColumnWidth = 18
+    Set rng = wb.Worksheets("LABOR T&G TOTAL").Range("COST_CODE").Offset(1, 0)
+    For i = 0 To UBound(pCodes)
+        rng.Offset(i, 0) = pCodes(i)
     Next
     moveShts = Split("Labor Tracking & Goals,DAILY JOB REPORT,DAILY SIGN IN,TOOLBOX SIGN IN,LABOR RELEASE,EMPLOYEE EVALUATION", ",")
     Dim xSht As Integer

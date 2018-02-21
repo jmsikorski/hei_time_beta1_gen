@@ -111,6 +111,12 @@ Private Sub smSubmit_Click()
     Unload Me
     lApp.Workbooks.Open ThisWorkbook.path & "\loadingtimer.xlsm"
     lApp.Run "'loadingtimer.xlsm'!main"
+    If loadRoster = -1 Then
+        Stop
+    End If
+    If timeCard.loadShifts = -1 Then
+        Stop
+    End If
     timeCard.genTimeCard
     timeCard.updatePacket
     lApp.Run "'loadingtimer.xlsm'!stopLoading"
