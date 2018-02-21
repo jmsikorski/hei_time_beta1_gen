@@ -321,6 +321,7 @@ rt:
         xlFile = xlPath & wb_arr(i)
         Workbooks.Open xlFile
         Application.Visible = False
+        Application.Visible = True
     Next
     Dim n As Integer
     Dim rng As Range
@@ -1270,7 +1271,8 @@ Public Sub genTimeCard()
     If timeCard.loadShifts = -1 Then
         Stop
     End If
-    Workbooks.Open ThisWorkbook.path & "\Master TC.xlsx", False
+    Workbooks.Open ThisWorkbook.path & "\Master TC.xlsx"
+    
     Application.Visible = False
     Set wb_tc = Workbooks("Master TC.xlsx")
     wb_tc.SaveAs xlPath & xlFile
