@@ -1290,7 +1290,6 @@ Public Sub genTimeCard()
     ThisWorkbook.Unprotect xPass
     For Each tEmp In weekRoster
         If tEmp Is Nothing Then
-            Exit For
         Else
             eCnt = eCnt + 1
             lApp.Run "'loadingtimer.xlsm'!update", "Generating Time Card " & eCnt & " of " & cnt
