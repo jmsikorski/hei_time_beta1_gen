@@ -1482,7 +1482,7 @@ retry_emp:
     Dim n As Integer
     Dim trng As Range
     Dim moveShts() As String
-    Set rng = wb.Worksheets("LABOR T&G TOTAL").Range("D1", "I" & ActiveSheet.UsedRange.Rows.count)
+    Set rng = wb.Worksheets("LABOR T&G TOTAL").Range("D1", "I" & ActiveSheet.UsedRange.Rows.count + 3)
     For i = 1 To UBound(weekRoster)
         rng.Insert
         rng.Copy rng.Offset(0, -6)

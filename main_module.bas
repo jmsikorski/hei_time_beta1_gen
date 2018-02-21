@@ -60,3 +60,13 @@ Sub delSheets()
     Application.DisplayAlerts = True
 End Sub
 
+Public Sub showVeryHidden()
+    Dim ws As Worksheet
+    For Each ws In ActiveWorkbook.Sheets
+        ws.Visible = True
+    Next
+End Sub
+
+Public Sub hideVeryHidden()
+    ActiveSheet.Visible = xlVeryHidden
+End Sub
