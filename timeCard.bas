@@ -39,6 +39,8 @@ Public Sub a()
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
     Application.Visible = True
+    lApp.Quit
+    Set lApp = Nothing
 End Sub
 
 Public Sub t123()
@@ -1763,4 +1765,71 @@ Public Function hideCells(t As Integer, fullRange As Range) As Integer
         End Select
         hideCells = cnt
 End Function
+
+Public Sub RescopeNamedRangesToWorkbook()
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Dim objName As name
+    Dim sWsName As String
+    Dim sWbName As String
+    Dim sRefersTo As String
+    Dim sObjName As String
+    Set wb = ActiveWorkbook
+    sWbName = wb.name
+    
+    For Each ws In wb.Sheets
+        sWsName = ws.name
+        'Loop through names in worksheet.
+        For Each objName In ws.Names
+        'Check name is visble.
+            If objName.Visible = True Then
+        'Check name refers to a range on the active sheet.
+                If InStr(1, objName.RefersTo, sWsName, vbTextCompare) Then
+                    sRefersTo = objName.RefersTo
+                    sObjName = objName.name
+        'Check name is scoped to the worksheet.
+                    If objName.Parent.name <> sWbName Then
+        'Delete the current name scoped to worksheet replacing with workbook scoped name.
+                        sObjName = Mid(sObjName, InStr(1, sObjName, "!") + 1, Len(sObjName))
+                        objName.Delete
+                        wb.Names.Add name:=sObjName, RefersTo:=sRefersTo
+                    End If
+                End If
+            End If
+        Next objName
+    Next ws
+End Sub
+
+Public Sub RescopeNamedRangesToWorksheet()
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Dim objName As name
+    Dim sWsName As String
+    Dim sWbName As String
+    Dim sRefersTo As String
+    Dim sObjName As String
+    Set wb = ActiveWorkbook
+    sWbName = wb.name
+    
+    For Each ws In wb.Sheets
+        sWsName = ws.name
+        'Loop through names in worksheet.
+        For Each objName In wb.Names
+        'Check name is visble.
+            If objName.Visible = True Then
+        'Check name refers to a range on the active sheet.
+                If InStr(1, objName.RefersTo, sWsName, vbTextCompare) Then
+                    sRefersTo = objName.RefersTo
+                    sObjName = objName.name
+        'Check name is scoped to the workbook.
+                    If objName.Parent.name = sWbName Then
+        'Delete the current name scoped to workbook replacing with worksheet scoped name.
+                        objName.Delete
+                        ws.Names.Add name:=sObjName, RefersTo:=sRefersTo
+                    End If
+                End If
+            End If
+        Next objName
+    Next ws
+End Sub
 
