@@ -20,6 +20,11 @@ Private Sub setWeek_Click()
 End Sub
 
 Private Sub UserForm_Initialize()
+    With Me
+        .StartUpPosition = 0
+        .Left = Application.Left + (0.5 * Application.Width) - (0.5 * .Width)
+        .Top = Application.Top + (0.5 * Application.Height) - (0.5 * .Height)
+    End With
     Dim thisWeek As Date
     Dim nextWeek As Date
     thisWeek = calcWeek(Date)
