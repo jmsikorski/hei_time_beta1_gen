@@ -184,6 +184,8 @@ quit_sub:
     'ThisWorkbook.Close False
 End Sub
 
+
+
 Public Sub BreakLinks()
     'Updateby20140318
     Dim wb As Workbook
@@ -198,9 +200,6 @@ Public Sub BreakLinks()
             wb.BreakLink link, xlLinkTypeExcelLinks
         Next link
     End If
-    For Each ws In wb.Sheets
-        ws.Protect
-    Next
 End Sub
 
 Public Sub addMenu(mType As Integer)
@@ -606,7 +605,12 @@ Public Sub genLeadSheets()
     End If
     For Each ls In bks
         ls.Worksheets("LEAD").Activate
-        ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Activate
+        On Error Resume Next
+        ls.Worksheets("LEAD").ListObjects("Monday").Range(2, 4).Select
+        If Err.Number <> 0 Then
+            Debug.Print Err.Description
+            Err.Clear
+        End If
         ls.Save
         ls.Close
         If ans = vbYes Then
@@ -1594,6 +1598,25 @@ show_hiddenApp:
     wb.Worksheets("ROSTER").Activate
     Application.Visible = False
     wb.Activate
+    On Error Resume Next
+    Dim xName As String
+    Dim drive() As String
+    Dim nm As name
+    Dim FSO As FileSystemObject
+    Set FSO = New FileSystemObject
+    For Each nm In wb.Names
+        xName = Right(nm.RefersTo, Len(nm.RefersTo) - 2)
+        drive = Split(xName, "\")
+        If FSO.DriveExists(drive(0)) Then
+            nm.Delete
+        End If
+    Next
+    If Err.Number <> 0 Then
+        Err.Clear
+    End If
+    On Error GoTo 0
+    Set FSO = Nothing
+
     wb.Save
     wb.Close False
     If publish = vbYes Then
