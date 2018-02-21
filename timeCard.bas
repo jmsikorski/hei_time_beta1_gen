@@ -117,6 +117,7 @@ relogin:
     uNum = 2
 auth_retry:
     user = Environ$("username")
+    timeCard.a
     If user = Range("reg_user") Then
         Dim uPass As String
         uPass = encryptPassword(Range("reg_pass"))
