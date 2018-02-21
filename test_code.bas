@@ -100,6 +100,11 @@ Public Sub t16()
     End If
     
 End Sub
+
+Public Sub t17() 'Test Set week userform
+    selWeek.Show
+    Stop
+End Sub
 Private Sub t8() 'Test of loadTestRoster function
     Dim l As Integer
     Dim e As Integer

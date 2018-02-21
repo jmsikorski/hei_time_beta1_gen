@@ -32,6 +32,7 @@ Private Sub pjCoordinator_Click()
 End Sub
 
 Private Sub pjSuper_Click()
+    selWeek.Show
     jobPath = ThisWorkbook.path & "\Data\"
     sharePointPath = "C:\Users\" & Environ$("username") & "\Helix Electric Inc\TeslaTimeCard - Documents\Time Card Files\Data\"
     'getUpdatedFiles jobPath, sharePointPath, jobNum & "\Week_" & Format(calcWeek(Date), "mm.dd.yy")

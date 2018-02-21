@@ -158,7 +158,6 @@ auth_retry:
         Next i
 '        check_updates ThisWorkbook.Worksheets("HOME").Range("file_updated")
         ThisWorkbook.Worksheets("HOME").Range("file_updated") = Now
-        week = calcWeek(Date)
         Dim lst As Range
         Set lst = ThisWorkbook.Worksheets("Jobs").UsedRange
         lst.name = "jobList"
