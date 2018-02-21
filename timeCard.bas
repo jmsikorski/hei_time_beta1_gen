@@ -320,9 +320,8 @@ rt:
     For i = 0 To UBound(wb_arr)
         xlFile = xlPath & wb_arr(i)
         Workbooks.Open xlFile
-        Application.Visible = False
-        Application.Visible = True
     Next
+    Application.Visible = False
     Dim n As Integer
     Dim rng As Range
     Dim trng As Range
@@ -1283,11 +1282,11 @@ Public Sub genTimeCard()
     Dim tEmp As Variant
     For Each tEmp In weekRoster
         If tEmp Is Nothing Then
-            Exit For
         Else
             cnt = cnt + 1
         End If
     Next
+    Debug.Print cnt
     ThisWorkbook.Unprotect xPass
     For Each tEmp In weekRoster
         If tEmp Is Nothing Then
