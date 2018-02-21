@@ -23,7 +23,7 @@ Private Sub smBuild_Click()
     Dim FSO As FileSystemObject
     Dim testPacket As Boolean
     Set FSO = New FileSystemObject
-    lastWE = Format(calcWeek(Date - 7), "mm.dd.yy")
+    lastWE = Format(week - 7, "mm.dd.yy")
     we = Format(week, "mm.dd.yy")
     xlFile = jobNum & "\Week_" & we & "\TimePackets\" & jobNum & "_Week_" & we & ".xlsx"
     lwXLFile = sharePointPath & jobNum & "\Week_" & lastWE & "\TimePackets\" & jobNum & "_Week_" & lastWE & ".xlsx"
