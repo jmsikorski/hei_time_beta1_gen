@@ -13,6 +13,38 @@ Public Sub t12()
     Set lApp = Nothing
 End Sub
 
+Sub copyDailyJobDescription()
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Dim rng As Range
+    Dim done As Boolean
+    Dim emNum As Integer
+    Dim i As Integer
+    Dim dataWs As Worksheet
+    Set wb = ThisWorkbook
+    Set dataWs = Workbooks("461702 WE 02.18.18 .Alex Brauning.revisions.xlsx").Worksheets("DAILY JOB REPORT")
+    Set ws = wb.Worksheets("LEAD")
+    Dim datarng As Range
+    Dim empCnt As Integer
+    Dim dCnt As Integer
+    empCnt = 0
+'    emNum = ActiveCell.Value
+    For dCnt = 1 To 7
+        For Each rng In ws.ListObjects(dCnt).ListColumns("DAILY JOB DESCRIPTION").DataBodyRange
+            Set datarng = dataWs.Range("A8").Offset(0, (dCnt - 1) * 9)
+            Do
+                If rng.Offset(0, -5).Value = vbNullString Then Exit For
+                If rng.Offset(0, -5).Value = datarng.Value Then
+                    rng = datarng.Offset(0, 5)
+                    Exit Do
+                Else
+                    Set datarng = datarng.Offset(1, 0)
+                End If
+            Loop
+        Next
+    Next
+End Sub
+
 Public Sub t13()
     loadingMenu.stopLoading
 End Sub

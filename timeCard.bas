@@ -1480,11 +1480,10 @@ retry_emp:
     Dim n As Integer
     Dim trng As Range
     Dim moveShts() As String
-    Set rng = wb.Worksheets("LABOR T&G TOTAL").Range("lead_table")
+    Set rng = wb.Worksheets("LABOR T&G TOTAL").Range("D1", "I" & ActiveSheet.UsedRange.Rows.count)
     For i = 1 To UBound(weekRoster)
-        rng.EntireColumn.Insert
+        rng.Insert
         rng.Copy rng.Offset(0, -6)
-        rng.Offset(0, -6).Formula = rng.Formula
     Next
     moveShts = Split("Labor Tracking & Goals,DAILY JOB REPORT,DAILY SIGN IN,TOOLBOX SIGN IN,LABOR RELEASE,EMPLOYEE EVALUATION", ",")
     Dim xSht As Integer
