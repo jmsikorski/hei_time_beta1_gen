@@ -125,8 +125,8 @@ auth_retry:
         If Environ$("username") = Range("reg_user") Then
             Dim uPass As String
             uPass = encryptPassword(Range("reg_pass"))
-            auth = file_auth(uPass)
             user = Range("reg_user")
+            auth = file_auth(uPass)
         Else
             auth = file_auth
         End If
