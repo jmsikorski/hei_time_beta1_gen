@@ -121,19 +121,8 @@ relogin:
     On Error GoTo 0
     uNum = 2
 auth_retry:
-    If Not logout Then
-        If Environ$("username") = Range("reg_user") Then
-            Dim uPass As String
-            uPass = encryptPassword(Range("reg_pass"))
-            user = Range("reg_user")
-            auth = file_auth(uPass)
-        Else
-            auth = file_auth
-        End If
-    Else
-        auth = file_auth
-    End If
-
+    auth = file_auth
+    
     If auth = -1 Then
         Dim ans As Integer
         ans = MsgBox("This program is not licensed!", vbCritical + vbAbortRetryIgnore)
@@ -876,17 +865,15 @@ new_user:
             End If
             i = i + 1
         Loop
-        If pw = vbNullString Then
+        If Environ$("username") = user Then
+            Dim uPass As String
+            uPass = encryptPassword(ThisWorkbook.Worksheets("HOME").Range("reg_user"))
+            pw = uPass
+        Else
             loginMenu.Show
             pw = encryptPassword(loginMenu.TextBox1.Value)
             user = loginMenu.TextBox2.Value
             GoTo new_user
-        ElseIf rg.Offset(uNum, 1).Value <> pw Then
-            pw = vbNullString
-        ElseIf Environ$("username") = user Then
-            Dim uPass As String
-            uPass = encryptPassword(ThisWorkbook.Worksheets("HOME").Range("reg_user"))
-            pw = uPass
         End If
         If auth = False Then
             file_auth = -3
