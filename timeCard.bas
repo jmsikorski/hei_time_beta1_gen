@@ -122,14 +122,19 @@ relogin:
     uNum = 2
 auth_retry:
     user = Environ$("username")
-    If user = Range("reg_user") Then
-        Dim uPass As String
-        uPass = encryptPassword(Range("reg_pass"))
-        auth = file_auth(uPass)
+    If Not logout Then
+        If user = Range("reg_user") Then
+            Dim uPass As String
+            uPass = encryptPassword(Range("reg_pass"))
+            auth = file_auth(uPass)
+        Else
+            auth = file_auth
+        End If
     Else
         auth = file_auth
     End If
     
+    GoTo relogin:
     If auth = -1 Then
         Dim ans As Integer
         ans = MsgBox("This program is not licensed!", vbCritical + vbAbortRetryIgnore)
