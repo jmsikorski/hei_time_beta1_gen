@@ -867,7 +867,7 @@ new_user:
         Loop
         If Environ$("username") = user Then
             Dim uPass As String
-            uPass = encryptPassword(ThisWorkbook.Worksheets("HOME").Range("reg_user"))
+            uPass = encryptPassword(ThisWorkbook.Worksheets("HOME").Range("reg_pass"))
             pw = uPass
         Else
             loginMenu.Show
@@ -879,7 +879,7 @@ new_user:
             file_auth = -3
             Exit Function
         End If
-        Do While encryptPassword(rg.Offset(uNum, 1).Value) <> pw
+        Do While rg.Offset(uNum, 1).Value <> pw
             If attempt < 2 Then
                 attempt = attempt + 1
                 Dim pw_ans As Integer
