@@ -842,6 +842,7 @@ Public Function file_auth(Optional pw As String) As Integer
     Dim auth As Integer
     Dim datPath As String
     Dim attempt As Integer
+    user = Environ$("username")
 '    If user = "jsikorski" Then
 '        file_auth = 1
 '        Exit Function
@@ -857,8 +858,9 @@ login_retry:
     uNum = -1
     i = 0
     If get_lic("https://raw.githubusercontent.com/jmsikorski/hei_misc/master/Licence.txt") Then
+new_user:
         Do While rg.Offset(i, 0) <> vbNullString
-            If Environ$("username") = rg.Offset(i, 0) Then
+            If user = rg.Offset(i, 0) Then
                 If rg.Offset(i, 2) = "YES" Then
                     auth = 1
                     uNum = i
@@ -874,17 +876,17 @@ login_retry:
             End If
             i = i + 1
         Loop
-        If rg.Offset(uNum, 1).Value <> pw Then
+        If pw = vbNullString Then
+            loginMenu.Show
+            pw = encryptPassword(loginMenu.TextBox1.Value)
+            user = loginMenu.TextBox2.Value
+            GoTo new_user
+        ElseIf rg.Offset(uNum, 1).Value <> pw Then
             pw = vbNullString
-        Else
+        ElseIf Environ$("username") = user Then
             Dim uPass As String
             uPass = encryptPassword(pw)
             pw = uPass
-        End If
-        If pw = vbNullString Then
-            loginMenu.Show
-            pw = loginMenu.TextBox1.Value
-            user = loginMenu.TextBox2.Value
         End If
         If auth = False Then
             file_auth = -3
