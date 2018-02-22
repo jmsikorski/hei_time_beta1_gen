@@ -121,7 +121,11 @@ relogin:
     On Error GoTo 0
     uNum = 2
 auth_retry:
-    auth = file_auth
+    If logout Then
+        auth = file_auth(user:=vbNullString)
+    Else
+        auth = file_auth(user:=Environ$("username"))
+    End If
     
     If auth = -1 Then
         Dim ans As Integer
@@ -825,13 +829,12 @@ Public Function encryptPassword(pw As String) As String
 End Function
 
 
-Public Function file_auth(Optional pw As String) As Integer
+Public Function file_auth(user As String) As Integer
     Dim rg As Range
     Set rg = ThisWorkbook.Worksheets("USER").Range("A" & 2)
     Dim auth As Integer
     Dim datPath As String
     Dim attempt As Integer
-    user = Environ$("username")
 '    If user = "jsikorski" Then
 '        file_auth = 1
 '        Exit Function
@@ -847,7 +850,16 @@ login_retry:
     uNum = -1
     i = 0
     If get_lic("https://raw.githubusercontent.com/jmsikorski/hei_misc/master/Licence.txt") Then
-new_user:
+        
+        If Environ$("username") = user Then
+            Dim uPass As String
+            uPass = encryptPassword(ThisWorkbook.Worksheets("HOME").Range("reg_pass"))
+            pw = uPass
+        Else
+            loginMenu.Show
+            pw = encryptPassword(loginMenu.TextBox1.Value)
+            user = loginMenu.TextBox2.Value
+        End If
         Do While rg.Offset(i, 0) <> vbNullString
             If user = rg.Offset(i, 0) Then
                 If rg.Offset(i, 2) = "YES" Then
@@ -865,16 +877,6 @@ new_user:
             End If
             i = i + 1
         Loop
-        If Environ$("username") = user Then
-            Dim uPass As String
-            uPass = encryptPassword(ThisWorkbook.Worksheets("HOME").Range("reg_pass"))
-            pw = uPass
-        Else
-            loginMenu.Show
-            pw = encryptPassword(loginMenu.TextBox1.Value)
-            user = loginMenu.TextBox2.Value
-            GoTo new_user
-        End If
         If auth = False Then
             file_auth = -3
             Exit Function
