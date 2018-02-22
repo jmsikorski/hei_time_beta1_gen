@@ -81,8 +81,6 @@ End Function
 
 Public Sub main(Optional logout As Boolean)
     If logout = True Then
-        Unload mMenu
-        Stop
         GoTo relogin
     End If
     Application.WindowState = xlMaximized

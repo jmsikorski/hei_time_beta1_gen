@@ -23,8 +23,8 @@ Private Sub ComboBox1_Change()
 1:
 End Sub
 Public Sub mCancel_Click()
-    Me.Hide
-    loginMenu.Show
+    timeCard.main True
+    Unload Me
 End Sub
 
 Private Sub pjCoordinator_Click()
