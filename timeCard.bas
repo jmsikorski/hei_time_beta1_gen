@@ -126,6 +126,7 @@ auth_retry:
             Dim uPass As String
             uPass = encryptPassword(Range("reg_pass"))
             auth = file_auth(uPass)
+            user = Range("reg_user")
         Else
             auth = file_auth
         End If
@@ -176,11 +177,7 @@ auth_retry:
     job = vbNullString
     Set mMenu = New mainMenu
     ThisWorkbook.Protect xPass, True, False
-    If user <> "jsikorski" Then
-        mMenu.Show
-    ElseIf ld = True Then
-        mMenu.Show
-    End If
+    mMenu.Show
     If Application.Visible = False Then
         Application.Visible = True
     End If

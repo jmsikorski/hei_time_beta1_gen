@@ -1,6 +1,6 @@
 Attribute VB_Name = "main_module"
 Public Sub blank()
-
+    ExportVisualBasicCode.DeleteVBAModulesAndUserForms "main_module"
 End Sub
 
 Public Sub showBooks()

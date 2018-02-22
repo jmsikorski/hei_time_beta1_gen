@@ -100,7 +100,6 @@ Private Sub reqUser_Click()
 End Sub
 
 Private Sub UserForm_Initialize()
-        timeCard.user = Environ$("Username")
     With Me
         .StartUpPosition = 0
         .Left = Application.Left + (0.5 * Application.Width) - (0.5 * .Width)
