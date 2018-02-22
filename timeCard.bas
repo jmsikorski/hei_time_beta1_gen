@@ -92,11 +92,16 @@ Public Sub main(Optional logout As Boolean)
     ThisWorkbook.Unprotect xPass
     On Error GoTo 0
     Dim i As Integer
+    On Error Resume Next
     For i = 1 To ThisWorkbook.Sheets.count
         If ThisWorkbook.Worksheets(i).name <> "HOME" Then
             ThisWorkbook.Worksheets(i).Visible = xlVeryHidden
         End If
     Next i
+    If Err.Number <> 0 Then
+        Err.Clear
+    End If
+    On Error GoTo 0
     ReDim menuList(0)
     ReDim empRoster(0, 0)
     ReDim leadRoster(0, 0)

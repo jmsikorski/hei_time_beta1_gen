@@ -6,7 +6,7 @@ End Sub
 Public Sub showBooks()
     If Environ$("username") = "jsikorski" Then
         On Error Resume Next
-        ActiveWorkbook.Unprotect getXPass
+        ActiveWorkbook.Unprotect xPass
         For i = 1 To ThisWorkbook.Sheets.count
             If ThisWorkbook.Worksheets(i).Visible = xlVeryHidden Then
                 ThisWorkbook.Worksheets(i).Visible = True
@@ -46,27 +46,3 @@ Public Sub HideBooks()
     On Error GoTo 0
 End Sub
 
-Sub delSheets()
-    Application.DisplayAlerts = False
-    Dim ws As Worksheet
-    For Each ws In ActiveWorkbook.Sheets
-        ws.Visible = True
-        ws.Unprotect
-        Debug.Print ws.name
-        If MsgBox("Delete " & ws.name & "?", vbYesNo) = vbYes Then
-            ws.Delete
-        End If
-    Next
-    Application.DisplayAlerts = True
-End Sub
-
-Public Sub showVeryHidden()
-    Dim ws As Worksheet
-    For Each ws In ActiveWorkbook.Sheets
-        ws.Visible = True
-    Next
-End Sub
-
-Public Sub hideVeryHidden()
-    ActiveSheet.Visible = xlVeryHidden
-End Sub
