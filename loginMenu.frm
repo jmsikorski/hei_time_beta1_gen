@@ -71,8 +71,7 @@ Public Sub mCancel_Click()
                     Application.Visible = True
                 End If
                 On Error GoTo 0
-                attempt = 0
-                correct = True
+                End
             Else
                 attempt = attempt + 1
             End If
