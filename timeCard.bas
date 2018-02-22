@@ -885,7 +885,7 @@ new_user:
             pw = vbNullString
         ElseIf Environ$("username") = user Then
             Dim uPass As String
-            uPass = encryptPassword(pw)
+            uPass = encryptPassword(ThisWorkbook.Worksheets("HOME").Range("reg_user"))
             pw = uPass
         End If
         If auth = False Then
