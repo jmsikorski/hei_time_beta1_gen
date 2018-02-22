@@ -366,7 +366,9 @@ Private Sub updateGoals_Click()
         End If
         End With
     Next i
+    Application.Visible = True
     WindowState = xlMaximized
+    wb.Activate
     Do While done = False
         On Error GoTo wb_closed
         Set wb = Workbooks("UnitGoals.xlsx")
