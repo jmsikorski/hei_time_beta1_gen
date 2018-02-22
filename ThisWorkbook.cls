@@ -19,12 +19,13 @@ Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
     End If
     On Error GoTo 0
     If Environ$("username") <> "jsikorski" Then
-        ThisWorkbook.Saved = True
-        Cancel = True
+    If Right(ThisWorkbook.name, 13) <> "TEMPLATE.xlsm" Then
+            ThisWorkbook.Saved = True
+            Cancel = True
+        End If
     End If
 End Sub
 
 Private Sub Workbook_Open()
     main
 End Sub
-
