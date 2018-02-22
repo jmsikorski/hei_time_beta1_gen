@@ -23,7 +23,6 @@ Private Sub ComboBox1_Change()
 1:
 End Sub
 Public Sub mCancel_Click()
-    timeCard.main True
     Unload Me
 End Sub
 
@@ -75,5 +74,6 @@ Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
     If CloseMode = vbFormControlMenu Then
        mCancel_Click
     End If
+    timeCard.main True
 End Sub
 

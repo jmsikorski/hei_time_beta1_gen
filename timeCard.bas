@@ -121,9 +121,8 @@ relogin:
     On Error GoTo 0
     uNum = 2
 auth_retry:
-    user = Environ$("username")
     If Not logout Then
-        If user = Range("reg_user") Then
+        If Environ$("username") = Range("reg_user") Then
             Dim uPass As String
             uPass = encryptPassword(Range("reg_pass"))
             auth = file_auth(uPass)
@@ -862,7 +861,7 @@ login_retry:
     i = 0
     If get_lic("https://raw.githubusercontent.com/jmsikorski/hei_misc/master/Licence.txt") Then
         Do While rg.Offset(i, 0) <> vbNullString
-            If user = rg.Offset(i, 0) Then
+            If Environ$("username") = rg.Offset(i, 0) Then
                 If rg.Offset(i, 2) = "YES" Then
                     auth = 1
                     uNum = i
@@ -879,7 +878,7 @@ login_retry:
             i = i + 1
         Loop
         If rg.Offset(uNum, 1).Value <> pw Then
-            pw = 0
+            pw = vbNullString
         Else
             Dim uPass As String
             uPass = encryptPassword(pw)
