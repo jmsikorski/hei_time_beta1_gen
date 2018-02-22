@@ -116,7 +116,7 @@ relogin:
     auth = 0
     Dim uNum As Integer
     Dim userPassword As String
-    
+
     On Error Resume Next
     On Error GoTo 0
     uNum = 2
@@ -133,8 +133,7 @@ auth_retry:
     Else
         auth = file_auth
     End If
-    
-    GoTo relogin:
+
     If auth = -1 Then
         Dim ans As Integer
         ans = MsgBox("This program is not licensed!", vbCritical + vbAbortRetryIgnore)
@@ -157,7 +156,7 @@ auth_retry:
         MsgBox "YOU ARE NOT AUTHORIZED TO VIEW THIS FILE!", vbCritical + vbOKOnly, "EXIT!"
         'ThisWorkbook.Close False
     End If
-    
+
     If logout = False Then
         For i = 1 To ThisWorkbook.Sheets.count
             If ThisWorkbook.Worksheets(i).name <> "HOME" Then
@@ -319,7 +318,7 @@ Public Function loadShifts() As Integer
     Dim xlFile As String
     Dim we As String
 rt:
-    
+
     we = Format(week, "mm.dd.yy")
     xlPath = jobPath & jobNum & "\Week_" & we & "\TimeSheets\"
     lead_arr = getLeadSheets(xlPath)
@@ -390,7 +389,7 @@ shift_err:
     For wb = 0 To UBound(wb_arr)
         Workbooks(wb_arr(wb)).Close False
     Next
-    
+
 End Function
 
 Sub showsave()
@@ -409,7 +408,7 @@ Public Sub makeWeekPath(w As String)
     Dim new_path() As String
     Dim FSO As FileSystemObject
     Set FSO = New FileSystemObject
-    
+
     tmp(0) = jobPath & jobNum & "\Week_" & w & "\TimePackets\"
     tmp(1) = jobPath & jobNum & "\Week_" & w & "\TimeSheets\"
     tmp(2) = sharePointPath & jobNum & "\Week_" & w & "\TimePackets\"
@@ -421,7 +420,7 @@ Public Sub makeWeekPath(w As String)
         new_path = Split(tmp(i), "\")
         x = 0
         tmp(i) = vbNullString
-    
+
         Do While x < UBound(new_path)
             tmp(i) = tmp(i) & new_path(x) & "\"
             x = x + 1
@@ -454,7 +453,7 @@ Public Sub genLeadSheets()
     we = Format(week, "mm.dd.yy")
     xlPath = jobPath & jobNum & "\Week_" & we & "\TimeSheets"
     spPath = sharePointPath & jobNum & "\Week_" & we & "\TimeSheets"
-    
+
     Dim e_cnt As Integer
     On Error GoTo 0
     Dim r_size As Integer
@@ -483,7 +482,7 @@ Public Sub genLeadSheets()
                 End If
             Next
         End With
-        
+
         On Error Resume Next
         Set uTbl = Workbooks("UnitGoals.xlsx").Worksheets(iTemp.getLName).ListObjects(1)
         If uTbl Is Nothing Then
@@ -581,11 +580,11 @@ Public Sub genLeadSheets()
                 .ListObjects(nday).DataBodyRange = .ListObjects("Monday").DataBodyRange.Formula
             Next tr
         End With
-        
+
         If genRoster(bk, ls.Worksheets("ROSTER"), i + 1) = -1 Then
             MsgBox ("ERROR PRINTING ROSTER")
         End If
-        
+
         setDataValidation ls.Worksheets("LEAD")
         ls.Worksheets("LEAD").Protect AllowInsertingRows:=True
         bk.Worksheets("SAVE").Visible = xlVeryHidden
@@ -718,7 +717,7 @@ Public Sub send_leadSheet(addr As String, lnk As String, view As Integer)
 'GET DEFAULT EMAIL SIGNATURE
     On Error Resume Next
     Const olMailItem As Long = 0
-    
+
     Dim signature As String
     signature = Environ("appdata") & "\Microsoft\Signatures\"
     If Dir(signature, vbDirectory) <> vbNullString Then
@@ -727,7 +726,7 @@ Public Sub send_leadSheet(addr As String, lnk As String, view As Integer)
         signature = ""
     End If
     signature = CreateObject("Scripting.FileSystemObject").GetFile(signature).OpenAsTextStream(1, -2).ReadAll
-    
+
     On Error GoTo 0
     Set xEmailObj = xOutlookObj.CreateItem(olMailItem)
     With xEmailObj
@@ -761,7 +760,7 @@ Public Sub check_updates(Optional uTime As Date)
         Set lc_wb = Workbooks("Lead Card.xlsx")
         total_pc.update_file
     End If
-    
+
 End Sub
 
 'Public Sub hideBooks()
@@ -775,7 +774,7 @@ End Sub
 'End Sub
 
 Public Function get_lic(url As String) As Boolean
-    
+
     get_lic = False
     Dim WinHttp As New WinHttpRequest
     WinHttp.Open "get", url, False
@@ -928,7 +927,9 @@ login_retry:
         Loop
 
         On Error GoTo 0
-        Unload loginMenu
+        If Not loginMenu Is Nothing Then
+            Unload loginMenu
+        End If
         file_auth = 1
     Else
         file_auth = -1
@@ -1038,7 +1039,7 @@ Public Function genRoster(ByRef wb As Workbook, ByRef ws As Worksheet, Optional 
             Next tmp
             .Range("emp").Borders(xlEdgeTop).LineStyle = xlContinuous
             .Range("emp").Borders(xlEdgeTop).Weight = xlThick
-            
+
         End With
     Else
         With ws
@@ -1171,12 +1172,12 @@ Public Sub printRoster()
             End If
         Next x
     Next i
-            
+
 End Sub
 
 Public Function isSave() As Integer
     Application.ScreenUpdating = False
-    
+
     Dim xlFile As String
     Dim we As String
     Dim tmp() As String
@@ -1234,7 +1235,7 @@ Public Sub resizeRoster(l As Integer, e As Integer)
         Next x
     Next i
     On Error GoTo 0
-    
+
 End Sub
 
 Public Sub insertRoster(index As Integer)
@@ -1280,7 +1281,7 @@ Public Sub genTimeCard()
     xlFile = jobNum & "_Week_" & we & "_TimeCards.xlsx"
     lApp.Run "'loadingtimer.xlsm'!update", "Building Roster"
     Workbooks.Open ThisWorkbook.path & "\Master TC.xlsx"
-    
+
     Application.Visible = False
     Set wb_tc = Workbooks("Master TC.xlsx")
     wb_tc.SaveAs xlPath & xlFile
@@ -1357,15 +1358,15 @@ rep_add:
             End If
         Next j
     Next n
-    
+
     ThisWorkbook.Protect xPass
     wb_tc.Save
     wb_tc.Close
-    
+
     Exit Sub
 load_err:
     MsgBox "No Packet Found!"
-    
+
 End Sub
 
 Public Sub bubblesortWorksheets(wb As String)
@@ -1376,7 +1377,7 @@ Public Sub bubblesortWorksheets(wb As String)
     Dim First As Integer, Last As Long
     Dim i As Long, j As Long
     Dim tEmp As Worksheet
-    
+
     First = 1
     Last = wb_tc.Sheets.count - 1
     For i = First To Last
@@ -1406,7 +1407,7 @@ Public Sub updatePacket()
     xlPath = jobPath & jobNum & "\Week_" & we & "\TimePackets\"
     xlFile = jobNum & "_Week_" & we & ".xlsx"
     xlTCFile = jobNum & "_Week_" & we & "_TimeCards.xlsx"
-    
+
     Workbooks.Open xlPath & xlFile
     Workbooks.Open xlPath & xlTCFile
     Application.Visible = False
@@ -1650,7 +1651,7 @@ Public Function updatedFile(src As String, dest As String)
     Dim FSO As FileSystemObject
     Dim a As File
     Dim b As File
-    
+
     Set FSO = New FileSystemObject
     On Error Resume Next
     Set a = FSO.GetFile(src)
@@ -1669,7 +1670,7 @@ Public Function updatedFile(src As String, dest As String)
         updatedFile = True
         Exit Function
     End If
-    
+
     If a.DateLastModified <> b.DateLastModified Then
         updatedFile = True
     Else
@@ -1761,7 +1762,7 @@ rt:
     bk.Worksheets("SAVE").Visible = xlVeryHidden
     test_code.print_roster
     bk.Close False
-    
+
     loadRoster = 1
     Exit Function
 10:
@@ -1770,8 +1771,8 @@ rt:
     For i = 1 To Application.Workbooks.count
         Workbooks(i).Close False
     Next
-    
-    
+
+
 End Function
 
 Public Sub loadMenu() 'ws As Worksheet)
@@ -1857,7 +1858,7 @@ Public Sub RescopeNamedRangesToWorkbook()
     Dim sObjName As String
     Set wb = ActiveWorkbook
     sWbName = wb.name
-    
+
     For Each ws In wb.Sheets
         sWsName = ws.name
         'Loop through names in worksheet.
@@ -1891,7 +1892,7 @@ Public Sub RescopeNamedRangesToWorksheet()
     Dim sObjName As String
     Set wb = ActiveWorkbook
     sWbName = wb.name
-    
+
     For Each ws In wb.Sheets
         sWsName = ws.name
         'Loop through names in worksheet.
@@ -1913,4 +1914,3 @@ Public Sub RescopeNamedRangesToWorksheet()
         Next objName
     Next ws
 End Sub
-
