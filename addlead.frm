@@ -47,7 +47,7 @@ Private Sub UserForm_Initialize()
         With Me.ComboBox1
             If tEmp = "NO" Then
                 .AddItem tEmp.Offset(0, -3) & " " & tEmp.Offset(0, -4)
-                .list(.ListCount - 1, 1) = tEmp.Offset(0, 1).Value
+                .List(.ListCount - 1, 1) = tEmp.Offset(0, 1).Value
             End If
         End With
     Next

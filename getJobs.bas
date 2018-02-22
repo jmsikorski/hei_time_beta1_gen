@@ -7,7 +7,7 @@ Function genJobsList() As Collection
     Application.DisplayAlerts = False
     Dim xPath As String
     Dim xFile As String
-    Set list = New Collection
+    Set List = New Collection
     xPath = "R:\Data\Jobfiles\"
     Dim tEmp() As String
     Dim i As Integer
@@ -26,12 +26,12 @@ Function genJobsList() As Collection
             t = CDbl(tEmp(0))
         End If
         If t > 459999 And t < 470000 Then
-            list.Add (xFile)
+            List.Add (xFile)
             t = 0
         End If
         xFile = Dir
     Loop
-    Set genJobsList = list
+    Set genJobsList = List
     Application.DisplayAlerts = True
 End Function
 

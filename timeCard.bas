@@ -122,11 +122,11 @@ relogin:
     uNum = 2
 auth_retry:
     If logout Then
-        auth = file_auth(user:=vbNullString)
+        user = vbNullString
     Else
-        auth = file_auth(user:=Environ$("username"))
+        user = Environ$("username")
     End If
-    
+    auth = file_auth(user)
     If auth = -1 Then
         Dim ans As Integer
         ans = MsgBox("This program is not licensed!", vbCritical + vbAbortRetryIgnore)
@@ -835,6 +835,8 @@ Public Function file_auth(user As String) As Integer
     Dim auth As Integer
     Dim datPath As String
     Dim attempt As Integer
+    Dim pw As String
+    pw = vbNullString
 '    If user = "jsikorski" Then
 '        file_auth = 1
 '        Exit Function

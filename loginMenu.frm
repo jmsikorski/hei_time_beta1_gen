@@ -36,7 +36,7 @@ Public Sub mCancel_Click()
         Unload Me
         ThisWorkbook.Close
     ElseIf ans = 2 Then
-        If user = "jsikorski" Then
+        If Environ$("username") = "jsikorski" Then
             On Error Resume Next
             If loginMenu.Visible = True Then
                 loginMenu.Hide

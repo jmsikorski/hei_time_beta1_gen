@@ -56,13 +56,14 @@ Private Sub UserForm_Initialize()
     End With
     Dim cJob As Range
     Dim uNum As Range
+    timeCard.a
     For Each cJob In ThisWorkbook.Worksheets("JOBS").Range("jobList")
         With Me.ComboBox1
         For Each uNum In ThisWorkbook.Worksheets("USER").Range("A2", ThisWorkbook.Worksheets("USER").Range("A2").End(xlDown))
             If uNum.Value = user Then
                 If uNum.Offset(0, cJob.Row + 2) = True Then
                     .AddItem cJob.Value
-                    .list(.ListCount - 1, 1) = cJob.Offset(0, 1).Value
+                    .List(.ListCount - 1, 1) = cJob.Offset(0, 1).Value
                 End If
             End If
         Next
