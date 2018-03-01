@@ -60,12 +60,12 @@ End Sub
 'sheetExists checks to see if a sheet is in the current Workbook
 Function sheetExists(sheetToFind As String) As Boolean
     sheetExists = False
-    For Each sheet In Worksheets
-        If sheetToFind = sheet.name Then
+    For Each Sheet In Worksheets
+        If sheetToFind = Sheet.name Then
             sheetExists = True
             Exit Function
         End If
-    Next sheet
+    Next Sheet
 End Function
 
 Private Sub get_it()

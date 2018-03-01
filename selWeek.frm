@@ -15,7 +15,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub setWeek_Click()
     week = Me.ComboBox1.Value
-    Debug.Print week
     Unload Me
 End Sub
 

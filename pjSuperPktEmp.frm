@@ -57,34 +57,34 @@ Private Sub spAdd_Click()
     Dim lIndex As Integer, mSize As Integer, cnt As Integer
     cnt = 0
 '    mSize = 0
-    For ld = 0 To UBound(menuList) - 1
-        For i = 1 To lBox
-            Set tlist = menuList(ld).Controls.Item("empList" & i)
-            For x = 0 To tlist.ListCount - 1
-                If tlist.Selected(x) Then
-                cnt = cnt + 1
-                End If
-            Next x
-        Next i
+'    For ld = 0 To UBound(menuList) - 1
+'        For i = 1 To lBox
+'            Set tlist = menuList(ld).Controls.Item("empList" & i)
+'            For x = 0 To tlist.ListCount - 1
+'                If tlist.Selected(x) Then
+'                cnt = cnt + 1
+'                End If
+'            Next x
+'        Next i
 '        If mSize < cnt Then mSize = cnt
 '        If mSize > 0 Then
 '        resizeRoster UBound(menuList) - 1, eCount
-        lIndex = 1
-        For i = 1 To lBox
-            Set tlist = menuList(ld).Controls.Item("empList" & i)
-            For x = 0 To tlist.ListCount - 1
-                If tlist.Selected(x) Then
-                    empRoster(i - 1, x).eLead = ld
-                    Set weekRoster(ld, lIndex) = empRoster(i - 1, x)
-                    lIndex = lIndex + 1
-                    If lIndex > eCount Then
-                        MsgBox ("ERROR, Lead can only have " & eCount & " workers!")
-                        Exit Sub
-                    End If
-                End If
-            Next x
-        Next i
-    Next ld
+'        lIndex = 1
+'        For i = 1 To lBox
+'            Set tlist = menuList(ld).Controls.Item("empList" & i)
+'            For x = 0 To tlist.ListCount - 1
+'                If tlist.Selected(x) Then
+'                    empRoster(i - 1, x).eLead = ld
+'                    Set weekRoster(ld, lIndex) = empRoster(i - 1, x)
+'                    lIndex = lIndex + 1
+'                    If lIndex > eCount Then
+'                        MsgBox ("ERROR, Lead can only have " & eCount & " workers!")
+'                        Exit Sub
+'                    End If
+'                End If
+'            Next x
+'        Next i
+'    Next ld
 '    savePacket
     Me.Hide
     For i = 0 To UBound(menuList) - 1
@@ -148,7 +148,10 @@ Private Sub spDone_Click()
     savePacket
     genLeadSheets
     lApp.Run "'loadingtimer.xlsm'!stopLoading"
+    Application.Wait (Now + TimeValue("00:00:03"))
+    On Error Resume Next
     lApp.Quit
+    On Error GoTo 0
     Set lApp = Nothing
     fn = Now
     Debug.Print st

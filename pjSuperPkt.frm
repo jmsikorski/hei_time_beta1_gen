@@ -257,7 +257,6 @@ Private Sub UserForm_Initialize()
             .Width = wide * (i + 1)
         End With
     Next i
-    test_code.print_roster
     Exit Sub
 10
     tEmp.emNum = -1
