@@ -566,7 +566,12 @@ Public Sub genLeadSheets()
                         .Weight = xlMedium
                         .ColorIndex = xlAutomatic
                     End With
-                    .Range(rng.End(xlDown).Offset(3, 0), .ListObjects(nday).HeaderRowRange.Offset(-2, 0)).EntireRow.Delete
+                    Dim rage As Range
+                    Set rage = .Range(rng.End(xlDown).Offset(3, 0), .ListObjects(nday).HeaderRowRange.Offset(-2, 0))
+                    Application.Visible = True
+                    If .Range(rng.End(xlDown).Offset(3, 0)).Row < .ListObjects(nday).HeaderRowRange.Offset(-2, 0).Row Then
+                        rage.EntireRow.Delete
+                    End If
                 Else
                     rng.End(xlDown).Offset(2, 0).EntireRow.Clear
                     With .Range(rng.End(xlDown).Offset(2, 0), rng.End(xlDown).Offset(2, 8)).Borders(xlEdgeTop)
@@ -1023,7 +1028,7 @@ Public Function genRoster(ByRef wb As Workbook, ByRef ws As Worksheet, Optional 
     wb.Worksheets("SAVE").Activate
     Dim we As String
     Dim tmp As Range
-    we = calcWeek(Date)
+    we = week
     Dim cnt As Integer
     cnt = 0
     If lead = 0 Then
