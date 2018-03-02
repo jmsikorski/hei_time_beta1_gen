@@ -530,7 +530,6 @@ Public Sub genLeadSheets()
             End If
         Next x
         With ls.Worksheets("LEAD")
-            Application.Visible = True
             Dim tr As Integer
             For tr = 1 To 7
                 Dim day As String
